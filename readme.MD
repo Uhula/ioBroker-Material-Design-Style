@@ -9,7 +9,7 @@
 5. [Changelog](#5-changelog)
 6. [Sonstiges](#6-sonstiges)
 
-![Beispiel grau_blau](docs/grau_blau.png?raw=true)
+
 
 
 ### 1. Funktionsumfang
@@ -27,7 +27,7 @@ Verwendung auf eigene Gefahr, der Autor übernimmt weder Gewähr noch Haftung.
 
 ### 4. Anleitung
 
-Siehe PDF-Dokument.
+Siehe Dokument ![Anleitung](docs/anleitung.html)
 
 
 ### 5. Changelog
