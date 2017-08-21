@@ -1,0 +1,61 @@
+.mdui-flex-screen {
+  height:100%;
+  display: flex !important;
+  flex-direction: column;
+}
+.mdui-flex-application-bar {
+  flex: 0 0 auto;
+  position:relative !important;
+  left:auto !important;
+  top:auto !important;
+  height:48px;
+}
+.mdui-flex-tab-navigation {
+  flex: 0 0 auto;
+  position:relative !important;
+  left:auto !important;
+  top:auto !important;
+  top:48px;
+  height:48px;
+  box-shadow: 0 1px 4px #404040;
+}
+.mdui-flex-bottom-navigation {
+  flex: 0 0 auto;
+  position:relative !important;
+  left:auto !important;
+  top:auto !important;
+  height:48px;
+  box-shadow: 0 -1px 4px #404040;
+  xdisplay:none;
+}
+
+.mdui-flex-container {
+  xheight:100%;
+  overflow-y: auto;
+  display: flex !important;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  xalign-items: stretch;
+  align-content: stretch;
+  justify-content: space-evenly;
+  xjustify-content: space-between;
+  xjustify-content: space-around;
+}
+
+.mdui-flex-screen .mdui-flex-container {
+  flex: 1 1 auto;
+  position:relative !important;
+  left:auto !important;
+  top:auto !important;
+}
+
+.mdui-flex-item {
+  position:relative !important;
+  left:auto !important;
+  top:auto !important;
+  xheight:auto !important;
+  margin: 4px;
+  xbackground: rgba(0,0,0,0.2) !important;
+  xalign-self: flex-start;
+}
