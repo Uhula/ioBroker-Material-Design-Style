@@ -27,7 +27,7 @@ Verwendung auf eigene Gefahr, der Autor übernimmt weder Gewähr noch Haftung.
 
 ### 4. Anleitung
 
-Siehe Dokument ![Anleitung](docs/anleitung.pdf)
+Siehe Dokument [:link:Anleitung](docs/anleitung.pdf)
 
 
 ### 5. Changelog
