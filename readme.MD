@@ -1,4 +1,6 @@
-### CSS Skin für ioBrokerim Material Design Stil
+### STILL UNDER CONSTRUCTION - KEEP CALM PLS ;-)
+
+### CSS Skin für ioBroker im Material Design Stil
 
 **Inhaltsverzeichnis**
 
@@ -14,7 +16,13 @@
 
 
 ### 1. Funktionsumfang
-In ioBroker.vis gestaltete Views können mit diesen CCS Anweisungen so dargestellt werden, dass sie ähnlich dem  Look & Feel des Material Design Styles von Google funktionieren.
+In ioBroker.vis gestaltete Views können mit diesen CCS Anweisungen so dargestellt werden, dass sie ähnlich dem  Look & Feel des Material Design Styles von Google funktionieren. Dazu gehören:
+* Application bar
+* Top-Navigation (Tabs)
+* Bottom-Navigation
+* Left- und Right-Navigation (Sidepanels)
+* Cards und Tiles
+* ...
 
 Beispiele: 1280 x 0720
 * [Beispiel 1280x0720 Main](docs/MD_1280_1280x0720_Main.png?raw=true "Beispiel 1280x0720 Main")
