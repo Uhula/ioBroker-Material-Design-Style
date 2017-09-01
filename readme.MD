@@ -1,8 +1,4 @@
 <<<<<<< HEAD
-### NOCH IM ENTWURF !
-=======
-### STILL UNDER CONSTRUCTION - KEEP CALM PLS ;-)
->>>>>>> origin/master
 
 ### CSS Skin für ioBroker im Material Design Stil
 
@@ -28,6 +24,9 @@ In ioBroker.vis gestaltete Views können mit diesen CCS Anweisungen so dargestel
 * Cards und Tiles
 * ...
 
+Siehe Film: [:link:Demo-Film](docs/MaterialDesign4ioBroker.mp4)
+
+
 Beispiele: 1280 x 0720
 * [Beispiel 1280x0720 Main](docs/MD_1280_1280x0720_Main.png?raw=true "Beispiel 1280x0720 Main")
 * [Beispiel 1280x0720 Wohnzimmer](docs/MD_1280_1280x0720_WZ.png?raw=true "Beispiel 1280x0720 Wohnzimmer")
@@ -51,6 +50,8 @@ Keine. Die CSS Anweisungen müssen lediglich in einem ioBroker.vis Projekt unter
 ### 4. Anleitung
 
 Siehe Dokument [:link:Anleitung](docs/anleitung.pdf)
+
+Beispiel-Projekte [:link:Demo-Projekt](ioBroker projects/MD_Demo.zip) und [:link:Simple-Projekt](ioBroker projects/MD_Simple.zip)
 
 
 ### 5. Changelog
