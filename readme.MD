@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-
 ### CSS Skin für ioBroker im Material Design Stil
 
 **Inhaltsverzeichnis**
@@ -51,7 +49,7 @@ Keine. Die CSS Anweisungen müssen lediglich in einem ioBroker.vis Projekt unter
 
 Siehe Dokument [:link:Anleitung](docs/anleitung.pdf)
 
-Beispiel-Projekte [:link:Demo-Projekt](ioBroker projects/MD_Demo.zip) und [:link:Simple-Projekt](ioBroker projects/MD_Simple.zip)
+Beispiel-Projekte [:link:Demo-Projekt]("ioBroker projects/MD_Demo.zip") und [:link:Simple-Projekt]("ioBroker projects/MD_Simple.zip")
 
 
 ### 5. Changelog
