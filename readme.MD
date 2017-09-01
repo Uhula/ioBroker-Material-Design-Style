@@ -42,15 +42,14 @@ Beispiele: 0720 x 1280
 
 
 ### 3. Installation
-Keine. Die CSS Anweisungen müssen lediglich in einem ioBroker.vis Projekt unter "CSS / Projekt" eingefügt werden.
+Keine. Die CSS Anweisungen müssen lediglich in einem ioBroker.vis Projekt unter "CSS / Projekt" eingefügt werden, die paar Zeilen Script unter "Skript".
 
 
 ### 4. Anleitung
 
 Siehe Dokument [:link:Anleitung](docs/anleitung.pdf)
 
-Beispiel-Projekte [:link:Demo-Projekt]("ioBroker projects/MD_Demo.zip") und [:link:Simple-Projekt]("ioBroker projects/MD_Simple.zip")
-
+Beispiel-Projekte befinden sich im Ordner "ioBroker projects", einmal ein Demo-Projekt, welches den Umfang zeigt und einmal ein Simple-Projekt, welches als Basis für eigene vis-Projekte verwendet werden kann. Beide Projekte (ZIP-Dateien) lassen sich in ioBroker.vis importieren.
 
 ### 5. Changelog
 Siehe [:link:ChangeLog](./changelog.md).
