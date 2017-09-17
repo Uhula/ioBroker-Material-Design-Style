@@ -22,7 +22,7 @@ In ioBroker.vis gestaltete Views können mit diesen CCS Anweisungen so dargestel
 * Cards und Tiles
 * ...
 
-Siehe Film: [:link:Demo-Film](docs/MaterialDesign4ioBroker.mp4)
+Siehe auch Video: [Demo-Film](docs/MaterialDesign4ioBroker.mp4) (zum Ansehen herunterladen)
 
 
 Beispiele: 1280 x 0720
@@ -42,20 +42,20 @@ Beispiele: 0720 x 1280
 
 
 ### 3. Installation
-Keine. Die CSS Anweisungen müssen lediglich in einem ioBroker.vis Projekt unter "CSS / Projekt" eingefügt werden, die paar Zeilen Script unter "Skript".
+Keine. Die CSS Anweisungen müssen lediglich in einem ioBroker.vis Projekt unter "CSS / Projekt" eingefügt werden, die paar Zeilen Script unter "Skript". Beides am besten aus dem [Demo-Projekt]("ioBroker projects/MD_Demo.zip") entnehmen.
 
 
 ### 4. Anleitung
 
-Siehe Dokument [:link:Anleitung](docs/anleitung.pdf)
+Siehe Dokument [Anleitung](docs/anleitung.pdf)
 
-Beispiel-Projekte befinden sich im Ordner "ioBroker projects", einmal ein Demo-Projekt, welches den Umfang zeigt und einmal ein Simple-Projekt, welches als Basis für eigene vis-Projekte verwendet werden kann. Beide Projekte (ZIP-Dateien) lassen sich in ioBroker.vis importieren.
+Beispiel-Projekte befinden sich im Ordner "ioBroker projects", einmal ein [Demo-Projekt]("ioBroker projects/MD_Demo.zip"), welches den Umfang zeigt und einmal ein [Simple-Projekt]("ioBroker projects/MD_Simple.zip"), welches als Basis für eigene vis-Projekte verwendet werden kann. Beide Projekte (ZIP-Dateien) lassen sich in ioBroker.vis importieren.
 
 ### 5. Changelog
-Siehe [:link:ChangeLog](./changelog.md).
+Siehe [ChangeLog](./changelog.md).
 
 
 ### 6. Sonstiges
 
 
-:copyright:2017ff Uhula, see [:link:MIT license](./license.md).
+:copyright:2017ff Uhula, see [MIT license](./license.md).
