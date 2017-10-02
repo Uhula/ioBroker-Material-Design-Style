@@ -1,4 +1,10 @@
-2017-09-24 V1.3 
+2017-10-02 V1.4
+CSS: FLOT-Diagramme, mdui-table (noch in Entwicklung)
+Script: Zeitspanne für FLOT-Diagramme setzen
+ioBroker Projekte: MD_Demo, MD-Simple ergänzt um "FLOT-Diagramme"
+Anleitung: Ergänzt um "FLOT-Diagramme"
+
+2017-09-24 V1.3
 CSS: "Slider transparent" hinzu
 ioBroker Projekte: MD_Demo, MD-Simple ergänzt um "Silder transparent"
 Anleitung: Ergänzt um "Select" und "Silder transparent"
