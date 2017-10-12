@@ -1,3 +1,9 @@
+2017-10-11 V1.5
+CSS: mdui-table Klassen
+Script: Tabellenbehandlung
+ioBroker Projekte: MD_Demo, MD-Simple ergänzt um Tabellenbeispiel
+Anleitung: Ergänzt um Tabellenbeschreibung, optisch überarbeitet
+
 2017-10-02 V1.4
 CSS: FLOT-Diagramme, mdui-table (noch in Entwicklung)
 Script: Zeitspanne für FLOT-Diagramme setzen
