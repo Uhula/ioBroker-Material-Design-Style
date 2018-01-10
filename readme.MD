@@ -16,11 +16,10 @@
 ### 1. Funktionsumfang
 In ioBroker.vis gestaltete Views können mit diesen CCS Anweisungen so dargestellt werden, dass sie ähnlich dem  Look & Feel des Material Design Styles von Google funktionieren. Dazu gehören:
 * Application bar
-* Top-Navigation (Tabs)
-* Bottom-Navigation
-* Left- und Right-Navigation (Sidepanels)
+* Top-Navigation (Tabs), Bottom-Navigation, Left- und Right-Navigation (Sidepanels)
 * Cards und Tiles
-* ...
+* Responsive Design (Grid, 13er/52er/156er Raster)
+* Tables, inputs, labels, states ...
 
 Siehe auch Video: [Demo-Film](docs/MaterialDesign4ioBroker.mp4) (zum Ansehen herunterladen)
 
@@ -52,6 +51,7 @@ Siehe Dokument [Anleitung](docs/anleitung.pdf)
 Beispiel-Projekte befinden sich im Ordner "ioBroker projects", einmal ein [Demo-Projekt]("ioBroker projects/MD_Demo.zip"), welches den Umfang zeigt und einmal ein [Simple-Projekt]("ioBroker projects/MD_Simple.zip"), welches als Basis für eigene vis-Projekte verwendet werden kann. Beide Projekte (ZIP-Dateien) lassen sich in ioBroker.vis importieren.
 
 ### 5. Changelog
+V1.8 10.01.2018
 Siehe [ChangeLog](./changelog.md).
 
 
