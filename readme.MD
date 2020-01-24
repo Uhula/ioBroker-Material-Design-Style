@@ -1,4 +1,6 @@
-### CSS Skin für ioBroker im Material Design Stil
+### Material Design CSS 2.0 für ioBroker
+
+### ! In Überarbeitung zur Version 2.0 !
 
 **Inhaltsverzeichnis**
 
@@ -10,7 +12,7 @@
 6. [Sonstiges](#6-sonstiges)
 
 
-![Beispiel 1280x0720 Main](docs/MD_1280_1280x0720_Main.png?raw=true "Beispiel 1280x0720 Main")
+![Beispiel 1280x0720 Main](docs/MD_1280x0720_Main.png?raw=true "Beispiel 1280x0720 Main")
 
 
 ### 1. Funktionsumfang
@@ -21,19 +23,22 @@ In ioBroker.vis gestaltete Views können mit diesen CCS Anweisungen so dargestel
 * Responsive Design (Grid, 13er/52er/156er Raster)
 * Tables, inputs, labels, states ...
 
-Siehe auch Video: [Demo-Film](docs/MaterialDesign4ioBroker.mp4) (zum Ansehen herunterladen)
+Siehe auch Video: [Demo-Film](video/MD4ioBrokerV2.mp4) (zum Ansehen herunterladen)
 
 
 Beispiele: 1280 x 0720
-* [Beispiel 1280x0720 Main](docs/MD_1280_1280x0720_Main.png?raw=true "Beispiel 1280x0720 Main")
-* [Beispiel 1280x0720 Wohnzimmer](docs/MD_1280_1280x0720_WZ.png?raw=true "Beispiel 1280x0720 Wohnzimmer")
-* [Beispiel 1280x0720 Demo Cards](docs/MD_1280_1280x0720_Demo_Cards.png?raw=true "Beispiel 1280x0720 Demo Cards")
-* [Beispiel 1280x0720 Demo Labels](docs/MD_1280_1280x0720_Demo_Labels.png?raw=true "Beispiel 1280x0720 Demo Labels")
-* [Beispiel 1280x0720 Demo Inputs](docs/MD_1280_1280x0720_Demo_Inputs.png?raw=true "Beispiel 1280x0720 Demo Inputs")
+* [Beispiel 1280x0720 Main](docs/MD_1280x0720_Main.png?raw=true "Beispiel 1280x0720 Main")
+* [Beispiel 1280x0720 Demo Cards](docs/MD_1280x0720_Cards.png?raw=true "Beispiel 1280x0720 Demo Cards")
+* [Beispiel 1280x0720 Demo Inputs](docs/MD_1280x0720_Inputs.png?raw=true "Beispiel 1280x0720 Demo Inputs")
+* [Beispiel 1280x0720 Main dark](docs/MD_1280x0720_Main_dark.png?raw=true "Beispiel 1280x0720 Main dark")
+* [Beispiel 1280x0720 Demo Cards dark](docs/MD_1280x0720_Cards_dark.png?raw=true "Beispiel 1280x0720 Demo Cards dark")
+* [Beispiel 1280x0720 Demo Inputs dark](docs/MD_1280x0720_Inputs_dark.png?raw=true "Beispiel 1280x0720 Demo Inputs dark")
 
-Beispiele: 0720 x 1280
-* [Beispiel 0720x1280 Wohnzimmer](docs/MD_1280_0720x1280_WZ.png?raw=true "Beispiel 0720x1280 Wohnzimmer")
-* [Beispiel 0720x1280 Demo Inputs](docs/MD_1280_0720x1280_Demo_Inputs.png?raw=true "Beispiel 0720x1280 Demo Inputs")
+Beispiele: 0360 x 0640
+* [Beispiel 0360x0640 Main](docs/MD_0360x0640_Main.png?raw=true "Beispiel 0360x0640 Main")
+* [Beispiel 0360x0640 Demo Inputs](docs/MD_0360x0640_Inputs.png?raw=true "Beispiel 0360x0640 Demo Inputs")
+* [Beispiel 0360x0640 Main dark](docs/MD_0360x0640_Main_dark.png?raw=true "Beispiel 0360x0640 Main dark")
+* [Beispiel 0360x0640 Demo Inputs dark](docs/MD_0360x0640_Inputs_dark.png?raw=true "Beispiel 0360x0640 Demo Inputs dark")
 
 
 ### 2. Systemanforderungen
@@ -51,7 +56,7 @@ Siehe Dokument [Anleitung](docs/anleitung.pdf)
 Beispiel-Projekte befinden sich im Ordner "ioBroker projects", einmal ein [Demo-Projekt]("ioBroker projects/MD_Demo.zip"), welches den Umfang zeigt und einmal ein [Simple-Projekt]("ioBroker projects/MD_Simple.zip"), welches als Basis für eigene vis-Projekte verwendet werden kann. Beide Projekte (ZIP-Dateien) lassen sich in ioBroker.vis importieren.
 
 ### 5. Changelog
-V1.8 10.01.2018
+V2.0 24.01.2020
 Siehe [ChangeLog](./changelog.md).
 
 
