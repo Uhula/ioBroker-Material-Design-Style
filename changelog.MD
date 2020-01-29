@@ -1,4 +1,19 @@
-V2.0 24.01.2020
+V2.0.2 29.01.2020
+  * mdui-center/-h/-v mit !important versehen damit die widgeteigenen Style
+    zuweisungen überschrieben werden
+  * mdui-flex: funktioniert nun auch mit contXXX in Widget view-8
+  * mdui-label, mdui-value, mdui-title, mdui-subtitle: es wurde die vertikale
+    Zentrierung mit display:flex entfernt damit die direkten Wigdet font-
+    zuweisungen funktionieren. Das Zentrieren kann mit mdui-center erreicht
+    werden
+  * Öffnen/Schließen der fixierten lnav ist nun animation-iteration-count
+  * mdui-navitem: im display:flex das !important entfernt, damit die Media
+    Query mit mdui-show480 funktioniert
+  * mdui-dialog-fullheight und mdui-dialog-fullscreen zur Nutzung in Dialogen
+    hinzugefügt  
+   
+
+V2.0.1 24.01.2020
 * Umstellung auf helles Thema
   Das komplette Design wurde auf das helle Thema (light) umgesetzt und passt sich
   flexibel an die jeweils gewählten Hintergrundfarben für abra, tnav, lnav, rnav
