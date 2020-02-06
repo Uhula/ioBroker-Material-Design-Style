@@ -1,33 +1,13 @@
-/* -----
-   Material Design JS for ioBroker.vis
-   (c) 2017 Uhula, MIT License
-   https://github.com/Uhula/ioBroker-Material-Design-Style
+/* =====
+   Material Design CSS for ioBroker.vis
+   (c) 2017ff Uhula, MIT License
    
-   V2.0.2 27.01.2020
-   * Das onEvent auf DOMSubtreeModified wurde durch einen MutationObserver
-     auf #vis_container ersetzt. Vorteil: Weniger Events, schnellerer Ablauf,
-     da DOMSubtreeModified häufig gefeuetrt wird
-   * MutationObserver für ui-dialog hinzugefügt um im dark-Style im Dialog die 
-     Farbanpassungen der Widgets vornehmen zu können
-     
-   V2.0.1 21.01.2020
-   * toggleExpand() : expandiert/collabiert ein übergeordnetes mdui-tile bzw
-     mdui-card Element. Wird an die class mdui-expand[-<height>] gebunden. in
-     [-<height>] kann optional eine Zielhöhe in px im collabierten Zustand angegeben
-     werden, wenn nicht, werden 52px angenommen
+   version: v2.0.3 08.02.2020
 
-   V1.7 28.12.2017
-   * Korrektur mdui-lnav/rnav. Funktionierte mit mdui-toggle nicht korrekt  
-   V1.6 16.10.2017 
-   * _toggleFullscreen geändert, damit die function auch im ioBroker
-                   fullscreen Mode funktioniert
-   * Delegator-Eventhandler für body gesetzt (bisher #vis_container, wirkten dann aber in Dialogen nicht)
-   V1.5 11.10.2017 
-   * MDUI.handleTables fertig
-   V1.3 24.09.2017 
-   * MDUI.handleTables hinzu (in Entwicklung)
-   V1.0 01.09.2017
------ */
+   source: https://github.com/Uhula/ioBroker-Material-Design-Style
+   changelog: https://github.com/Uhula/ioBroker-Material-Design-Style/blob/master/changelog.MD
+   =====
+*/
 
 // Zur sicheren CSS-Erkennung der Runtime eine CSS-Klasse anlegen
 document.documentElement.className +=  " mdui-runtime";
@@ -150,7 +130,7 @@ function _initObserverPage() {
         let i;
         for (i = 0; i < nodelist.length; i++) {
            observerPage.observe(nodelist[i], {
-              subtree: false,
+              subtree: true,
               childList: true
            });
         }
@@ -218,6 +198,23 @@ function _onChangeConfig( ele ) {
     _initObserverConfig();
 }
 
+
+function _onLoad() {
+  let sel = "#"+lastPageID+" ";
+  try {
+        $(sel+"[class*='mdui-onload'][class*='mdui-expand']:not(.mdui-active)").each( function (index) {
+            _toggleExpand( $(this) );
+        });
+        $(sel+"[class*='mdui-onload'][class*='mdui-toggle']:not(.mdui-active)").each( function (index) {
+            _handleToggle( $(this) );
+        });
+        $(sel+"[class*='mdui-onload'][class*='mdui-fullscreen']:not(.mdui-active)").each( function (index) {
+            _toggleFullscreen( $(this) );
+        });
+  } catch(err) { console.log("[MDUI._onLoad] ",err.message ); } 
+    
+}
+
 // wenn sich die config ändert, muss evtl ein reload der Seite stattfinden
 function _onChangePage( ele ) {
     let pageID = "";
@@ -225,18 +222,29 @@ function _onChangePage( ele ) {
     if ( $eles.length < 1 || $eles.length > 2) return;
 
     pageID = $eles[$eles.length-1].id;
+console.log("_onChangePage ",lastPageID," ",pageID);            
 
     if ( (pageID!="") && (lastPageID!=pageID) ) {
         lastPageID=pageID;
-        _getConfig();
-        _patchColors();
-        _patchWidgetColors();
-        _handleTables();
-        _handleDialogs();
-        _initObserverSlider();
-        _initObserverConfig();
-        _initObserverDialog();
-        _onResizeWindow( $(window) );
+        setTimeout( function () { 
+            _getConfig();
+            _patchColors();
+            _patchWidgetColors();
+            _handleTables();
+            _handleDialogs();
+            _initObserverSlider();
+            _initObserverConfig();
+            _initObserverDialog();
+            _onResizeWindow( $(window) ); 
+            _onLoad();
+            
+            // favicon anpassen
+            $("#vis_container>:not([style*='display: none']) .mdui-favicon img").each( function (index) {
+                if ($(this)[0].src)
+                     $("link[rel='shortcut icon']").attr("href", $(this)[0].src);
+            });
+
+        }, 100);
     }
     _initObserverPage();
 }
@@ -338,6 +346,7 @@ function _formatDatetime(date, format) {
 // XXX aus class "mdui-target-XXX" des ele ist
 function _handleToggle( $ele ) {
     $ele.toggleClass("ui-state-active");
+    $ele.toggleClass("mdui-active");
 
     var id = _getGroupID( $ele );
     if (id!=="") 
@@ -356,8 +365,8 @@ function _handleToggle( $ele ) {
 
 
 // das nächste übergeordnete .mdui-card* Element wird 
-// - fullscreen angezeigt, wenn es noch nicht fullscreen ist
-// - wieder normal angezeigt, wenn es fullscreen ist
+// - collapsed, wenn es expanded ist
+// - expanded, wenn es collapsed ist
 function _toggleExpand( $ele ){
     if (!$ele) return;
     let $target = $ele.closest("[class*='mdui-card']");
@@ -367,6 +376,8 @@ function _toggleExpand( $ele ){
     if (h==="") h="68";
     // element um 180° drehen
     let styleold = $ele.attr("styleold");
+    $ele.toggleClass("mdui-active");
+
     if (styleold) {
         $ele.attr("style",styleold);
         $ele.removeAttr("styleold");
@@ -392,21 +403,35 @@ function _toggleExpand( $ele ){
 // das nächste übergeordnete .vis-view Element wird 
 // - fullscreen angezeigt, wenn es noch nicht fullscreen ist
 // - wieder normal angezeigt, wenn es fullscreen ist
+/* <div class="vis-widget mdui-button mdui-fullscreen mdui-center vis-tpl-basic-HTML" style="width: 36px; height: 36px; left: calc(100% - 52px); top: 16px; z-index: 1;" id="w00005">
+        <div class="vis-widget-body">
+            <i class="material-icons">fullscreen</i>
+        </div>
+    </div>
+    */
 function _toggleFullscreen( $ele ){
     if (!$ele) return;
     let $target = $ele.closest(".vis-view");
     if (!$target) return;
     var styleold = $target.attr("styleold");
+    $ele.toggleClass("mdui-active");
+    
     if (styleold) {
+        let html = $ele.html();
+        html = html.replace(/fullscreen_exit/g, "fullscreen");
+        $ele.html( html );
         $target.attr("style",styleold);
         $target.removeAttr("styleold");
         $target.appendTo(".mdui-id-"+$target.attr("id"));
     } else {
+        let html = $ele.html();
+        html = html.replace(/fullscreen/g, "fullscreen_exit");
+        $ele.html( html );
         $target.parent().addClass("mdui-id-"+$target.attr("id"));
         $target.attr("styleold",$target.attr("style"));
         // dark-theme?
         if ($ele.closest(".mdui-content.mdui-dark").length) $target.addClass("mdui-dark");
-        $target.attr("style","position:fixed; left:0; top:0; width:100%; height:100%; z-index: 2147483647 !important; background-color: "+lastConfig.content_color+" !important;");
+        $target.attr("style","position:fixed; left:8px; top:8px; min-width:0; width:calc(100% - 16px); min-height:0; height:calc(100% - 16px); z-index: 2147483647 !important; background-color: "+lastConfig.content_color+" !important;   box-shadow: 0 0 0 1px rgba(0,0,0,0.3), 0 14px 28px rgba(0,0,0,0.65), 0 10px 10px rgba(0,0,0,0.62); border-radius: 4px;");
         $target.appendTo( "body" );
     }
 }
@@ -469,30 +494,84 @@ function _scale( ele ) {
 // span: inc / dec / (number)
 // number: Zahl in Minuten
 function _timespan( ele ) {
+    var src = "";
+
+    function __patchParam( paramName, offset ) {
+        let reParam = RegExp(paramName+"=[^&]*", "i");
+        let reVal = RegExp("[+-][0-9]*", "i");
+        let param = src.match(reParam);
+        console.log("timespan param:",param);                    
+        if ( param ) {
+            param = param[0];
+            let paramval = param.match( reVal );
+            if (paramval) {
+                paramval = Math.floor(paramval) + offset; 
+                param = param.replace( reVal, paramval<0 ? paramval : "-0" );
+            } else { 
+                if ( (param[param.length-2]=="/") && ("smhdwMy".indexOf(param[param.length-1])>=0) )
+                    param = param.substr(0,param.length-2) + (offset<0 ? offset : "-0") + param[param.length-1] + param.substr(param.length-2,2); 
+            }
+            console.log("timespan src:",src);                    
+            src = src.replace(reParam, param);
+            console.log("timespan src:",src);    
+        }                
+
+    }
+
     var id = _getTargetID( ele );
     var target = $( "#"+id+" [src]" );
     if (target) {
-        var timespan = _getClassSuffix(ele, "mdui-timespan-" );
-        var src = target.attr( "src" );
-        var min = src.substr(src.indexOf("&range=")+7,20);  
-        min = min.substr(0,min.indexOf("&"));  
-        switch(timespan) {
-            case "inc":
-                min = min * 2;
-                break;
-            case "dec":
-                min = min / 2;
-                break;
-            default:
-                if ( timespan<=0 )
-                    timespan = 1440;
-                min = timespan;
+        let timespan = _getClassSuffix(ele, "mdui-timespan-" );
+        src = target.attr( "src" );
+
+        // flot
+        if (src.indexOf("&range=">=0)) {
+            let min = src.substr(src.indexOf("&range=")+7,20);  
+            min = min.substr(0,min.indexOf("&"));  
+            switch(timespan) {
+                case "inc":
+                    min = min * 2;
+                    break;
+                case "dec":
+                    min = min / 2;
+                    break;
+                default:
+                    if ( timespan<=0 )
+                        timespan = 1440;
+                    min = timespan;
+            }
+            src = src.replace(/&range=[0-9]*&/g, "&range="+min+"&");
+            target.attr("src",src);
         }
-        src = src.replace(/&range=[0-9]*&/g, "&range="+min+"&");
+
+        // grafana
+        // from=now/d, from=now-1d/d 
+        if (src.indexOf("from=">=0) && src.indexOf("to=">=0)) {
+            __patchParam( "from", timespan=="inc" ? +1 : -1);
+            __patchParam( "to", timespan=="inc" ? +1 : -1);
+            target.attr("src",src);
+        }
+    }
+}
+
+// ersetzt im src-Attribute des Unter-Elements von (id) einen url-Parameter
+function _srcparam( ele ) {
+    var id = _getTargetID( ele );
+    var target = $( "#"+id+" [src]" );
+    if (target) {
+        let params = _getClassSuffix(ele, "mdui-srcparam-" ).split("&");
+        let src = target.attr( "src" );
+
+        // grafana
+        // http://192.168.2.8:3000/d/ek8fMryWz/iobroker-cpu?orgId=1&from=1580383496316&to=1580405096316&var-ID_WC_Temp=20&var-ID_HZR_Temp=17&panelId=4&fullscreen
+        
+        for (let i=0; i<params.length; i++) {
+            let key = params[i].substr(0,params[i].indexOf("="));
+            let value = params[i].substr(key.length+1,1000);
+            let re = new RegExp(key+"=[^&]*", 'g');               
+            src = src.replace(re, key+"="+value);  // encodeURI()
+        }
         target.attr("src",src);
-console.log("[MDUI.timespan] ",ele);
-console.log("[MDUI.timespan] ",target);
-console.log("[MDUI.timespan] ",min);
     }
 }
 
@@ -749,7 +828,26 @@ function _patchWidgetColors( ) {
         }
         $ele.src = src;
     });     
+    // flot Widget 
     
+    $("#vis_container:not([style*='display: none']) iframe[src*='orgId='],.ui-dialog iframe[src*='orgId=']").each( 
+        function (index) {
+          var $ele = $(this)[0];
+          var src = $ele.src;
+  /*
+          src = src.replace(/&bg=%23[0-9]*&/g, "&bg=%23f00000&");
+          src = src.replace(/&x_labels_color=%23[0-9]*&/g, "&x_labels_color=%23f00000&");
+  */
+  
+          if (isDark) {
+              src = src.replace(/&theme=light/ig, "&theme=dark");
+          } else {
+            src = src.replace(/&theme=dark/ig, "&theme=light");
+        }
+          $ele.src = src;
+      });    
+     
+      
 }
 
 function _addCSS(selector, bc) {
@@ -935,9 +1033,11 @@ return {
     toggleExpand: _toggleExpand,
     scale: _scale,
     timespan: _timespan,
+    srcparam: _srcparam,
     handleTables: _handleTables,
     handleDialogs: _handleDialogs,
     onChangePage : _onChangePage,
+    onLoad : _onLoad,
     patchColors : _patchColors,
     onResizeWindow : _onResizeWindow
 };
@@ -1007,6 +1107,10 @@ function mdui_init() {
     $("body").on( "click", "[class*='mdui-timespan-']", function(event) { 
         MDUI.timespan( $(this) );
     } );
+   // click-Handler für "mdui-srcparam-" 
+   $("body").on( "click", "[class*='mdui-srcparam-']", function(event) { 
+    MDUI.srcparam( $(this) );
+} );
 
     $( window ).on("resize", function() {
       MDUI.handleTables( $(this) );
@@ -1024,10 +1128,11 @@ function mdui_init() {
     // für den ersten load einmal aufrufen
     setTimeout( MDUI.onChangePage(), 100);
 
+
 }; 
 
 
-setTimeout( mdui_init(), 10); 
+setTimeout( mdui_init(), 100); 
 
 
 // vis ... Menu ausblenden

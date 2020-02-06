@@ -1,257 +1,31 @@
-/* ToDo 
-flot: timespan 1em
+/* =====
+   Material Design CSS for ioBroker.vis
+   (c) 2017ff Uhula, MIT License
+   
+   version: v2.0.3 08.02.2020
+
+   source: https://github.com/Uhula/ioBroker-Material-Design-Style
+   changelog: https://github.com/Uhula/ioBroker-Material-Design-Style/blob/master/changelog.MD
+   =====
+*/
+
+/* -----
+   ToDo 
+   -----
+   flot: timespan 1em
+
+
+from=now-1h-45m m=min h=hour d=day w=week M=month y=year
+     mit / angehängter Zeitraum zeigt vollen Zeitraum
+     now/M = lfd Monat, now-1M/M = letzer Monat, now/y = lfd Jahr 
+     für mdui muss "to=now" als "to=now-0h" gesetzt werden
+to=(wie from)
+theme=light
+refresh=5m
+kiosk
+kiosk=tv
 
 */
-/* -----
-   Material Design CSS for ioBroker.vis
-   (c) 2017 Uhula, MIT License
-   https://grithub.com/Uhula/ioBroker-Material-Design-Style
-   
-   -----
-   
-   V2.0.2 29.01.2020
-   * mdui-center/-h/-v mit !important versehen damit die widgeteigenen Style
-     zuweisungen überschrieben werden
-   * mdui-flex: funktioniert nun auch mit contXXX in Widget view-8
-   * mdui-label, mdui-value, mdui-title, mdui-subtitle: es wurde die vertikale
-     Zentrierung mit display:flex entfernt damit die direkten Wigdet font-
-     zuweisungen funktionieren. Das Zentrieren kann mit mdui-center erreicht
-     werden
-   * Öffnen/Schließen der fixierten lnav ist nun animation-iteration-count
-   * mdui-navitem: im display:flex das !important entfernt, damit die Media
-     Query mit mdui-show480 funktioniert
-   * mdui-dialog-fullheight und mdui-dialog-fullscreen zur Nutzung in Dialogen
-     hinzugefügt  
-   
-   
-   V2.0.1 24.01.2020
-   * Umstellung auf helles Thema
-     Das komplette Design wurde auf das helle Thema (light) umgesetzt und passt sich
-     flexibel an die jeweils gewählten Hintergrundfarben für abra, tnav, lnav, rnav
-     und content an in dem es automatisch eine weiße bzw. schwarze Schrift- und
-     Stiftfarbe wählt. Somit ist das dunkle Schema zur Laufzeit einstellbar.
-     Siehe auch "Symbole, Icons"!
-
-   * Konfiguration
-     Die Farben werden nicht mehr direkt den abra, tnav, lnav, rnav und content
-     -Elementen zugeordnet, sondern es wird z.B. im abar ein HTML-Element mit der 
-     CSS-Class mdui-config ausgewertet, in welchem alle Farbangaben zentral 
-     verzeichnet sind.
-     Das HTML-Element muss folgenden Aufbau haben:
-       "primary_color":"<farbe>",
-       "lnav_color":"<farbe>",
-       "rnav_color":"<farbe>",
-       "secondary_color":"<farbe>",
-       "content_color":"<farbe>",
-       "lnav_fixed_width":"0..9999",
-       "lnav_fixed_open":"true"
-     Für <farbe> können die Werte:
-     red, pink, purple, deeppurple, indigo, blue, lightblue, cyan, teal, green, 
-     lightgreen, lime, yellow, amber, orange, deeporange, brown, grey, 
-     darkgrey, bluegrey, white, black
-     sowie jede Farbangabe im Format #rrggbb (Bsp: #8050FF) verwendet werden.
-     In "lnav_fixed_width" wird die Breite in Pixel angegeben, ab der die lnav 
-     links permanent angezeigt werden soll.
-     In "lnav_fixed_open" wird über true bzw. false festgelegt, ob die lnav beim
-     Seitenwechsel geöffnet dargestellt werden soll (wenn die Breite ausreicht)
-
-     Natürlich kann in allen Angaben auch von der binding-Fähigkeit von ioBroker
-     Gebrauch gemacht werden um die Angaben über vis-States zu setzen und somit 
-     z.B. tagsüber ein helles Design und nachts ein dunkles Design zu verwenden.
-     Beispiel: "primary_color":"{vis.0.md.primary_color}" verwendet dann die akutell in 
-        vis.0.md.primary_color eingestellte Farbe
-
-
-   * mdui-flex (Responsive Design)
-     Die Handhabung des responsive design, also die Anpassung des Inhalts an
-     die Breite der Darstellung, wurde komplett geändert. Statt bisher mit
-     dem float-Attribut zu arbeiten, wird nun flex verwendet. Dieses ist
-     deutlich mächtiger und bietet u.a. die Möglichkeit die Reihenfolge der
-     Child-Elemente unabhängig von ihrem Auftreten im HTML über die CSS-Class
-     mdui-order-<nn> (<nn>=1..99) zu setzen. Damit entfällt das unständliche 
-     Kopieren/Einfügen von Elementen im Designer!
-     Im Demo-Projekt wird flex für tnav, lnav, rnav und den content verwendet.
-     Die mdui-flex CSS-Class wird dem Containerelement (z.B. mdui-content) zugeordnet, 
-     nicht den Child-Elementen (z.B. den mdui-card).
-  
-   * mdui-cols-<n>, mdui-rows-<n> 
-     Die Größenangaben der Cards mit mdui-cols-<n> (Breite) und mdui-rows-<n> (Höhe)
-     basiert nun auf einem 80 Pixel Raster mit <n>=1-24 (bisher 156 Pixel Raster). 
-     Damit ist eine feinere Größenzuweisung möglich.
-     Weiterhin kann nun jeweils auch eine maximale Größe mit angegeben werden. Dazu
-     muss nur mdui-cols-<n> zu mdui-cols-<n>-toc-<m> ergänzt werden <m>=1-24, bzw. 
-     mdui-rows-<n> zu mdui-rows-<n>-tor-<m>. 
-     Beispiel: mdui-cols-4-toc-8 führt dazu, dass das Card-Element je nach Platz
-               320 bis 640 Pixel breit dargestellt wird. 
-               (wenn der Container "mdui-content" die CSS-Class mdui-flex besitzt) 
-     Beispiel: mdui-rows-4-tor-8 führt dazu, dass das Card-Element je nach Platz
-               320 bis 640 Pixel hoch dargestellt wird 
-               (wenn der Container "mdui-content" die CSS-Class mdui-flex-stretch besitzt) 
-
-   * Cards
-     Die Darstellung der Cards wurde verändert. Sie fügen nun keine margins mehr hinzu,
-     sondern stellen die Vard-Views so dar, wie sie designt wurden. Es empfiehlt sich  
-     in den Card-Views 16 Px linke und oben frei zu lassen.
-     mdui-card : Darstellung als flache Card, mit 2px Außen-, 14px Innenabstand (früher: mdui-tile)
-     mdui-card-raised : Darstellung mit Schatten, mit 8px Außen-, 8px Innenabstand (früher: mdui-card)
-     mdui-card-outlined: Darstellung mit Rahmen, mit 8px Außen-, 8px Innenabstand
-
-   * Buttons
-     Hier wurden die CSS-Class namentlich verändert und vereinheitlicht:
-     mdui-flatbutton -> mdui-button
-     mdui-raisedbutton -> mdui-button-raised
-     mdui-button-outlined: NEU Stellt Buttons mit einer Rahmenlinie dar, über 
-        mdui-<colorname>-ol kann die Rahmenfarbe gesetzt werden. Vorgabe: grau
-
-   * Symbole, Icons
-     Wenn man mit der Umschaltung heller und dunkler Schema arbeiten möchte, muss
-     man auch dafür sorgen, dass Symbole und Icons z.B. von schwar auf weiß wechseln.
-     Da dieses mit diskreten Bilddateien (img) nicht per CSS lösbar ist, können nun die
-     Material Design Icons genutzt werden.
-     Link: https://material.io/resources/icons/?style=baseline 
-     Hierzu werden alle Icons als Font in der CSS-Datei eingebunden und können dann in 
-     jeder HTML Eingabe als Icon durch <i class="material-icons">iconname</i> genutzt werden.
-     Bsp:<i class="material-icons">home</i>
-     Dadruch werden die Icons wie normaler Text behandelt und passen sich sowohl in der
-     Größe (font-size) als auch in der Farbe (color) an!
-     Wichtig: Die font-Dateien (Material-Icons-...) liegen im Demo-Projektordner 
-       (Bsp: /vis.0/MD_Demo/) im Images-Ordner. Wird ein eigenes Projekt verwendet, müssen 
-       die font-Dateien kopiert werden und die Pfadangaben in der CSS-Datei müssen 
-       für @font-face {} angepasst werden!!!
-
-   * Slider
-     Die Dartellung der Slider wurde erweitert, so ist nun sowohl die segmentierte
-     Darstellung als auch die Anzeige des aktuellen Wertes während des slidens möglich.
-     mdui-segment-<n> : Anzeige mit entspr. vielen Segmenten <n>=5,10,20,25,33,50
-     mdui-show-hint : Während des Bedienens wird der aktuelle Wert angezeigt (0-100)
-     mdui-range-<from>-<to> : Da kein Zugriff auf den aktuellen Wert im vis möglich ist
-       und nur die Info 0 bis 100% im Slider zur Verfügung steht, kann über die mdui-range
-       Angabe ein Sliderbereich für mdui-show-hint festgelegt werden. 0%=<from> 100%=<to>
-       Beispiel: mdui-range-0-255 für die Festlegung eines Rot-Wertes
-
-   * Tabellen
-     Die Tabellen CSS-Classes haben sich ein wenig verändert, ebenso die Angabe der Optionen. 
-     Weiterhin wurde die Darstellung an die flat/raised/outlined Darstellung der Cards 
-     angepasst.
-     mdui-table: Darstellung der Tabelle in normaler Tabellenform
-     mdui-table-list : Darstellung in Zeilen (rows) Listenform
-     mdui-table-raised : Darstellung der Zeilen (rows) als Cards, erhaben, mit Schatten
-     mdui-table-outlined : Darstellung der Zeilen (rows) als Cards, mit Rahmen
-     Die Optionen werden nun in einer seperaten CSS-Class angegeben:
-     mdui-table-opt-[-r<responsewidth>][-w<colwidth>][-c<colcount>][-l]
-
-   * Diverses
-     * box-sizing wird global auf box-model gesetzt damit die width und height
-       Berechnungen besser passen. Hinweis: Größenangaben werden nun inklusive
-       Border+Padding interpretiert.
-     * Werden mdui-toggle 100% Buttons in der lnav bzw. rnav verwendet um strukturierte
-       Menüs zu erzeugen, so zeigen sie nun bereits einen Pfeil nach unten bzw. 
-       nach oben am rechten Rand automatisch an
-
-   * Neue bzw. geänderte CSS Classes
-     * mdui-center: Zentriert die Ausgabe im Element horizontal und vertikal
-     * mdui-center-h: Zentriert die Ausgabe im Element horizontal
-     * mdui-center-v: Zentriert die Ausgabe im Element vertikal
-     * mdui-cols-<n>-toc-<m>: Über "-toc-<m>" kann nun eine max. Breite angegeben
-       werden, mit <m>=1 bis 24
-     * mdui-divider : zeichnet eine dünne horizontale Linie, kann z.B. in lnav
-       verwendet werden, passt sich dem light-dark-Thema an
-     * mdui-expand[-<height>]: Kann einer Schaltfläche zugewiesen werden um ein Element
-       zu kollabieren/expandieren. Normalerweise also innerhalb eines Views, der als
-       Card verwendet werden soll. Sinnvoll für Phone-Screens.
-       In [-<height>] kann optional eine Zielhöhe in px im collabierten Zustand
-       angegeben werden, wenn nicht, werden 64px angenommen
-     * mdui-flex : Wird einem Container (view-in-view) zugeordnet und führt dazu, 
-       dass enthaltene Elemente automatisch angeordnet werden und je nach deren
-       mdui-cols- Zuweisungen sich in der Breite anpassen
-     * mdui-flex-stretch : Wird einem Container (view-in-view) zugeordnet und 
-       führt dazu, dass enthaltene Elemente je nach mdui-rows- Zuweisungen
-       sich in der Höhe anpassen
-     * mdui-noflex : Das Element wird im mdui-flex nicht berücksichtigt  
-     * mdui-h-flow bzw. mdui-v-flow: umbenannt zu mdui-flow, da man h/v flow durch 
-       das Drehen mit mdui-rotate-<grad> erreichen kann
-     * mdui-input mdui-center-horizontal umbenannt zu mdui-input mdui-center-h
-     * mdui-order-N: Festlegung der Reihenfolge dwer Elemente in flex-Darstellung,
-       wird zur Designzeit im ElElement mit angezeigt
-     * mdui-rotate-<grad> : Dreht ein Element um <grad>°. 0° entspricht der horizontalen
-       Darstellung. 15° Schritte sind möglich.
-       <grad>=000,015,030,045,060,075,090,105,120,135,150,165,180,195,210,225,
-       240,255,270,285,300,315,330,345
-     * mdui-rotateX-cw, mdui-rotateX-ccw : Lässt ein Element um seine X-Achse 
-       rotieren, die Rotationsgeschwindigkeit kann über mdui-slowest, mdui-slower, 
-       mdui-slow, ..., mdui-fast, mdui-faster, mdui-fastest festgelegt werden. 
-       cw=im Uhrzeigersinn, ccw=gegen den Uhrzeigersinn
-     * mdui-rotateY-cw, mdui-rotateY-ccw : Lässt ein Element um seine Y-Achse 
-       rotieren, die Rotationsgeschwindigkeit kann über mdui-slowest, mdui-slower, 
-       mdui-slow, ..., mdui-fast, mdui-faster, mdui-fastest festgelegt werden. 
-       cw=im Uhrzeigersinn, ccw=gegen den Uhrzeigersinn
-     * mdui-rotateZ-cw, mdui-rotateZ-ccw : Lässt ein Element um seine Z-Achse 
-       rotieren, die Rotationsgeschwindigkeit kann über mdui-slowest, mdui-slower, 
-       mdui-slow, ..., mdui-fast, mdui-faster, mdui-fastest festgelegt werden. 
-       cw=im Uhrzeigersinn, ccw=gegen den Uhrzeigersinn
-     * mdui-rows-<n>-tor-<m>: Über "-tor-<m>" kann nun eine max. Höhe angegeben 
-       werden, mit <m>=1 bis 24
-     * .mdui-scale-<n> : Dient der Skalierung des Elements/Widgets. 
-       Mit <n>=010,020,025,030,033,040,050,060,066,070,075,080,090
-
-
-   V1.9.3 14.02.2019
-   + mdui-chips: wird für jqui-radiobuttons valuelist verwendet um diese als
-     "chips" darzustellen (alternativ zu mdui-radio)
-   + mdui-chip: wird für basic HTML verwendet
-   o mdui-state: Text ist nun auch horizontal zentiert
-   o mdui-raisedbutton: haben diese amber, yellow oder lime als Hintergrundfarbe so ist die Schriftfarbe nun schwarz statt weiß
-
-   V1.9.2 06.12.2018
-   + mdui-clear: wird mit mdui-float verwendet um einen row-Umbruch zu erzwingen
-   + mdui-rows-X: Grid-System (152px) für responsive design (mit X=1-10).
-     Erweitert das mdui-cols-X Grid um die Möglichkeit auch die Höhen anzugeben
-     Die Grids werden idR in den mdui-cont verwendet
-   o mdui-tile: dunkelt leicht ab statt aufzuhellen
-
-   V1.9.1 02.02.2018
-   + mdui-center-horizontal für mdui-input, damit kann man den Input-Text zentrieren
-   o Korrektur: "der active-State der Buttons in tnav/bnav wird nun mit box-shadow statt border gezeichnet". mdui-(color)-acc ging nicht mehr
-   o Korrektur: mdui-state, Border-Radius und Zentrierung
-   + mdui-black<op>-bg und mdui-white<op>-bg für transparenten Hintergund in schwarz und weiß, Opacity in %: op=10,20,30,...90
-   + mdui-(color)-bg funktioniert nun auch für ioBroker Dialogs (Angabe in der Titel-Eigenschaft des anzuzeigenden Dialogs: Mein Dialog|class=mdui-red-bg|style=min-width:90;min-height:90%;
-
-
-   V1.9 13.01.2018
-   + mdui-h-flow, mdui-v-flow hinzugefügt. Dient der Fließ-Animation in
-     verschiedenen Farben und verschiedenen Geschwindigkeiten
-
-   V1.8 04.01.2018
-   + mdui-(color)-glow für red, yellow, blue und green hinzugefügt
-   o der active-State der Buttons in tnav/bnav wird nun mit box-shadow
-     statt border gezeichnet
-
-   V1.7 22.12.2017
-   + mdui-state: Anzeige von Textstati mit Vorder-/Hintergrundfarbe (basic ValueList HTML)
-   + mdui-cols-X: Grid-System (152px) für responsive design
-   o mdui-raisedbutton, mdui-flatbutton Texte werden nun horz/vert zentriert
-
-   V1.6 16.10.2017
-   o mdui-dialog z-index korrigiert, damit Dialoge auch im ioBroker fullscreen Mode sichtbar sind
-
-   V1.5 11.10.2017
-   + mdui-table-xxxx hinzu, fertig
-
-   V1.3 24.09.2017
-   + mdui-transparent-acc für mdui-slider hinzu
-   + mdui-(color)-acc für input mit btn
-   + mdui-slider ohne focus-Rahmen
-   + Designtime: bei [Mouse-down] > 3 Sek alle Widgets mit einem Rahmen versehen und die ID anzeigen
-   + Designtime: bei [Mouse-over] > 0.5 Sek das Widget mit einem Rahmen versehen und die ID anzeigen
-
-   V1.2 19.09.2017
-   + mdui-select hinzu
-   o mdui-input angepasst
-   o mdui-flash/blink/pulse mit filter:drop-shadow (not IE Browser!)
-   o mdui-(color) für input/select ermöglicht
-
-   V1.0 01.09.2017
-   ----- */
 
 /* -----
    Generell
@@ -300,8 +74,12 @@ flot: timespan 1em
 }
 /* das box Modell für alle Elemente auf border-box setzen */
 
-*, ::before, ::after {
+*, :before, :after {
   box-sizing: border-box;
+}
+
+:focus {
+  outline: 0px red solid;
 }
 
 /* nur zur Laufzeit anwenden, nicht im Editor */
@@ -309,10 +87,10 @@ flot: timespan 1em
   visibility:hidden !important;
   height:0 !important;
   opacity: 0 !important;
-  transition:all 0.33s;
+  transition:all  0.33s ease;
 }
 .mdui-runtime .mdui-hide-show {
-  transition:all 0.33s;
+  transition:all  0.33s ease;
 }
 
 .mdui-toggle img {
@@ -325,15 +103,18 @@ flot: timespan 1em
 
 /* zentrieren */
 
-.mdui-center-v .vis-widget-body   {
+.mdui-center-v .vis-widget-body,
+.mdui-center-v .vis-widget-body *  {
   display:flex !important;
   align-items: center;
 }
-.mdui-center-h .vis-widget-body   {
+.mdui-center-h .vis-widget-body,
+.mdui-center-h .vis-widget-body *  {
   display:flex !important;
   justify-content: center;
 }
-.mdui-center .vis-widget-body  {
+.mdui-center .vis-widget-body,
+.mdui-center .vis-widget-body * {
   display:flex !important;
   align-items: center;
   justify-content: center;
@@ -436,6 +217,12 @@ flot: timespan 1em
 .mdui-rotateY-ccw.mdui-slow,
 .mdui-rotateZ-cw.mdui-slow,
 .mdui-rotateZ-ccw.mdui-slow{ animation-duration:6s; }
+.mdui-rotateX-cw.mdui-normal,
+.mdui-rotateX-ccw.mdui-normal,
+.mdui-rotateY-cw.mdui-normal,
+.mdui-rotateY-ccw.mdui-normal,
+.mdui-rotateZ-cw.mdui-normal,
+.mdui-rotateZ-ccw.mdui-normal{ animation-duration:4s; }
 .mdui-rotateX-cw.mdui-fast,
 .mdui-rotateX-ccw.mdui-fast,
 .mdui-rotateY-cw.mdui-fast,
@@ -485,8 +272,6 @@ flot: timespan 1em
   color:#000000;
 }
 
-
-
 .vis_container_edit>.vis-view {
   background:#000;
   color:#000000;
@@ -506,6 +291,45 @@ flot: timespan 1em
   font-size:3em !important;
 }
 
+/* ripple effect */
+
+
+.mdui-button:before,
+.mdui-ripple:before,
+.mdui-button-outlined:before,
+.mdui-button-raised:before,
+.mdui-menuitem:before,
+.mdui-navitem:before {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+  background-repeat: no-repeat;
+  background-position: 50%;
+  transform: scale(10, 10);
+  opacity: 0;
+  transition: transform .5s, opacity 1s;
+}
+
+.mdui-button:active:before,
+.mdui-ripple:active:before,
+.mdui-button-outlined:active:before,
+.mdui-button-raised:active:before,
+.mdui-menuitem:active:before,
+.mdui-navitem:active:before {
+  transform: scale(0, 0);
+  opacity: .33;
+  transition: 0s;
+}
+
+
+/* Wetter meteoblue in dark */
+
 .mdui-dark .vis-widget-body iframe[src*="meteoblue"],
 .mdui-dark .vis-widget-body iframe[src*="meteoblue"] #document,
 .mdui-dark .vis-widget-body iframe[src*="meteoblue"] html,
@@ -514,18 +338,7 @@ flot: timespan 1em
 }
 
 /* Grid
-13er Raster, 52er Block, 156er Col
-----------------------------------
- 1 col   156        1 * 160 + 0 * 8
- 2 cols  312   320  2 * 160 + 1 * 8
- 3 cols  468   480  3 * 160 + 2 * 8
- 4 cols  624   640  4 * 160 + 3 * 8
- 5 cols  780   800  5 * 160 + 4 * 8
- 6 cols  936   960  6 * 160 + 5 * 8
- 7 cols 1092  1120  7 * 160 + 6 * 8
- 8 cols 1248  1280  8 * 160 + 7 * 8
- 9 cols 1404  1440  9 * 160 + 8 * 8
-10 cols 1560  1600 10 * 160 + 9 * 8
+80er Raster
 */
 [class*="mdui-cols-1"] {min-width:80px; max-width:88px;}
 [class*="mdui-cols-2"] {min-width:160px; max-width:176px;}
@@ -727,11 +540,16 @@ flot: timespan 1em
 }
 
 
+/*
+.mdui-flex-stretch>.vis-view-container {
+  height:auto !important;
+}
+*/
 .mdui-flex-stretch>.vis-view-container>.vis-view {
   align-content: stretch;
 }
 
-.mdui-flex-column>.vis-view-container>.vis-view {
+.mdui-flex.mdui-flex-column>.vis-view-container>.vis-view {
   flex-direction: column;
 }
 
@@ -751,18 +569,17 @@ flot: timespan 1em
   align-self: stretch;
 }
 
+.mdui-flex [class*="mdui-cols-"], 
+.mdui-flex [class*="mdui-cols-"][class*="-toc-"] { 
+    flex-grow:1;
+}
+
 .mdui-flex .mdui-cols-break { 
   flex-basis:100%; 
   height: 0px !important; 
   width: 0px !important; 
   margin:0px !important; 
   padding:0px !important; 
-}
-
-.mdui-flex .mdui-cols-flex,
-.mdui-flex [class*="mdui-cols-"], 
-.mdui-flex [class*="mdui-cols-"][class*="-toc-"] { 
-    flex-grow:1;
 }
 
 .mdui-order-1{order:1;}.mdui-order-2{order:2;}.mdui-order-3{order:3;} 
@@ -1155,25 +972,26 @@ flot: timespan 1em
 /* -----
    menuitem
    ----- */
-
+.mdui-menu {
+  background:#ffffff !important;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.1), 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.25);
+  border-radius:4px;
+}
+.mdui-dark .mdui-menu {
+  background:#303030 !important;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.5), 0 14px 28px rgba(0,0,0,0.87), 0 10px 10px rgba(0,0,0,1);
+}
 .mdui-menuitem {
-  background:rgba(255,255,255,0.87) !important;
+  color:#000000;
+  background:rgba(255,255,255,1) !important;
   font-size:1em !important;
   font-weight:normal !important;
-  border:1px solid rgba(0,0,0,0.05) !important;
+  xborder:1px solid rgba(0,0,0,0.05) !important;
+  overflow:visible;
 }
 .mdui-dark .mdui-menuitem {
-  background-color:rgba(0,0,0,0.87) !important;
-  border:1px solid rgba(255,255,255,0.05) !important;
-}
-
-.mdui-menuitem * {
-  background:none !important;
-  border:none !important;
-  color:#000000;
-}
-
-.mdui-dark .mdui-menuitem * {
+  background-color:#303030 !important;
+  xborder:1px solid rgba(255,255,255,0.1) !important;
   color:#ffffff;
 }
 
@@ -1200,7 +1018,7 @@ flot: timespan 1em
 
 .mdui-input .ui-button,
 .mdui-button {
-  border-radius:4px !important;
+  border-radius:4px;
   cursor:pointer;
 }
 
@@ -1208,10 +1026,12 @@ flot: timespan 1em
   background:none !important;
   font-size:1em !important;
   font-weight:normal !important;
-  border-radius:4px !important;
+  border-radius:4px;
   border:none !important;
   text-transform: uppercase ;
+  transition: background 0.8s;
 }
+
 
 .mdui-input .ui-button,
 .mdui-button * {
@@ -1227,11 +1047,11 @@ flot: timespan 1em
 
 
 .mdui-runtime.mdui-notouch .mdui-button:hover {
-  box-shadow: 0 0 0 1000px rgba(0,0,0,0.2) inset !important;
+  box-shadow: 0 0 0 1000px rgba(0,0,0,0.1) inset !important;
   transition: all 0.3s ease;
 }
 .mdui-runtime.mdui-notouch .mdui-dark .mdui-button:hover {
-  box-shadow: 0 0 0 1000px rgba(255,255,255,0.2) inset !important;
+  box-shadow: 0 0 0 1000px rgba(255,255,255,0.1) inset !important;
 }
 
 .mdui-button.mdui-accent *,
@@ -1290,7 +1110,7 @@ flot: timespan 1em
 
 .mdui-button-outlined {
   border:1px solid rgba(0,0,0,0.33);
-  border-radius:4px !important;
+  border-radius:4px;
 }
 .mdui-button-outlined * {
   border:none !important;
@@ -1317,11 +1137,11 @@ flot: timespan 1em
 }
 
 .mdui-runtime.mdui-notouch .mdui-button-outlined:hover {
-  box-shadow: 0 0 0 1000px rgba(0,0,0,0.2) inset !important;
+  box-shadow: 0 0 0 1000px rgba(0,0,0,0.1) inset !important;
   transition: all 0.3s ease;
 }
 .mdui-runtime.mdui-notouch .mdui-dark .mdui-button-outlined:hover {
-  box-shadow: 0 0 0 1000px rgba(255,255,255,0.2) inset !important;
+  box-shadow: 0 0 0 1000px rgba(255,255,255,0.1) inset !important;
 }
 
 .mdui-button-outlined.mdui-red *,
@@ -1421,10 +1241,9 @@ flot: timespan 1em
    ----------*/
 
 .mdui-button-raised {
-  font-size:1em !important;
   background: rgba(0,0,0,.21) !important;
   border:none !important;
-  border-radius:4px !important;
+  border-radius:4px;
 }
 .mdui-dark .mdui-button-raised {
   background: rgba(255,255,255,.33) !important;
@@ -1455,11 +1274,11 @@ flot: timespan 1em
 }
 
 .mdui-runtime.mdui-notouch .mdui-button-raised:hover {
-  box-shadow: 0 0 0 1000px rgba(0,0,0,0.2) inset !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.27), 0 1px 2px rgba(0,0,0,0.54), 0 0 0 1000px rgba(0,0,0,0.1) inset;
   transition: all 0.3s ease;
 }
 .mdui-runtime.mdui-notouch .mdui-dark .mdui-button-raised:hover {
-  box-shadow: 0 0 0 1000px rgba(255,255,255,0.2) inset !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.66), 0 1px 2px rgba(0,0,0,0.87), 0 0 0 1000px rgba(255,255,255,0.1) inset !important;
 }
 /*
 .mdui-button-raised.mdui-red-bg *,
@@ -1610,7 +1429,7 @@ flot: timespan 1em
 
 .mdui-navitem .vis-widget-body,
 .mdui-navitem .vis-widget-body * {
-  display:flex;
+  display:flex !important;
   align-items: center;
 }
 
@@ -1686,6 +1505,12 @@ flot: timespan 1em
 
 .mdui-navitem.mdui-toggle.ui-state-active:after {
   transform:rotate(180deg); 
+}
+:not(.mdui-navitem).mdui-toggle.ui-state-active {
+  background: rgba(0,0,0,.1) !important;
+}
+.mdui-dark :not(.mdui-navitem).mdui-toggle.ui-state-active {
+  background: rgba(255,255,255,.1) !important;
 }
 
 
@@ -1933,7 +1758,7 @@ flot: timespan 1em
 .mdui-value {
   z-index:2;
   color:#000000;
-  font-weight:bold !important;
+  font-weight:bold;
   font-size:1em;
   text-shadow:none !important;
   letter-spacing: 0px !important;
@@ -1955,7 +1780,7 @@ flot: timespan 1em
 .mdui-state {
   z-index:2;
   color:#000000 !important;
-  font-weight:normal;
+  font-weight:bold;
   font-size:1em;
   text-shadow:none !important;
   letter-spacing: 0px !important;
@@ -2101,6 +1926,10 @@ flot: timespan 1em
 }
 
 .mdui-select select  {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  border: none;
   color : #000000;
   background: rgba(0,0,0,0);
   height:100% !important;
@@ -2132,19 +1961,17 @@ flot: timespan 1em
 
 .mdui-select:before {
   position: absolute;
-  top: calc(50% - 0.22em);
-  right: 0.22em;
-  width: 0px;
-  height: 0px;
+  color:#000000;
   padding: 0px;
-  content: "";
-  border-left: .4em solid transparent;
-  border-right: .4em solid transparent;
-  border-top: .4em solid #000000;
+  font-family: 'Material Icons' !important;
+  font-size:24px;
+  top: calc(50% - 0.5em);
+  left:calc(100% - 1em);
+  content: "arrow_drop_down";
   pointer-events: none;
 }
 .mdui-dark .mdui-select:before {
-  border-top: .4em solid #ffffff;
+  color:#ffffff;
 }
 
 .mdui-runtime.mdui-notouch .mdui-select:hover,
@@ -2309,7 +2136,20 @@ zeigt und so bedienbar ist.
     0 1px 5px 0 rgba(0, 0, 0, 1);
 }
 
-.mdui-runtime .mdui-slider:hover .ui-slider-horizontal .ui-slider-handle:before,
+.mdui-runtime .mdui-slider:hover .ui-slider-horizontal .ui-slider-handle:not(:focus):before {
+  outline: none;
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.27),
+    0 2px 2px 0 rgba(0, 0, 0, 0.27),
+    0 1px 5px 0 rgba(0, 0, 0, 0.54),
+    0 0 0 12px rgba(0,0,0,.33);
+}
+.mdui-runtime .mdui-dark .mdui-slider:hover .ui-slider-horizontal .ui-slider-handle:not(:focus):before {
+  outline: none;
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.27),
+    0 2px 2px 0 rgba(0, 0, 0, 0.87),
+    0 1px 5px 0 rgba(0, 0, 0, 1),
+    0 0 0 12px rgba(255,255,255,.2);
+}
 .mdui-slider .ui-slider-handle:focus:before {
   outline: none;
   box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.27),
@@ -2317,7 +2157,6 @@ zeigt und so bedienbar ist.
     0 1px 5px 0 rgba(0, 0, 0, 0.54),
     0 0 0 16px rgba(0,0,0,.33);
 }
-.mdui-runtime .mdui-dark .mdui-slider:hover .ui-slider-horizontal .ui-slider-handle:before,
 .mdui-dark .mdui-slider .ui-slider-horizontal .ui-slider-handle:focus:before {
   outline: none;
   box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.27),
@@ -2325,7 +2164,6 @@ zeigt und so bedienbar ist.
     0 1px 5px 0 rgba(0, 0, 0, 1),
     0 0 0 16px rgba(255,255,255,.2);
 }
-
 
 /* left-Wert (mdui-slider-value) als %-Angabe anzeigen */
 /*.mdui-slider.mdui-show-hint .ui-slider-horizontal .ui-slider-handle:after,*/
@@ -2422,7 +2260,21 @@ zeigt und so bedienbar ist.
     0 1px 5px 0 rgba(0, 0, 0, 1);
 }
 
-.mdui-runtime .mdui-slider:hover .ui-slider-vertical .ui-slider-handle:before,
+.mdui-runtime .mdui-slider:hover .ui-slider-vertical .ui-slider-handle:not(:focus):before {
+  outline: none;
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.27),
+    0 2px 2px 0 rgba(0, 0, 0, 0.27),
+    0 1px 5px 0 rgba(0, 0, 0, 0.54),
+    0 0 0 12px rgba(0,0,0,.33);
+}
+.mdui-runtime .mdui-dark .mdui-slider:hover .ui-slider-vertical .ui-slider-handle:not(:focus):before
+ {
+  outline: none;
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.27),
+    0 2px 2px 0 rgba(0, 0, 0, 0.87),
+    0 1px 5px 0 rgba(0, 0, 0, 1),
+    0 0 0 12px rgba(255,255,255,.2);
+}
 .mdui-slider .ui-slider-handle:focus:before {
   outline: none;
   box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.27),
@@ -2430,7 +2282,6 @@ zeigt und so bedienbar ist.
     0 1px 5px 0 rgba(0, 0, 0, 0.54),
     0 0 0 16px rgba(0,0,0,.33);
 }
-.mdui-runtime .mdui-dark .mdui-slider:hover .ui-slider-vertical .ui-slider-handle:before,
 .mdui-dark .mdui-slider .ui-slider-vertical .ui-slider-handle:focus:before {
   outline: none;
   box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.27),
@@ -2438,7 +2289,6 @@ zeigt und so bedienbar ist.
     0 1px 5px 0 rgba(0, 0, 0, 1),
     0 0 0 16px rgba(255,255,255,.2);
 }
-
 
 
 
@@ -2495,7 +2345,7 @@ zeigt und so bedienbar ist.
   left: calc(50% - 60px);
   width: 32px;
   height: 32px;
-  background:#000000;
+  background:#121212;
   border-radius: 50%;
   opacity:1;
   z-index:32000;
@@ -2872,7 +2722,7 @@ display: block;
 }
 
 .mdui-chips-outlined * label.ui-state-active:before {
-  opacity:0.4;
+  xopacity:0.8;
   border-color:#2196F3 !important;
 }
 
@@ -3572,6 +3422,9 @@ display: block;
 .mdui-slow.mdui-flow:after  {
   animation-duration: 90s;
 }
+.mdui-normal.mdui-flow:after  {
+  animation-duration: 60s;
+}
 .mdui-fast.mdui-flow:after  {
   animation-duration: 40s;
 }
@@ -3978,6 +3831,14 @@ einblenden */
          0 0 1px 0 rgba(0,0,255,.33);
     
 }
+.vis_container_edit .mdui-menuitem {
+   outline:1px solid rgba(0,0,255,.1);
+   outline-offset:-1px;
+}
+.vis_container_edit .mdui-menuitem.mdui-hide {
+   outline:1px solid rgba(255,0,0,.1);
+}
+
 /*
 .vis_container_edit .vis-tpl-basic-view .mdui-navitem,
 .vis_container_edit .vis-tpl-basic-view .mdui-menuitem,
@@ -3993,11 +3854,6 @@ einblenden */
 }
 
 
-.vis_container_edit .mdui-navitem.mdui-hide,
-.vis_container_edit .mdui-menuitem.mdui-hide {
-    box-shadow: 0 0 0 1000px rgba(2550,0,0,.02) inset;
-}
-
 
 /* flex-grid anzeigen */
 
@@ -4006,13 +3862,35 @@ einblenden */
   top:0px;
   left:5em;
   content: "flex";
-  background: rgba(0,0,255,.66);
-  color:#fffffff !important;
-  font-size:0.66em;
+  width:3em;
+  height:1.5em;
+  background: rgba(0,0,255,.33);
+  color:#ffffff !important;
+  font-size:10px;
   font-weight:normal;
   border-radius: 1em;
-  padding: 1px 3px;
   z-index:32000;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+}
+.vis_container_edit .vis-view .mdui-hide>.vis-widget-body:before  {
+  position:absolute;
+  top:0px;
+  right:1.5em;
+  width:1.5em;
+  height:1.5em;
+  content: "h";
+  background: rgba(255,0,0,.33);
+  color:#ffffff !important;
+  font-size:10px;
+  font-weight:normal;
+  border-radius: 1em;
+  z-index:32000;
+    display:flex;
+  align-items: center;
+  justify-content: center;
+
 }
 
 
@@ -4029,7 +3907,7 @@ einblenden */
   content: "#";
   background: rgba(0,0,255,.66);
   color:#ffffff;
-  font-size:0.66em;
+  font-size:10px;
   font-weight:normal;
   border-radius: 1em;
   z-index:32000;
@@ -4149,32 +4027,39 @@ einblenden */
 .vis_container_edit .mdui-order-99>.vis-widget-body:after { content: "99"; }
 
 
-/* 
-.vis_container_edit .mdui-lnav { 
-  left:0px !important;
-  width:26px !important;
-  height:100% !important;
-  border-right: 1px solid blue;
+/* vis -Eigenschaften, label-column verkleinern */
+.vis-widget-tools table colgroup col:nth-child(1) {
+    width:20% !important;
 }
-.vis_container_edit .mdui-rnav { 
-  left:calc(100% - 26px) !important;
-  width:26px !important;
-  height:91px !important;
-  border-left: 1px solid blue;
-  border-bottom: 1px solid blue;
+
+/* mdui Hinweis bei Eingabe class anzeigen */
+#td_class td:nth-child(1) {
+  font-style: italic;
 }
-.vis_container_edit .mdui-abar { 
-  left:0px !important;
+#td_class td:nth-child(2):hover:after {
+  position:absolute;
+  top:16px;
+  left:-640px;
+  width:640px;
+  height:calc(100% - 32px);
+  content:"";
+  background: #ffffff;
+  background-size: 100% auto;
+  background-position: 4px 4px;
+  background-repeat: no-repeat;
+  background-image: url("https://github.com/Uhula/ioBroker-Material-Design-Style/blob/master/docs/mdui-uebersicht.png?raw=true");
+  border-radius:4px;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.3), 0 14px 28px rgba(0,0,0,0.65), 0 10px 10px rgba(0,0,0,0.62);
+  z-index:32000;
 }
-.vis_container_edit .mdui-tnav,
-.vis_container_edit .mdui-bnav { 
-  left:104px !important;
-  width:calc(100% - 104px) !important;
-}
-.vis_container_edit .mdui-content { 
-  left:104px !important;
-  width:calc(100% - 104px) !important;
-}
-*/
+
+/* =====
+   end of mdui-content
+   =====*/
+
+
+
+
+
 
 

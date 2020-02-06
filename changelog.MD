@@ -1,4 +1,30 @@
-V2.0.2 29.01.2020
+## V2.0.3 07.02.2020
+# CSS Projekt
+* mdui-state wieder bold Font
+* mdui-center(-h|-v) wirkt sich nun auch auf Child Elemente aus, somit auch nutzbar für mdui-state
+* mdui-select: Rendering des Drop-Down Buttons druch den Browser wrid unterdrückt 
+* mdui-menu: Kann als Hintergrund für mdui-menuitems verwendet werden, Stellt einen "raised" Bereich dar
+* mdui-dialog-fullheight: Wird in Verbindung mit einem "... view in Dialog" Widget verwendet und wird in der Titel-Eigenschaft hinter dem Titel angegeben. Führt dazu, dass der Dialog mit voller Höhe (abzgl. 16px Rand) angezeigt wird, was sonst via vis nicht erreichbar ist. Bsp: Titel: "Test Fullheight|class=mdui-dialog-fullheight"
+* mdui-dialog-fullscreen: Wird in Verbindung mit einem "... view in Dialog" Widget verwendet und wird in der Titel-Eigenschaft hinter dem Titel angegeben. Führt dazu, dass der Dialog im Fullscreen (abzgl. 16px Rand) angezeigt wird, was sonst via vis nicht erreichbar ist. Bsp: Titel: "Test Fullscreen|class=mdui-dialog-fullscreen" 
+* In der vis-Eigenschaftseingabe die linke (Label) Spalte auf 20% statt 40% verkleinert, damit mehr Platz für die Editfelder bleibt
+* mdui-button(-outlined|raised): In der border-radius Angabe !important antfernt, so dass nmun die Widget-Border-Radius Eigenschaft greift und z.B. via "1em" auch gerundete Buttons dargestellt werden können
+* mdui-button(-outlined|raised), mdui-navitem, mdui-menuitem: Um einen optischen Ripple-Effekt beim Click()/Tap erweitert
+* mdui-favicon: Wird ein Widget mit einer Bildangabe (z.B. basic-Image) mit mdui-favicon versehen, so wird das dort angegebene Bild als favicon für die Browseranzeige gesetzt. Hier bieten sich kleine PNG-Dateien an.
+
+#  Script
+V2.0.3 31.01.2020
+* mdui-fullscreen wechselt nun das angezeigte Item "fullscreen" auf "fullscreen_exit" im Fullscreen-Modus um kenntlich zu machen, dass man darüber wieder die normale Darstellung erreichen kann. Weiterhin wird nun ein Rand von 8px gelassen.
+* die mdui-timespan-(min) Angaben für die Manipulation der flot Zeitbereiche funktioniert nun auch für grafana Zeitbereiche, wenn in der URL &from= und &to= Angaben vorhanden sind. Der &from-Wert wird dabei neu berechnet. Eine entsprechende URL kann in grafana mit Panel|Share|Link erzeugt werden, dabei müssen die from/to Angaben er Unixtime durch die now-Notation (Bsp:&from=now-1d&to=now) ersetzt werden.
+* mdui-srcparam-[...]: Hierüber können die Parameter einer src-Angabe in einem Widget, welches über mdui-target-[widget-id] angegeben ist, manipuliert werden. Beim WIdget wird es sich idR um ein iframe/img handeln.
+     Bsp: mdui-srcparam-from=now-2d&to=now-1d ändert einen 
+          src="...&from=now-1d&to=now..." zu src="...&from=now-2d&to=now-1d..."  
+* mdui-onload: Hierüber kann festgelegt werden, dass die dem Widget zugewiesene Funktion bereits beim Laden der Page ausgeführt werden soll. Wirkt sich nur im Zusammenhang mit mdui-toggle, mdui-expand oder mdui-fullscreen aus.
+
+# Sonstiges
+* Change-Log aus dem CSS und Script entfernt, spart Ladezeit
+
+
+## V2.0.2 29.01.2020
   * mdui-center/-h/-v mit !important versehen damit die widgeteigenen Style
     zuweisungen überschrieben werden
   * mdui-flex: funktioniert nun auch mit contXXX in Widget view-8
@@ -13,7 +39,7 @@ V2.0.2 29.01.2020
     hinzugefügt  
    
 
-V2.0.1 24.01.2020
+## V2.0.1 24.01.2020
 * Umstellung auf helles Thema
   Das komplette Design wurde auf das helle Thema (light) umgesetzt und passt sich
   flexibel an die jeweils gewählten Hintergrundfarben für abra, tnav, lnav, rnav
@@ -184,7 +210,7 @@ V2.0.1 24.01.2020
     Mit <n>=010,020,025,030,033,040,050,060,066,070,075,080,090
 
 
-2018-01-10 V1.8
+## 2018-01-10 V1.8
 CSS:
 mdui-state: Anzeige von Textstati mit Vorder-/Hintergrundfarbe (basic ValueList HTML)
 dui-cols-X: Grid-System (152px) für responsive design, maximal 10 Spalten a 152 Pixel,
@@ -196,35 +222,35 @@ Script: nix
 ioBroker Projekte: MD_Demo, MD-Simple umgestellt auf 52er Raster
 Anleitung: Ergänzt um mdui-state, mdui-cols-X
 
-2018-01-05 V1.7
+## 2018-01-05 V1.7
 CSS: mdui-(color)-glow für red, yellow, blue und green hinzugefügt
 Script: Korrektur mdui-lnav/rnav. Funktionierte mit mdui-toggle nicht korrekt
 Anleitung: Ergänzt um mdui-(color)-glow
 
-2017-10-11 V1.5
+## 2017-10-11 V1.5
 CSS: mdui-table Klassen
 Script: Tabellenbehandlung
 ioBroker Projekte: MD_Demo, MD-Simple ergänzt um Tabellenbeispiel
 Anleitung: Ergänzt um Tabellenbeschreibung, optisch überarbeitet
 
-2017-10-02 V1.4
+## 2017-10-02 V1.4
 CSS: FLOT-Diagramme, mdui-table (noch in Entwicklung)
 Script: Zeitspanne für FLOT-Diagramme setzen
 ioBroker Projekte: MD_Demo, MD-Simple ergänzt um "FLOT-Diagramme"
 Anleitung: Ergänzt um "FLOT-Diagramme"
 
-2017-09-24 V1.3
+## 2017-09-24 V1.3
 CSS: "Slider transparent" hinzu
 ioBroker Projekte: MD_Demo, MD-Simple ergänzt um "Silder transparent"
 Anleitung: Ergänzt um "Select" und "Silder transparent"
 
-2017-09-20 V1.2
+## 2017-09-20 V1.2
 CSS: "Select" hinzu
 ioBroker Projekte: MD_Demo, MD-Simple ergänzt um "Select"
 
-2017-09-17 V1.1
+## 2017-09-17 V1.1
 Sidebar Menüs hinzu
 MD_Demo aktualisiert
 
-2017-08-20 V0.1
+## 2017-08-20 V0.1
 First Upload
