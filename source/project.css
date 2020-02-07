@@ -3656,7 +3656,7 @@ display: block;
    ----- */
 
 .vis_container>div {
-    background: #f8f8f8 !important;
+    background: #f0f0f0 !important;
 }
 
 /* Weißes Raster mit 52x52 156x156 als Hintergrund */
@@ -3698,19 +3698,7 @@ display: block;
     repeating-linear-gradient(to right,
      transparent 0px,   transparent 39px,
      #c0c0c0 40px,      transparent 40px
-    ),
-    /* Ränder */
-    repeating-linear-gradient(
-     #e8e8e8 0px,      #e8e8e8 16px,
-     transparent 16px, transparent 304px,
-     #e8e8e8 304px,    #e8e8e8 320px
-    ),
-    repeating-linear-gradient(to right,
-     #e8e8e8 0px,      #e8e8e8 16px,
-     transparent 16px, transparent 304px,
-     #e8e8e8 304px,    #e8e8e8 320px
     )
-
     
     ;
 }
@@ -3718,7 +3706,7 @@ display: block;
 
 /* Sichtbarkeit des Grids verringern */
 .vis-grid {
-  opacity: 0.2;
+  opacity: 0.3;
   z-index:0;
 }
 
@@ -4036,7 +4024,7 @@ einblenden */
 #td_class td:nth-child(1) {
   font-style: italic;
 }
-#td_class td:nth-child(2):hover:after {
+#td_class td:nth-child(2):active:after {
   position:absolute;
   top:16px;
   left:-640px;

@@ -1,5 +1,16 @@
+## V2.0.4 07.02.2020
+### CSS Projekt
+* Anpassungen vis Edit-Hintergrund
+* beim CLick() in die "CSS Klasse" erscheint ein mdui-Hinweisfenster
+
+###  Script
+* Korrektur bei der Farbangabe für tnav
+
+### Sonstiges
+* MD_Simple Projekt an v2 angepasst
+
 ## V2.0.3 07.02.2020
-# CSS Projekt
+### CSS Projekt
 * mdui-state wieder bold Font
 * mdui-center(-h|-v) wirkt sich nun auch auf Child Elemente aus, somit auch nutzbar für mdui-state
 * mdui-select: Rendering des Drop-Down Buttons druch den Browser wrid unterdrückt 
@@ -11,16 +22,15 @@
 * mdui-button(-outlined|raised), mdui-navitem, mdui-menuitem: Um einen optischen Ripple-Effekt beim Click()/Tap erweitert
 * mdui-favicon: Wird ein Widget mit einer Bildangabe (z.B. basic-Image) mit mdui-favicon versehen, so wird das dort angegebene Bild als favicon für die Browseranzeige gesetzt. Hier bieten sich kleine PNG-Dateien an.
 
-#  Script
-V2.0.3 31.01.2020
+###  Script
 * mdui-fullscreen wechselt nun das angezeigte Item "fullscreen" auf "fullscreen_exit" im Fullscreen-Modus um kenntlich zu machen, dass man darüber wieder die normale Darstellung erreichen kann. Weiterhin wird nun ein Rand von 8px gelassen.
 * die mdui-timespan-(min) Angaben für die Manipulation der flot Zeitbereiche funktioniert nun auch für grafana Zeitbereiche, wenn in der URL &from= und &to= Angaben vorhanden sind. Der &from-Wert wird dabei neu berechnet. Eine entsprechende URL kann in grafana mit Panel|Share|Link erzeugt werden, dabei müssen die from/to Angaben er Unixtime durch die now-Notation (Bsp:&from=now-1d&to=now) ersetzt werden.
-* mdui-srcparam-[...]: Hierüber können die Parameter einer src-Angabe in einem Widget, welches über mdui-target-[widget-id] angegeben ist, manipuliert werden. Beim WIdget wird es sich idR um ein iframe/img handeln.
+* mdui-srcparam-(...): Hierüber können die Parameter einer src-Angabe in einem Widget, welches über mdui-target-(widget-id) angegeben ist, manipuliert werden. Beim WIdget wird es sich idR um ein iframe/img handeln.
      Bsp: mdui-srcparam-from=now-2d&to=now-1d ändert einen 
           src="...&from=now-1d&to=now..." zu src="...&from=now-2d&to=now-1d..."  
 * mdui-onload: Hierüber kann festgelegt werden, dass die dem Widget zugewiesene Funktion bereits beim Laden der Page ausgeführt werden soll. Wirkt sich nur im Zusammenhang mit mdui-toggle, mdui-expand oder mdui-fullscreen aus.
 
-# Sonstiges
+### Sonstiges
 * Change-Log aus dem CSS und Script entfernt, spart Ladezeit
 
 

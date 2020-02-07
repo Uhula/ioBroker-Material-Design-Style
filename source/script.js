@@ -28,7 +28,10 @@ document.documentElement.className +=
 var MDUI = (function () {
 
 
-let lastConfig = {"content_color":"#ffffff"},
+let defConfig = {"primary_color":"indigo",
+                 "secondary_color":"amber",
+                 "content_color":"#ffffff"},
+    lastConfig = defConfig,
     styleSheet = null,
     lastPageID = "";
     observerSlider = null;
@@ -284,11 +287,11 @@ function _getConfig() {
         } catch(err) { console.log( "MDUI._getConfig: ", err.message ); }             
     });
     if (!lastConfig.hasOwnProperty("primary_color")) 
-        lastConfig.primary_color = "blue";
+        lastConfig.primary_color = defConfig.primary_color
     if (!lastConfig.hasOwnProperty("secondary_color")) 
-        lastConfig.secondary_color = "amber";
+        lastConfig.secondary_color = defConfig.secondary_color;
     if (!lastConfig.hasOwnProperty("content_color")) 
-        lastConfig.content_color = "#ffffff";
+        lastConfig.content_color = defConfig.content_color;
 }
 
 //
@@ -870,9 +873,9 @@ function _addCSS(selector, bc) {
 
 function _patchColors() {
    try {
-        let primary_color = 'blue',
-            secondary_color = 'amber',
-            content_color = '#ffffff',
+        let primary_color = defConfig.primary_color,
+            secondary_color = defConfig.secondary_color,
+            content_color = defConfig.content_color,
             abar_color=colors[primary_color].c500, 
             tnav_color=colors[primary_color].c500, 
             lnav_color=content_color, 
@@ -905,7 +908,7 @@ function _patchColors() {
         // tnav
         if (lastConfig.hasOwnProperty("tnav_color")) {
             if ( colors.hasOwnProperty(lastConfig.tnav_color) )
-                tnav_color = colors[lastConfig].c500
+                tnav_color = colors[lastConfig.tnav_color].c500
             else tnav_color = lastConfig.tnav_color;
         }
         css += _addCSS('.mdui-tnav',tnav_color);
@@ -940,7 +943,7 @@ function _patchColors() {
         // bnav
         if (lastConfig.hasOwnProperty("bnav_color")) {
             if ( colors.hasOwnProperty(lastConfig.bnav_color) )
-                tnav_color = colors[lastConfig.bnav_color].c500
+                bnav_color = colors[lastConfig.bnav_color].c500
             else bnav_color = lastConfig.bnav_color;
         }
         css += _addCSS('.mdui-bnav',bnav_color);
@@ -979,7 +982,7 @@ function _patchColors() {
 
              
 
-//console.log("primary:",primary_color,"secondary:",secondary_color,"content:",content_color," abar:",abar_color," tnav:",tnav_color);           
+console.log("primary:",primary_color,"secondary:",secondary_color,"content:",content_color," abar:",abar_color," tnav:",tnav_color," lnav:",lnav_color);           
 
 
     // alten inlineStyle entfernen
