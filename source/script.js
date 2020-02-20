@@ -7,6 +7,9 @@
    source: https://github.com/Uhula/ioBroker-Material-Design-Style
    changelog: https://github.com/Uhula/ioBroker-Material-Design-Style/blob/master/changelog.MD
    =====
+   
+   2.0.4
+   Farbinterpretation überarbeitet, damit auch bei falschen oder nicht vorhandenen Farb-Konfiguration sinnvolle Farben verwendet werden.
 */
 
 // Zur sicheren CSS-Erkennung der Runtime eine CSS-Klasse anlegen
@@ -22,7 +25,7 @@ document.documentElement.className +=
    MDUI
    ----- 
    Sammlung von JS-Funktionen für das Material Design
-   (c) 2017 Uhula, MIT License
+   (c) 2017ff Uhula, MIT License
 */
 
 var MDUI = (function () {
@@ -853,6 +856,39 @@ function _patchWidgetColors( ) {
       
 }
 
+// holt den CSSFarbwert aus dem Colors-Array
+function _getCSSColorFromColors( color, luminance ) {
+console.log("[_getColorFromColors]",color, luminance);
+    // colorType in Config?
+    if (colors.hasOwnProperty(color) ) 
+        switch(luminance) {
+            case 200: color = colors[color].c200; break;
+            case 700: color = colors[color].c700; break;
+            default:  color =  colors[color].c500;
+        }    
+console.log("[_getColorFromColors] return:",color);    
+    return color;
+}
+// wandelt den gewünschten Color-Wert in eine CSSColor um
+function _getCSSColorFromConfig( colorType, color, luminance, defColor ) {
+console.log("[_getColorFromConfig]",colorType, color, luminance, defColor);
+    // colorType in Config?
+    if (lastConfig.hasOwnProperty(colorType) && colors.hasOwnProperty(lastConfig[colorType]) ) {
+            color = _getCSSColorFromColors(lastConfig[colorType], luminance);
+        } 
+    // Check color
+    try {
+        let $div = $("<div>");
+        $div.css("border", "1px solid "+color);
+        if ($div.css("border-color")=="") color = _getCSSColorFromColors(defColor,luminance);
+    } catch(err) { 
+        console.log( "[MDUI.getColorFromConfig] (",color,") ", err.message ); 
+        color = _getCSSColorFromColors(defColor,luminance);
+    } 
+console.log("[_getColorFromConfig] return:",color);    
+    return color;
+}
+
 function _addCSS(selector, bc) {
     var fc = _getFontColor( bc );
     
@@ -883,79 +919,51 @@ function _patchColors() {
             bnav_color=colors[primary_color].c500;
 
         // lastConfig entladen
-        if (lastConfig.hasOwnProperty("primary_color")) {
-            primary_color = _toRGB( lastConfig.primary_color );
-            if ( colors.hasOwnProperty(primary_color) ) {
-                abar_color=colors[primary_color].c500, 
-                tnav_color=colors[primary_color].c500, 
-                bnav_color=colors[primary_color].c500;
-            } else {
-                abar_color=primary_color; 
-                tnav_color=primary_color; 
-                bnav_color=primary_color; 
-            }
-        }
+        primary_color = _getCSSColorFromConfig("primary_color",lastConfig.primary_color,500,defConfig.primary_color);
+        abar_color=primary_color; 
+        tnav_color=primary_color; 
+        bnav_color=primary_color; 
 
         var css="";
         // abar
-        if (lastConfig.hasOwnProperty("abar_color")) {
-            if ( colors.hasOwnProperty(lastConfig.abar_color) )
-                abar_color = colors[lastConfig.abar_color].c700
-            else abar_color = lastConfig.abar_color;
-        }
+        abar_color = _getCSSColorFromConfig("abar_color",lastConfig.abar_color,700,abar_color);
         css += _addCSS('.mdui-abar',abar_color);
         
         // tnav
-        if (lastConfig.hasOwnProperty("tnav_color")) {
-            if ( colors.hasOwnProperty(lastConfig.tnav_color) )
-                tnav_color = colors[lastConfig.tnav_color].c500
-            else tnav_color = lastConfig.tnav_color;
-        }
+        tnav_color = _getCSSColorFromConfig("tnav_color",lastConfig.tnav_color,700,tnav_color);
         css += _addCSS('.mdui-tnav',tnav_color);
 
+        // bnav
+        bnav_color = _getCSSColorFromConfig("bnav_color",lastConfig.bnav_color,700,bnav_color);
+        css += _addCSS('.mdui-bnav',bnav_color);
+
         // content
-        if (lastConfig.hasOwnProperty("content_color")) {
-            if ( colors.hasOwnProperty(lastConfig.content_color) ) {
-                content_color = colors[lastConfig.content_color].c200
-            } else content_color = lastConfig.content_color;
-            lnav_color = content_color;
-            rnav_color = content_color;
-        }
+        content_color = _getCSSColorFromConfig("content_color",lastConfig.content_color,200,defConfig.content_color);
+        lnav_color = content_color;
+        rnav_color = content_color;
         css += _addCSS('.mdui-content',content_color);
         css += _addCSS('.ui-dialog',content_color);
     
         // lnav
-        if (lastConfig.hasOwnProperty("lnav_color")) {
-            if ( colors.hasOwnProperty(lastConfig.lnav_color) )
-                lnav_color = colors[lastConfig.lnav_color].c500
-            else lnav_color = lastConfig.lnav_color;
-        }
+        lnav_color = _getCSSColorFromConfig("lnav_color",lastConfig.lnav_color,500,lnav_color);
         css += _addCSS('.mdui-lnav',lnav_color);
     
         // rnav
-        if (lastConfig.hasOwnProperty("rnav_color")) {
-            if ( colors.hasOwnProperty(lastConfig.rnav_color) )
-                rnav_color = colors[lastConfig.rnav_color].c500
-            else rnav_color = lastConfig.rnav_color;
-        }
+        rnav_color = _getCSSColorFromConfig("rnav_color",lastConfig.rnav_color,500,rnav_color);
         css += _addCSS('.mdui-rnav',rnav_color);
 
-        // bnav
-        if (lastConfig.hasOwnProperty("bnav_color")) {
-            if ( colors.hasOwnProperty(lastConfig.bnav_color) )
-                bnav_color = colors[lastConfig.bnav_color].c500
-            else bnav_color = lastConfig.bnav_color;
-        }
-        css += _addCSS('.mdui-bnav',bnav_color);
 
 
         // secondary
-        if (lastConfig.hasOwnProperty("secondary_color")) {
+        secondary_color = _getCSSColorFromConfig("secondary_color",lastConfig.secondary_color,500,defConfig.secondary_color);
+/*
+if (lastConfig.hasOwnProperty("secondary_color")) {
             if ( colors.hasOwnProperty(lastConfig.secondary_color) )
                 secondary_color = colors[lastConfig.secondary_color].c500
             else secondary_color = lastConfig.secondary_color;
         }
-        css +='.mdui-button.mdui-accent * {'
+*/
+css +='.mdui-button.mdui-accent * {'
             + '  color:'+ secondary_color+';'
             + '} ';
 

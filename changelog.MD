@@ -1,3 +1,36 @@
+## V2.1 20.02.2020
+### CSS
+* mdui-value: padding entfernt
+* hover-Effekt: Einfärbung mit 5% statt 20% schwarz/weiß
+* mdui-list, mdui-listitem: Erlaubt die Darstellung von List-Elementen. Je nach Anorderung können drei Listarten umgesezt werden: read only, clickable, complex. Beispiele im MD_Demo
+* mdui-flex-justify-content_center, mdui-flex-justify-content_space-evenly: Der Vorgabewert bei der flex-Angabe für die innenliegenden Elemente ist mdui-flex-justify-content_flex-start, d.h. sie werden ab links oben angeordnet. Über die beiden neuen CSS-Klassen kann eine zentrierte Anordnung erreicht werden.
+* mdui-shape-XXXX: Stellt verschiedene Shapes (Formen) zur Verfügung um einfache Grafiken darzustellen. XXXX=circle, semicircle, quadrant, arrow08, arrow16, triangle. Diese können dann z.B. mit mdui-flow/mdui-rotate versehen werden. Beispiele im MD_Demo
+* mdui-card mdui-title kann nun mit einer Farbe für den Titelbereich versehen werden. Erlaubt sind die MD-Color-Konstanten COLOR="red, ...". Es kann die Hintergrundfarbe festgelegt werden. 
+  mdui-title-COLOR-bg : Angabe der Hintergrundfarbe
+* mdui-menuitem: Korrektur der font-Farbe im dark-Theme
+* mdui-flow: Das "flow"-Symbol überarbeitet
+* mdui-input-number: kann zusätzlich zu einem mdui-input gesetzt werden um den Eingabe-Typ von "text" auf "number" zur Laufzeit zu wechseln.
+* mdui-input-date: kann zusätzlich zu einem mdui-input gesetzt werden um den Eingabe-Typ von "text" auf "date" zur Laufzeit zu wechseln.
+* mdui-input-time: kann zusätzlich zu einem mdui-input gesetzt werden um den Eingabe-Typ von "text" auf "time" zur Laufzeit zu wechseln.
+* mdui-input-color: kann zusätzlich zu einem mdui-input gesetzt werden um den Eingabe-Typ von "text" auf "color" zur Laufzeit zu wechseln.
+* mdui-placeholder-XXXXX: kann zusätzlich zu einem mdui-input gesetzt werden um, wenn das Eingabefeld leer ist, den Platzhalter-Text "XXXXX" anzuzeigen.
+* mdui-flex: So geändert, dass es im Bereich der tnav/bnav nun ein horizontales Scrollen erlaubt
+
+### vis-Editor
+* Nutzung von CSS-Variablen: Hier kann in der CSS am Anfang nun leicht ein dark-Theme zur vis-Bearbeitung gewählt werden.
+* Korrektur des backgrounds des Editors, so dass nun die roten Hilfslinien beim Ausrichten der Widgets mit den Cursortasten wieder eingeblendet werden.
+
+### script
+*  Farbinterpretation überarbeitet, damit auch bei falschen oder nicht vorhandenen Farb-Konfiguration sinnvolle Farben verwendet werden. Greift auch im MD_Demo Projekt
+* Auswertung der mdui-input-number hinzugefügt
+* Secondary-color wird nun über CSS-var gesetzt
+
+### MD_Demo
+* Einstellungsdialog nun 2-seitig, 1x Farben, 1xcards. Separate Einstellung für lnav/rnav-Farben und card-Titel
+* Ergänzung Beispiel für mdui-listitem (Bedienung>Listen)
+* Ergänzung Beispiel für mdui-shape-NNN (Darstellung>Formen)
+
+
 ## V2.0.4 07.02.2020
 ### CSS Projekt
 * Anpassungen vis Edit-Hintergrund

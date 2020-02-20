@@ -1,50 +1,71 @@
-/* =====
-   Material Design CSS for ioBroker.vis
-   (c) 2017ff Uhula, MIT License
-   
-   version: v2.0.3 08.02.2020
+/*
+##### Material Design CSS for ioBroker.vis 
 
-   source: https://github.com/Uhula/ioBroker-Material-Design-Style
-   changelog: https://github.com/Uhula/ioBroker-Material-Design-Style/blob/master/changelog.MD
-   =====
+(c) 2017ff Uhula, MIT License
+version: v2.0.5 08.02.2020
+source: https://github.com/Uhula/ioBroker-Material-Design-Style
+changelog: https://github.com/Uhula/ioBroker-Material-Design-Style/blob/master/changelog.MD
+
+##### Konfiguration
+
+(1) Der Pfad zum WebFont muss unter @font-face angepasst werden. Dort steht "MD-Demo" drin, hier muss der wirkliche Projektname eingetragen werden.
+(2) Das vis Design ist per Vorgabe auf "light"-Theme, also schwarze Schrift auf weißem Grund eingestellt, wer in der vis im "dark"-Theme arbeiten möchte, muss Einstellungen unter ":root / Design time" vornehmen
+(3) Wenn einzelne CSS Anweisungen geändert werden sollen, dann nicht im MDUI CSS direkt ändern, sondern die CSS-Anweisung am Ende erneut angepasst einfügen
 */
 
-/* -----
-   ToDo 
-   -----
-   flot: timespan 1em
-
-
-from=now-1h-45m m=min h=hour d=day w=week M=month y=year
-     mit / angehängter Zeitraum zeigt vollen Zeitraum
-     now/M = lfd Monat, now-1M/M = letzer Monat, now/y = lfd Jahr 
-     für mdui muss "to=now" als "to=now-0h" gesetzt werden
-to=(wie from)
-theme=light
-refresh=5m
-kiosk
-kiosk=tv
-
-*/
-
-/* -----
-   Generell
-   ----- */
-
-
-/* material icons font einbinden */
-
+/* (1) An Projektnamen anpassen (MD_Demo ersetzen) */
 @font-face {
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
   src: url(/vis.0/MD_Demo/images/MaterialIcons-Regular.eot); /* For IE6-8 */
   src: local('Material Icons'),
-    local('MaterialIcons-Regular'),
-/*    url(/vis.0/MD_Demo/images/MaterialIcons-Regular.woff2) format('woff2'),*/
-    url(/vis.0/MD_Demo/images/MaterialIcons-Regular.woff) format('woff'),
-    url(/vis.0/MD_Demo/images/MaterialIcons-Regular.ttf) format('truetype');
+       local('MaterialIcons-Regular'),
+       url(/vis.0/MD_Demo/images/MaterialIcons-Regular.woff) format('woff'),
+       url(/vis.0/MD_Demo/images/MaterialIcons-Regular.ttf) format('truetype');
 }
+
+/* (2) Umschalten vis-Edit light/dark Theme */
+:root {
+
+  /* Design-time light-Theme */
+  --design-background: #f8f8f8;
+  --design-vis-font-color: #000000;
+  --design-hint-background: #0000ff;
+  --design-hint-color: #ffffff;
+  --design-grid: #000000;
+
+  /* Design-time dark-Theme  
+  --design-background: #404040;
+  --design-vis-font-color: #ffffff;
+  --design-hint-background: #ff8000;
+  --design-hint-color: #ffffff;
+  --design-grid: #ffffff;
+  */
+}
+
+
+/* --------------------------------------------------------------- 
+##### Start des MDUI-Contents 
+ab hier nichts mehr ändern, nur am Ende anfügen 
+*/
+
+/* Variable  */
+
+/* js-Zugriff: root.style.setProperty('--time', duration + "s"); */
+  
+:root {
+  --divider-color: rgba(0,0,0,0.1);
+  --divider-color-dark: rgba(255,255,255,0.2);
+  --accent-color: #ffc107;
+}
+:root.mdui-runtime {
+  --design-background: #ffffff;
+  --design-vis-font-color: #000000;
+}
+  
+
+/* Generell */
 
 .material-icons {
   font-family: 'Material Icons';
@@ -56,24 +77,21 @@ kiosk=tv
   word-wrap: normal;
   white-space: nowrap;
   direction: ltr;
-
   /* Support for all WebKit browsers. */
   -webkit-font-smoothing: antialiased;
   /* Support for Safari and Chrome. */
   text-rendering: optimizeLegibility;
-
   /* Support for Firefox. */
   -moz-osx-font-smoothing: grayscale;
-
   /* Support for IE. */
   font-feature-settings: 'liga';
 }
 
 .mdui-dark .material-icons {
-    color:#ffffff;
+  color:#ffffff;
 }
-/* das box Modell für alle Elemente auf border-box setzen */
 
+/* das box Modell für alle Elemente auf border-box setzen */
 *, :before, :after {
   box-sizing: border-box;
 }
@@ -82,7 +100,7 @@ kiosk=tv
   outline: 0px red solid;
 }
 
-/* nur zur Laufzeit anwenden, nicht im Editor */
+/* hide nur zur Laufzeit anwenden, nicht im Editor */
 .mdui-runtime .mdui-hide {
   visibility:hidden !important;
   height:0 !important;
@@ -103,16 +121,19 @@ kiosk=tv
 
 /* zentrieren */
 
+.mdui-center-v,
 .mdui-center-v .vis-widget-body,
 .mdui-center-v .vis-widget-body *  {
   display:flex !important;
   align-items: center;
 }
+.mdui-center-h,
 .mdui-center-h .vis-widget-body,
 .mdui-center-h .vis-widget-body *  {
   display:flex !important;
   justify-content: center;
 }
+.mdui-center,
 .mdui-center .vis-widget-body,
 .mdui-center .vis-widget-body * {
   display:flex !important;
@@ -257,7 +278,40 @@ kiosk=tv
 .mdui-scale-080 { transform: scale(0.8); transform-origin: 0% 0%; }
 .mdui-scale-090 { transform: scale(0.9); transform-origin: 0% 0%; }
 
-/* generell */
+/* Shapes */
+
+.mdui-shape-circle {
+  clip-path: circle(50% at 50% 50%);
+}
+
+.mdui-shape-semicircle {
+  clip-path: circle(50% at 0% 50%);
+}
+.mdui-shape-quadrant {
+  clip-path: circle(50% at 0% 0%);
+}
+
+.mdui-shape-triangle {
+  clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
+}
+
+.mdui-shape-corner {
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%);
+}
+.mdui-shape-arrow08 {
+  clip-path: polygon(0% calc(50% - 4px), calc(100% - 12px) calc(50% - 4px), calc(100% - 12px) 0%, 100% 50%, calc(100% - 12px) 100%, calc(100% - 12px) calc(50% + 4px), 0% calc(50% + 4px));
+}
+.mdui-shape-arrow16 {
+  clip-path: polygon(0% calc(50% - 8px), calc(100% - 24px) calc(50% - 8px), calc(100% - 24px) 0%, 100% 50%, calc(100% - 24px) 100%, calc(100% - 24px) calc(50% + 8px), 0% calc(50% + 8px));
+}
+.mdui-shape-arrow08[class*="mdui-rotate-"],
+.mdui-shape-arrow16[class*="mdui-rotate-"],
+.mdui-shape-semicircle[class*="mdui-rotate-"],
+.mdui-shape-quadrant[class*="mdui-rotate-"],
+.mdui-shape-triangle[class*="mdui-rotate-"],
+.mdui-shape-corner[class*="mdui-rotate-"] { transform-origin: center center;}
+
+
 
 /* Standard syntax */
 :fullscreen {
@@ -269,12 +323,12 @@ kiosk=tv
 .vis-view .ui-widget {
   font-family: Roboto, Arial;
   font-size: 16px !important;
-  color:#000000;
+  color:var(--design-vis-font-color);
 }
 
 .vis_container_edit>.vis-view {
-  background:#000;
-  color:#000000;
+  background:#000000;
+  color:var(--design-vis-font-color);
   font-family: Roboto, Arial;
   font-size: 16px !important;
 }
@@ -293,13 +347,12 @@ kiosk=tv
 
 /* ripple effect */
 
-
-.mdui-button:before,
-.mdui-ripple:before,
-.mdui-button-outlined:before,
-.mdui-button-raised:before,
-.mdui-menuitem:before,
-.mdui-navitem:before {
+.mdui-button .vis-widget-body:before,
+.mdui-ripple .vis-widget-body:before,
+.mdui-button-outlined .vis-widget-body:before,
+.mdui-button-raised .vis-widget-body:before,
+.mdui-menuitem .vis-widget-body:before,
+.mdui-navitem .vis-widget-body:before {
   content: "";
   display: block;
   position: absolute;
@@ -316,12 +369,12 @@ kiosk=tv
   transition: transform .5s, opacity 1s;
 }
 
-.mdui-button:active:before,
-.mdui-ripple:active:before,
-.mdui-button-outlined:active:before,
-.mdui-button-raised:active:before,
-.mdui-menuitem:active:before,
-.mdui-navitem:active:before {
+.mdui-button .vis-widget-body:active:before,
+.mdui-ripple .vis-widget-body:active:before,
+.mdui-button-outlined .vis-widget-body:active:before,
+.mdui-button-raised .vis-widget-body:active:before,
+.mdui-menuitem .vis-widget-body:active:before,
+.mdui-navitem .vis-widget-body:active:before {
   transform: scale(0, 0);
   opacity: .33;
   transition: 0s;
@@ -337,33 +390,31 @@ kiosk=tv
     color : #ff0000 !important;
 }
 
-/* Grid
-80er Raster
-*/
-[class*="mdui-cols-1"] {min-width:80px; max-width:88px;}
-[class*="mdui-cols-2"] {min-width:160px; max-width:176px;}
-[class*="mdui-cols-3"] {min-width:240px; max-width:264px;}
-[class*="mdui-cols-4"] {min-width:320px; max-width:352px;}
-[class*="mdui-cols-5"] {min-width:400px; max-width:440px;}
-[class*="mdui-cols-6"] {min-width:480px; max-width:528px;}
-[class*="mdui-cols-7"] {min-width:560px; max-width:616px;}
-[class*="mdui-cols-8"] {min-width:640px; max-width:704px;}
-[class*="mdui-cols-9"] {min-width:720px; max-width:792px;}
-[class*="mdui-cols-10"] {min-width:800px; max-width:880px;}
-[class*="mdui-cols-11"] {min-width:880px; max-width:968px;}
-[class*="mdui-cols-12"] {min-width:960px; max-width:1054px;}
-[class*="mdui-cols-13"] {min-width:1040px; max-width:1144px;}
-[class*="mdui-cols-14"] {min-width:1120px; max-width:1232px;}
-[class*="mdui-cols-15"] {min-width:1200px; max-width:1320px;}
-[class*="mdui-cols-16"] {min-width:1280px; max-width:1408px;}
-[class*="mdui-cols-17"] {min-width:1360px; max-width:1496px;}
-[class*="mdui-cols-18"] {min-width:1440px; max-width:1584px;}
-[class*="mdui-cols-19"] {min-width:1520px; max-width:1672px;}
-[class*="mdui-cols-20"] {min-width:1600px; max-width:1760px;}
-[class*="mdui-cols-21"] {min-width:1680px; max-width:1848px;}
-[class*="mdui-cols-22"] {min-width:1760px; max-width:1936px;}
-[class*="mdui-cols-23"] {min-width:1840px; max-width:2024px;}
-[class*="mdui-cols-24"] {min-width:1920px; max-width:2112px;}
+/* Grid 80er Raster */
+[class*="mdui-cols-1"] {min-width:80px; max-width:80px;}
+[class*="mdui-cols-2"] {min-width:160px; max-width:160px;}
+[class*="mdui-cols-3"] {min-width:240px; max-width:240px;}
+[class*="mdui-cols-4"] {min-width:320px; max-width:320px;}
+[class*="mdui-cols-5"] {min-width:400px; max-width:400px;}
+[class*="mdui-cols-6"] {min-width:480px; max-width:480px;}
+[class*="mdui-cols-7"] {min-width:560px; max-width:560px;}
+[class*="mdui-cols-8"] {min-width:640px; max-width:640px;}
+[class*="mdui-cols-9"] {min-width:720px; max-width:720px;}
+[class*="mdui-cols-10"] {min-width:800px; max-width:800px;}
+[class*="mdui-cols-11"] {min-width:880px; max-width:880px;}
+[class*="mdui-cols-12"] {min-width:960px; max-width:960px;}
+[class*="mdui-cols-13"] {min-width:1040px; max-width:1040px;}
+[class*="mdui-cols-14"] {min-width:1120px; max-width:1120px;}
+[class*="mdui-cols-15"] {min-width:1200px; max-width:1200px;}
+[class*="mdui-cols-16"] {min-width:1280px; max-width:1280px;}
+[class*="mdui-cols-17"] {min-width:1360px; max-width:1360px;}
+[class*="mdui-cols-18"] {min-width:1440px; max-width:1440px;}
+[class*="mdui-cols-19"] {min-width:1520px; max-width:1520px;}
+[class*="mdui-cols-20"] {min-width:1600px; max-width:1600px;}
+[class*="mdui-cols-21"] {min-width:1680px; max-width:1680px;}
+[class*="mdui-cols-22"] {min-width:1760px; max-width:1760px;}
+[class*="mdui-cols-23"] {min-width:1840px; max-width:1840px;}
+[class*="mdui-cols-24"] {min-width:1920px; max-width:1920px;}
 
 
 [class*="-toc-1"] {max-width:80px;}
@@ -443,15 +494,13 @@ kiosk=tv
 
 
 
-/* -----
-   application bar
-   ----- */
+/* ----- application bar ----- */
 
 .mdui-abar {
   background:#0069c0 !important;
   z-index:99;
   border:none !important;
-    transition: left 0.25s ease;
+  transition: left 0.25s ease;
 }
 .vis_container_edit .mdui-dark.mdui-abar {
   background:#000000 !important;
@@ -461,25 +510,22 @@ kiosk=tv
 }
 
 .mdui-lnav-fixed-open .mdui-abar {
-    left: 256px !important;
-    width: calc(100% - 256px) !important;
+  left: 256px !important;
+  width: calc(100% - 256px) !important;
 }
 
-/* -----
-   top navigation
-   ----- */
+/* ----- top navigation ----- */
+
 .mdui-tnav {
   background:#0069c0 !important;
   border:none !important;
   z-index:98;
-  xbox-shadow:0px 1px 0px 0px rgba(255,255,255,0.2), 0px 2px 4px 0px rgba(0,0,0,0.45);
   border-bottom: 1px solid rgba(0,0,0,0.2) !important;
   overflow-y:hidden !important;
   overflow-x:auto !important;
   transition: left 0.25s ease;
 }
 .mdui-dark.mdui-tnav {
-  xbox-shadow:0px 2px 4px 0px rgba(0,0,0,1);
   border-bottom: 1px solid rgba(255,255,255,0.2) !important;
 }
 
@@ -496,11 +542,10 @@ kiosk=tv
     width: calc(100% - 256px) !important;
 }
 
-/* -----
-   content
-   ----- */
+/* ----- content ----- */
+
 .mdui-content {
-  background:#f8f8f8 !important;
+  background:var(--design-background) !important;
   overflow-y:auto !important;
   overflow-x:auto !important;
   transition: left 0.25s ease;
@@ -515,16 +560,8 @@ kiosk=tv
 
 }
 
-/* -----
-   flex
-   ----- */
+/* ----- flex ----- */
 
-
-/* flex 
-
-  align-items : stretch;
-
-*/
 .mdui-flex>.vis-widget-body>.vis-view-container>.vis-view,
 .mdui-flex>.vis-view-container>.vis-view {
   display: flex;
@@ -532,11 +569,28 @@ kiosk=tv
   flex-direction: row;
   align-items : flex-start;
   justify-content : flex-start;
+  justify-content : flex-start;
   align-content: flex-start;
 }
-.mdui-flex.tnav>.vis-view-container>.vis-view,
-.mdui-flex.bnav>.vis-view-container>.vis-view {
+.mdui-flex.mdui-tnav>.vis-widget-body>.vis-view-container>.vis-view,
+.mdui-flex.mdui-tnav>.vis-view-container>.vis-view,
+.mdui-flex.mdui-bnav>.vis-widget-body>.vis-view-container>.vis-view,
+.mdui-flex.mdui-bnav>.vis-view-container>.vis-view {
   flex-wrap: nowrap;
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+.mdui-flex-justify-content_flex-start>.vis-widget-body>.vis-view-container>.vis-view,
+.mdui-flex-justify-content_flex-start>.vis-view-container>.vis-view {
+  justify-content : flex-start;
+}
+.mdui-flex-justify-content_center>.vis-widget-body>.vis-view-container>.vis-view,
+.mdui-flex-justify-content_center>.vis-view-container>.vis-view {
+  justify-content : center;
+}
+.mdui-flex-justify-content_space-evenly>.vis-widget-body>.vis-view-container>.vis-view,
+.mdui-flex-justify-content_space-evenly>.vis-view-container>.vis-view {
+  justify-content : space-evenly;
 }
 
 
@@ -554,23 +608,24 @@ kiosk=tv
 }
 
 
-/* ist das flex-item, muss wieder in den normalen Verlauf rein */
-
+/* ist es ein flex-item, muss wieder in den normalen Verlauf rein */
 .mdui-flex>.vis-widget-body>.vis-view-container>.vis-view>div:not(.mdui-noflex), 
 .mdui-flex>.vis-view-container>.vis-view>div:not(.mdui-noflex) { 
   position: relative !important;
   position: -webkit-relative !important;
   top:auto !important;
   left:auto !important;
+  align-self: flex-start;
+  flex: 0 0 auto;
+}
+
+.mdui-flex>.vis-widget-body>.vis-view-container>.vis-view>div:not(.mdui-noflex)[class*="mdui-rows-"][class*="-tor-"], 
+.mdui-flex>.vis-view-container>.vis-view>div:not(.mdui-noflex)[class*="mdui-rows-"][class*="-tor-"] { 
   align-self: stretch;
 }
 
-.mdui-flex [class*="mdui-rows-"][class*="-tor-"] { 
-  align-self: stretch;
-}
-
-.mdui-flex [class*="mdui-cols-"], 
-.mdui-flex [class*="mdui-cols-"][class*="-toc-"] { 
+.mdui-flex>.vis-widget-body>.vis-view-container>.vis-view>div:not(.mdui-noflex)[class*="mdui-cols-"][class*="-toc-"], 
+.mdui-flex>.vis-view-container>.vis-view>div:not(.mdui-noflex)[class*="mdui-cols-"][class*="-toc-"] { 
     flex-grow:1;
 }
 
@@ -632,11 +687,10 @@ kiosk=tv
 .mdui-order-97{order:97;}.mdui-order-98{order:98;}.mdui-order-99{order:99;} 
 
 
-/* -----
-   bottom navigation
-   ----- */
+/* ----- bottom navigation ----- */
+
 .mdui-bnav {
-  background:#2196f3 !important;
+  background:var(--accent-color) !important;
   z-index:98;
   border:none;
   box-shadow:0px -2px 4px -1px rgba(0,0,0,0.45);
@@ -657,18 +711,11 @@ kiosk=tv
     width: calc(100% - 256px) !important;
 }
 
-/* -----
-   left navigation
-   -----
-*/
+/* ----- left navigation ----- */
 
 .mdui-lnav {
-  background: #ffffff !important;
+  background: var(--design-background) !important;
   transition: width 0.25s ease;
-
-}
-.vis_container_edit .mdui-dark.mdui-lnav {
-  background:#000000 !important;
 }
 
 .mdui-runtime .mdui-lnav {
@@ -716,15 +763,10 @@ kiosk=tv
 }
 
 
-/* -----
-   right navigation
-   -----  */
+/* -----  right navigation -----  */
 
 .mdui-rnav {
-  background: #ffffff !important;
-}
-.vis_container_edit .mdui-dark.mdui-rnav {
-  background:#000000 !important;
+  background: var(--design-background) !important;
 }
 
 .mdui-runtime .mdui-rnav {
@@ -761,13 +803,102 @@ kiosk=tv
 }
 
 
+/* ----- Card title ----- */
 
-/* -----
-   Cards
-   ----- */
+[class*="mdui-card"].mdui-title:after {
+  content:"";
+  position:absolute;
+  margin:0px !important;
+  pointer-events: none;
+  background: rgba(0,0,0,.1);
+
+  left:2px;
+  top:2px;
+  width:calc(100% - 4px);
+  height:60px;
+  border-radius:0px;
+  z-index:-1;
+}
+.mdui-dark [class*="mdui-card"].mdui-title:after {
+  background: rgba(255,255,255,.2);
+}
+
+/* background für card title */
+
+[class*="mdui-card"].mdui-title-transparent-bg:after { background:transparent; }
+
+[class*="mdui-card"].mdui-title-black10-bg:after { background:rgba(0,0,0,0.1); }
+[class*="mdui-card"].mdui-title-black20-bg:after { background:rgba(0,0,0,0.2); }
+[class*="mdui-card"].mdui-title-black30-bg:after { background:rgba(0,0,0,0.3); }
+[class*="mdui-card"].mdui-title-black40-bg:after { background:rgba(0,0,0,0.4); }
+[class*="mdui-card"].mdui-title-black50-bg:after { background:rgba(0,0,0,0.5); }
+[class*="mdui-card"].mdui-title-black60-bg:after { background:rgba(0,0,0,0.6); }
+[class*="mdui-card"].mdui-title-black70-bg:after { background:rgba(0,0,0,0.7); }
+[class*="mdui-card"].mdui-title-black80-bg:after { background:rgba(0,0,0,0.8); }
+[class*="mdui-card"].mdui-title-black90-bg:after { background:rgba(0,0,0,0.9); }
+
+[class*="mdui-card"].mdui-title-white10-bg:after { background:rgba(255,255,255,0.1); }
+[class*="mdui-card"].mdui-title-white20-bg:after { background:rgba(255,255,255,0.2); }
+[class*="mdui-card"].mdui-title-white30-bg:after { background:rgba(255,255,255,0.3); }
+[class*="mdui-card"].mdui-title-white40-bg:after { background:rgba(255,255,255,0.4); }
+[class*="mdui-card"].mdui-title-white50-bg:after { background:rgba(255,255,255,0.5); }
+[class*="mdui-card"].mdui-title-white60-bg:after { background:rgba(255,255,255,0.6); }
+[class*="mdui-card"].mdui-title-white70-bg:after { background:rgba(255,255,255,0.7); }
+[class*="mdui-card"].mdui-title-white80-bg:after { background:rgba(255,255,255,0.8); }
+[class*="mdui-card"].mdui-title-white90-bg:after { background:rgba(255,255,255,0.9); }
+
+[class*="mdui-card"].mdui-title-red-bg:after { background:#ffcdd2;}
+[class*="mdui-card"].mdui-title-pink-bg:after { background:#f8bbd0;}
+[class*="mdui-card"].mdui-title-purple-bg:after { background:#e1bee7;}
+[class*="mdui-card"].mdui-title-deeppurple-bg:after { background:#d1c4e9;}
+[class*="mdui-card"].mdui-title-indigo-bg:after { background:#c5cae9;}
+[class*="mdui-card"].mdui-title-blue-bg:after { background:#bbdefb;}
+[class*="mdui-card"].mdui-title-lightblue-bg:after { background:#b3e5fc;}
+[class*="mdui-card"].mdui-title-cyan-bg:after { background:#b2ebf2;}
+[class*="mdui-card"].mdui-title-teal-bg:after { background:#b2dfdb;}
+[class*="mdui-card"].mdui-title-green-bg:after { background:#c8e6c9;}
+[class*="mdui-card"].mdui-title-lightgreen-bg:after { background:#dcedc8;}
+[class*="mdui-card"].mdui-title-lime-bg:after { background:#f0f4c3;}
+[class*="mdui-card"].mdui-title-yellow-bg:after { background:#fff9c4;}
+[class*="mdui-card"].mdui-title-amber-bg:after { background:#ffecb3;}
+[class*="mdui-card"].mdui-title-orange-bg:after { background:#ffe0b2;}
+[class*="mdui-card"].mdui-title-deeporange-bg:after { background:#ffccbc;}
+[class*="mdui-card"].mdui-title-brown-bg:after { background:#d7ccc8;}
+[class*="mdui-card"].mdui-title-grey-bg:after { background:#f5f5f5;}
+[class*="mdui-card"].mdui-title-darkgrey-bg:after { background:#e5e5e5;}
+[class*="mdui-card"].mdui-title-bluegrey-bg:after { background:#eceff1;}
+[class*="mdui-card"].mdui-title-white-bg:after { background:#ffffff;}
+[class*="mdui-card"].mdui-title-black-bg:after { background:#a0a0a0;}
+
+.mdui-dark [class*="mdui-card"].mdui-title-red-bg:after { background:#f44336; }
+.mdui-dark [class*="mdui-card"].mdui-title-pink-bg:after { background:#e91e63; }
+.mdui-dark [class*="mdui-card"].mdui-title-purple-bg:after { background:#9c27b0; }
+.mdui-dark [class*="mdui-card"].mdui-title-deeppurple-bg:after { background:#673ab7; }
+.mdui-dark [class*="mdui-card"].mdui-title-indigo-bg:after { background:#3f51b5; }
+.mdui-dark [class*="mdui-card"].mdui-title-blue-bg:after { background:#2196f3; }
+.mdui-dark [class*="mdui-card"].mdui-title-lightblue-bg:after { background:#03a9f4; }
+.mdui-dark [class*="mdui-card"].mdui-title-cyan-bg:after { background:#00bcd4; }
+.mdui-dark [class*="mdui-card"].mdui-title-teal-bg:after { background:#009688; }
+.mdui-dark [class*="mdui-card"].mdui-title-green-bg:after { background:#4caf50; }
+.mdui-dark [class*="mdui-card"].mdui-title-lightgreen-bg:after { background:#8bc34a; }
+.mdui-dark [class*="mdui-card"].mdui-title-lime-bg:after { background:#cddc39; }
+.mdui-dark [class*="mdui-card"].mdui-title-yellow-bg:after { background:#ffeb3b; }
+.mdui-dark [class*="mdui-card"].mdui-title-amber-bg:after { background:#ffc107; }
+.mdui-dark [class*="mdui-card"].mdui-title-orange-bg:after { background:#ff9800; }
+.mdui-dark [class*="mdui-card"].mdui-title-deeporange-bg:after { background:#ff5722; }
+.mdui-dark [class*="mdui-card"].mdui-title-brown-bg:after { background:#795548; }
+.mdui-dark [class*="mdui-card"].mdui-title-grey-bg:after { background:#9e9e9e; }
+.mdui-dark [class*="mdui-card"].mdui-title-darkgrey-bg:after { background:#303030; }
+.mdui-dark [class*="mdui-card"].mdui-title-bluegrey-bg:after { background:#607d8b; }
+.mdui-dark [class*="mdui-card"].mdui-title-white-bg:after { background:#f8f8f8; }
+.mdui-dark [class*="mdui-card"].mdui-title-black-bg:after { background:#212121; }
+
+
+
+/* ----- Cards ----- */
 
 .mdui-card {
-  z-index:1; /* muss, damit :before mit z_index:-1 geht */
+  z-index:1; /* muss, damit :after mit z_index:-1 geht */
 }
 .mdui-card:before {
   content:"";
@@ -777,43 +908,17 @@ kiosk=tv
   width:calc(100% - 4px);
   height:calc(100% - 4px);
   background: rgba(255,255,255,0);
-  border: 1px solid rgba(0,0,0,.05) !important;
+  border: none !important;
   pointer-events: none;
   z-index: -1;
 }
 .mdui-dark .mdui-card:before {
   color:#ffffff;
   background-color: rgba(255,255,255,0);
-  border-color: rgba(255,255,255,.1) !important;
-}
-
-.mdui-card.mdui-title:after,
-.mdui-card-raised.mdui-title:after,
-.mdui-card-outlined.mdui-title:after {
-  content:"";
-  position:absolute;
-  margin:0px !important;
-  pointer-events: none;
-  background: #000000;
-  opacity:.1;
-
-  left:2px;
-  top:2px;
-  width:calc(100% - 4px);
-  height:60px;
-  border-radius:0px;
-}
-.mdui-dark .mdui-card.mdui-title:after,
-.mdui-dark .mdui-card-raised.mdui-title:after,
-.mdui-dark .mdui-card-outlined.mdui-title:after {
-  background: #ffffff;
-  opacity:0.2;
 }
 
 
-/* -----
-   Cards raised
-   ----- */
+/* ----- Cards raised ----- */
 
 .mdui-card-raised {
   z-index:1; /* muss, damit :before mit z_index:-1 geht */
@@ -837,17 +942,16 @@ kiosk=tv
   background-color: rgba(255,255,255,0.12); /* 12% elevation */
   box-shadow: none;
 }
-.mdui-card-raised.mdui-title:after {
+.mdui-card-raised[class*="mdui-title"]:after {
   left:8px;
   top:8px;
   width:calc(100% - 16px);
   height:52px;
   border-radius:4px 4px 0px 0px;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.025) inset;
 }
 
-/* -----
-   Cards outlined
-   ----- */
+/* ----- Cards outlined ----- */
 
 .mdui-card-outlined {
   z-index:1; /* muss, damit :before mit z_index:-1 geht */
@@ -872,14 +976,13 @@ kiosk=tv
   border-color: rgba(255,255,255,.33) !important; 
 }
 
-.mdui-card-outlined.mdui-title:after {
-  left:8px;
-  top:8px;
-  width:calc(100% - 16px);
-  height:52px;
+.mdui-card-outlined[class*="mdui-title"]:after {
+  left:9px;
+  top:9px;
+  width:calc(100% - 18px);
+  height:51px;
   border-radius:4px 4px 0px 0px;
 }
-
 
 
 /* background für cards */
@@ -891,7 +994,6 @@ kiosk=tv
 
 [class*="mdui-card"].mdui-transparent-bg:before { background-color:transparent !important; }
 
-/* transparent black, white */
 [class*="mdui-card"].mdui-black10-bg:before { background-color:rgba(0,0,0,0.1) !important; }
 [class*="mdui-card"].mdui-black20-bg:before { background-color:rgba(0,0,0,0.2) !important; }
 [class*="mdui-card"].mdui-black30-bg:before { background-color:rgba(0,0,0,0.3) !important; }
@@ -911,10 +1013,6 @@ kiosk=tv
 [class*="mdui-card"].mdui-white70-bg:before { background-color:rgba(255,255,255,0.7) !important; }
 [class*="mdui-card"].mdui-white80-bg:before { background-color:rgba(255,255,255,0.8) !important; }
 [class*="mdui-card"].mdui-white90-bg:before { background-color:rgba(255,255,255,0.9) !important; }
-
-
-/* 500 background */
-/* background 100er normal, 500er bei dark */
 
 [class*="mdui-card"].mdui-red-bg:before { background-color:#ffcdd2 !important;}
 [class*="mdui-card"].mdui-pink-bg:before { background-color:#f8bbd0 !important;}
@@ -963,17 +1061,10 @@ kiosk=tv
 .mdui-dark [class*="mdui-card"].mdui-black-bg:before { background-color:#212121 !important; }
 
 
+/* ----- menuitem ----- */
 
-
-
-
-
-
-/* -----
-   menuitem
-   ----- */
 .mdui-menu {
-  background:#ffffff !important;
+  background:var(--design-background) !important;
   box-shadow: 0 0 0 1px rgba(0,0,0,0.1), 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.25);
   border-radius:4px;
 }
@@ -982,39 +1073,41 @@ kiosk=tv
   box-shadow: 0 0 0 1px rgba(0,0,0,0.5), 0 14px 28px rgba(0,0,0,0.87), 0 10px 10px rgba(0,0,0,1);
 }
 .mdui-menuitem {
-  color:#000000;
-  background:rgba(255,255,255,1) !important;
+  color:var(--design-vis-font-color);
+  background:var(--design-background) !important;
   font-size:1em !important;
   font-weight:normal !important;
-  xborder:1px solid rgba(0,0,0,0.05) !important;
-  overflow:visible;
+  overflow:hidden;
 }
 .mdui-dark .mdui-menuitem {
   background-color:#303030 !important;
-  xborder:1px solid rgba(255,255,255,0.1) !important;
   color:#ffffff;
 }
 
 .mdui-runtime.mdui-notouch .mdui-menuitem:hover {
-  box-shadow: 0 0 0 1000px rgba(0,0,0,0.2) inset !important;
+  box-shadow: 0 0 0 1000px rgba(0,0,0,0.05) inset !important;
   transition: all 0.3s ease;
 }
 .mdui-runtime.mdui-notouch .mdui-dark .mdui-menuitem:hover {
-  box-shadow: 0 0 0 1000px rgba(255,255,255,0.2) inset !important;
+  box-shadow: 0 0 0 1000px rgba(255,255,255,0.05) inset !important;
 }
 
 .mdui-menuitem .vis-widget-body,
 .mdui-menuitem .vis-widget-body * {
   display:flex;
   align-items: center;
+  background:none;
+  border:none;
+  font-weight:normal;
+  color:var(--design-vis-font-color);
+}
+.mdui-dark .mdui-menuitem .vis-widget-body,
+.mdui-dark .mdui-menuitem .vis-widget-body * {
+  color:#ffffff;
 }
 
 
-/* -----
-   Buttons
-   ----- */
-
-/* buttons */
+/* ----- Buttons ----- */
 
 .mdui-input .ui-button,
 .mdui-button {
@@ -1028,16 +1121,15 @@ kiosk=tv
   font-weight:normal !important;
   border-radius:4px;
   border:none !important;
-  text-transform: uppercase ;
+  /*text-transform: uppercase ;*/
   transition: background 0.8s;
 }
-
 
 .mdui-input .ui-button,
 .mdui-button * {
   background:none !important;
   border:none !important;
-  color:#000000;
+  color:var(--design-vis-font-color);
 }
 
 .mdui-dark .mdui-input .ui-button,
@@ -1045,13 +1137,12 @@ kiosk=tv
   color:#ffffff;
 }
 
-
 .mdui-runtime.mdui-notouch .mdui-button:hover {
-  box-shadow: 0 0 0 1000px rgba(0,0,0,0.1) inset !important;
+  box-shadow: 0 0 0 1000px rgba(0,0,0,0.05) inset !important;
   transition: all 0.3s ease;
 }
 .mdui-runtime.mdui-notouch .mdui-dark .mdui-button:hover {
-  box-shadow: 0 0 0 1000px rgba(255,255,255,0.1) inset !important;
+  box-shadow: 0 0 0 1000px rgba(255,255,255,0.05) inset !important;
 }
 
 .mdui-button.mdui-accent *,
@@ -1103,10 +1194,7 @@ kiosk=tv
 .mdui-dark .mdui-button.mdui-black * { color:#212121; }
 
 
-
-/* ----------
-   button-outlined
-   ----------*/
+/* ---------- button-outlined ----------*/
 
 .mdui-button-outlined {
   border:1px solid rgba(0,0,0,0.33);
@@ -1119,7 +1207,7 @@ kiosk=tv
 .mdui-button-outlined,
 .mdui-button-outlined * {
   background:none !important;
-  color:#000000 !important;
+  color:var(--design-vis-font-color) !important;
   font-weight:normal !important;
 }
 .mdui-dark .mdui-button-outlined,
@@ -1137,11 +1225,11 @@ kiosk=tv
 }
 
 .mdui-runtime.mdui-notouch .mdui-button-outlined:hover {
-  box-shadow: 0 0 0 1000px rgba(0,0,0,0.1) inset !important;
+  box-shadow: 0 0 0 1000px rgba(0,0,0,0.05) inset !important;
   transition: all 0.3s ease;
 }
 .mdui-runtime.mdui-notouch .mdui-dark .mdui-button-outlined:hover {
-  box-shadow: 0 0 0 1000px rgba(255,255,255,0.1) inset !important;
+  box-shadow: 0 0 0 1000px rgba(255,255,255,0.05) inset !important;
 }
 
 .mdui-button-outlined.mdui-red *,
@@ -1236,10 +1324,8 @@ kiosk=tv
 
 
 
-/* ----------
-   Button-raised
-   ----------*/
-
+/* ---------- Button-raised ----------*/
+  
 .mdui-button-raised {
   background: rgba(0,0,0,.21) !important;
   border:none !important;
@@ -1257,7 +1343,7 @@ kiosk=tv
 }
 
 .mdui-button-raised * {
-  color:#000000;
+  color:var(--design-vis-font-color);
   background: none !important;
   border:none !important;
   font-weight: normal !important;
@@ -1274,66 +1360,17 @@ kiosk=tv
 }
 
 .mdui-runtime.mdui-notouch .mdui-button-raised:hover {
-  box-shadow: 0 1px 3px rgba(0,0,0,0.27), 0 1px 2px rgba(0,0,0,0.54), 0 0 0 1000px rgba(0,0,0,0.1) inset;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.27), 0 1px 2px rgba(0,0,0,0.54), 0 0 0 1000px rgba(0,0,0,0.05) inset;
   transition: all 0.3s ease;
 }
 .mdui-runtime.mdui-notouch .mdui-dark .mdui-button-raised:hover {
-  box-shadow: 0 1px 3px rgba(0,0,0,0.66), 0 1px 2px rgba(0,0,0,0.87), 0 0 0 1000px rgba(255,255,255,0.1) inset !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.66), 0 1px 2px rgba(0,0,0,0.87), 0 0 0 1000px rgba(255,255,255,0.05) inset !important;
 }
-/*
-.mdui-button-raised.mdui-red-bg *,
-.mdui-dark .mdui-button-raised.mdui-red-bg * { background-color:#f44336 !important; }
-.mdui-button-raised.mdui-pink-bg *,
-.mdui-dark .mdui-button-raised.mdui-pink-bg * { background-color:#e91e63 !important; }
-.mdui-button-raised.mdui-purple-bg *,
-.mdui-dark .mdui-button-raised.mdui-purple-bg * { background-color:#9c27b0 !important;  color:#ffffff; }
-.mdui-button-raised.mdui-deeppurple-bg *,
-.mdui-dark .mdui-button-raised.mdui-deeppurple-bg * { background-color:#673ab7 !important; color:#ffffff; }
-.mdui-button-raised.mdui-indigo-bg *,
-.mdui-dark .mdui-button-raised.mdui-indigo-bg * { background-color:#3f51b5 !important;  color:#ffffff; }
-.mdui-button-raised.mdui-blue-bg *,
-.mdui-dark .mdui-button-raised.mdui-blue-bg * { background-color:#2196f3 !important; }
-.mdui-button-raised.mdui-lightblue-bg *,
-.mdui-dark .mdui-button-raised.mdui-lightblue-bg * { background-color:#03a9f4 !important; }
-.mdui-button-raised.mdui-cyan-bg *,
-.mdui-dark .mdui-button-raised.mdui-cyan-bg * { background-color:#00bcd4 !important; }
-.mdui-button-raised.mdui-teal-bg *,
-.mdui-dark .mdui-button-raised.mdui-teal-bg * { background-color:#009688 !important; }
-.mdui-button-raised.mdui-green-bg *,
-.mdui-dark .mdui-button-raised.mdui-green-bg * { background-color:#4caf50 !important; }
-.mdui-button-raised.mdui-lightgreen-bg *,
-.mdui-dark .mdui-button-raised.mdui-lightgreen-bg * { background-color:#8bc34a !important; }
-.mdui-button-raised.mdui-lime-bg *,
-.mdui-dark .mdui-button-raised.mdui-lime-bg * { background-color:#cddc39 !important; }
-.mdui-button-raised.mdui-yellow-bg *,
-.mdui-dark .mdui-button-raised.mdui-yellow-bg * { background-color:#ffeb3b !important; }
-.mdui-button-raised.mdui-amber-bg *,
-.mdui-dark .mdui-button-raised.mdui-amber-bg * { background-color:#ffc107 !important; }
-.mdui-button-raised.mdui-orange-bg *,
-.mdui-dark .mdui-button-raised.mdui-orange-bg * { background-color:#ff9800 !important; }
-.mdui-button-raised.mdui-deeporange-bg *,
-.mdui-dark .mdui-button-raised.mdui-deeporange-bg * { background-color:#ff5722 !important; }
-.mdui-button-raised.mdui-brown-bg *,
-.mdui-dark .mdui-button-raised.mdui-brown-bg * { background-color:#795548 !important;  color:#ffffff; }
-.mdui-button-raised.mdui-grey-bg *,
-.mdui-dark .mdui-button-raised.mdui-grey-bg * { background-color:#9e9e9e !important; }
-.mdui-button-raised.mdui-darkgrey-bg *,
-.mdui-dark .mdui-button-raised.mdui-darkgrey-bg * { background-color:#303030 !important;  color:#ffffff; }
-.mdui-button-raised.mdui-bluegrey-bg *,
-.mdui-dark .mdui-button-raised.mdui-bluegrey-bg * { background-color:#607d8b !important;  color:#ffffff; }
-.mdui-button-raised.mdui-white-bg *,
-.mdui-dark .mdui-button-raised.mdui-white-bg * { background-color:#f8f8f8 !important; }
-.mdui-button-raised.mdui-black-bg *,
-.mdui-dark .mdui-button-raised.mdui-black-bg * { background-color:#212121 !important;  color:#ffffff; }
-*/
 
-
-/* ----------
-   floating button
-   ----------*/
+/* ----- floating button -----*/
 
 .mdui-floatingbutton {
-  background: #2196f3;
+  background: var(--accent-color);
   position: fixed !important;
   z-index:1000;
   border-radius:50% !important;
@@ -1341,7 +1378,6 @@ kiosk=tv
   border:none !important;
   opacity: 1 !important;
 }
-
 
 .mdui-floatingbutton * {
   background: none !important;
@@ -1351,7 +1387,6 @@ kiosk=tv
   margin:0 !important;
 }
 
-
 .mdui-floatingbutton .vis-widget-body {
   display:flex;
   align-items: center;
@@ -1359,7 +1394,7 @@ kiosk=tv
 }
 
 .mdui-runtime.mdui-notouch .mdui-floatingbutton:hover {
-  box-shadow: 0 10px 20px rgba(0,0,0,0.49), 0 6px 6px rgba(0,0,0,0.53), 0 0 0 1000px rgba(0,0,0,0.2) inset !important;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.49), 0 6px 6px rgba(0,0,0,0.53), 0 0 0 1000px rgba(0,0,0,0.05) inset !important;
   transition: all 0.3s ease;
 }
 
@@ -1388,10 +1423,72 @@ kiosk=tv
 .mdui-black.mdui-floatingbutton * { color:#212121 !important; }
 
 
-/* ----------
-   navigation items
-   ---------- */
+/* ----- list ----- */
 
+.mdui-list {
+  border: 1px solid var(--divider-color) !important;
+  background: transparent;
+  color:var(--design-vis-font-color);
+  overflow:auto; 
+}
+.mdui-dark .mdui-list {
+  border: 1px solid var(--divider-color-dark) !important;
+  color:#ffffff;
+}
+.mdui-list>.vis-widget-body>.vis-view-container>.vis-view,
+.mdui-list>.vis-view-container>.vis-view {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  align-items : flex-start;
+  justify-content : flex-start;
+  justify-content : flex-start;
+  align-content: flex-start;
+}
+
+/* ist das flex-item, muss wieder in den normalen Verlauf rein */
+
+.mdui-list>.vis-widget-body>.vis-view-container>.vis-view>div:not(.mdui-noflex), 
+.mdui-list>.vis-view-container>.vis-view>div:not(.mdui-noflex) { 
+  position: relative !important;
+  position: -webkit-relative !important;
+  top:auto !important;
+  left:auto !important;
+  flex-shrink: 0;
+}
+
+.mdui-listitem {
+  border-bottom: 1px solid var(--divider-color) !important;
+  background: transparent;
+  color:var(--design-vis-font-color);
+}
+.mdui-dark .mdui-listitem {
+  border-bottom: 1px solid var(--divider-color-dark) !important;
+  background: transparent;
+  color:#ffffff;
+}
+.mdui-listitem .material-icons {
+  transform:scale(1);
+}
+
+.mdui-listitem .vis-widget-body,
+.mdui-listitem .vis-widget-body>* {
+  display:flex;
+  align-items: center;
+  background:none;
+  border:none;
+  color: inherit !important;
+  padding:0px !important;
+}
+.mdui-listitem button,
+.mdui-listitem label,
+.mdui-listitem a,
+.mdui-listitem .vis-widget-body {
+  font-size:1em;
+}
+
+
+/* ----- navigation items ----- */
 
 .mdui-navitem,
 .mdui-navitem button,
@@ -1400,7 +1497,7 @@ kiosk=tv
 .mdui-navitem .vis-widget-body {
   background:none !important;
   border:none !important;
-  color:#000000 !important;
+  color:var(--design-vis-font-color) !important;
   font-size:1em !important;
   font-weight:normal !important;
   border-radius:0px !important;
@@ -1420,16 +1517,16 @@ kiosk=tv
 }
 
 .mdui-runtime.mdui-notouch .mdui-navitem:hover {
-  box-shadow: 0 0 0 1000px rgba(0,0,0,0.2) inset !important;
+  box-shadow: 0 0 0 1000px rgba(0,0,0,0.05) inset !important;
   transition: all 0.3s ease;
 }
 .mdui-runtime.mdui-notouch .mdui-dark .mdui-navitem:hover {
-  box-shadow: 0 0 0 1000px rgba(255,255,255,0.2) inset !important;
+  box-shadow: 0 0 0 1000px rgba(255,255,255,0.05) inset !important;
 }
 
 .mdui-navitem .vis-widget-body,
 .mdui-navitem .vis-widget-body * {
-  display:flex !important;
+  display:flex;
   align-items: center;
 }
 
@@ -1462,10 +1559,7 @@ kiosk=tv
 }
 
 
-/* ----------
-   divider
-   ---------- */
-
+/* ----- divider ----- */
 
 .mdui-divider {
   background:linear-gradient(to right, rgba(0,0,0,.2), rgba(0,0,0,.2) ) !important;
@@ -1481,16 +1575,14 @@ kiosk=tv
 }
 
 
-/* ----------
-   toggle button
-   ----------*/
+/* ----- toggle button -----*/
 
 /* toggle Dreieck rechts aussen anzeigen */
 .mdui-navitem.mdui-toggle:after {
   position: absolute;
   font-family: 'Material Icons' !important;
   font-size:24px;
-  color:#000000;
+  color:var(--design-vis-font-color);
   top: calc(50% - 0.5em);
   left:calc(100% - 1.1em);
   content: "expand_more";
@@ -1515,25 +1607,19 @@ kiosk=tv
 
 
 
-/* -----
-   tables
-   -----
-   HMTL-Tabellen (tables), die mit mdui-table versehen werden, können in zwei
-   Arten angezeigt werden: (a) als normale Table und (b) als responsive Table,
-   wobei aus Zeile dann Cards/Tiles werden und aus Spalten dann Zeilen.
+/* ----- tables -----
+HMTL-Tabellen (tables), die mit mdui-table versehen werden, können in zwei
+Arten angezeigt werden: (a) als normale Table und (b) als responsive Table,
+wobei aus Zeile dann Cards/Tiles werden und aus Spalten dann Zeilen.
 
-   mdui-table-bordered
-   mdui-table-striped
-   mdui-table-(type)
-   mdui-table[-r(responsewidth)][-w(colwidth)][-c(colcount)][-l]
-   (responsewidth) = 0000 .. 9999
-   (type)  = card | tile | list
-   (colwidth) = 0000 .. 9999
-   (colcount) = 0 .. 99
-
-
-
-
+mdui-table-bordered
+mdui-table-striped
+mdui-table-(type)
+mdui-table[-r(responsewidth)][-w(colwidth)][-c(colcount)][-l]
+(responsewidth) = 0000 .. 9999
+(type)  = card | tile | list
+(colwidth) = 0000 .. 9999
+(colcount) = 0 .. 99
 */
 [class*="mdui-table"],
 [class*="mdui-table"] table {
@@ -1542,7 +1628,7 @@ kiosk=tv
 }
 
 [class*="mdui-table"] tr th {
-  color:#000000;
+  color:var(--design-vis-font-color);
   opacity:0.54 !important;
   font-weight:normal;
   font-size:0.8em;
@@ -1571,7 +1657,7 @@ kiosk=tv
 
 [class*="mdui-table"] tr td {
   padding:6px;
-  color:#000000;
+  color:var(--design-vis-font-color);
 }
 .mdui-dark [class*="mdui-table"] tr td {
   color:#ffffff;
@@ -1622,7 +1708,7 @@ kiosk=tv
 .mdui-table-raised tbody tr td:before,
 .mdui-table-outlined tbody tr td:before,
 .mdui-table-list tbody tr td:before {
-  color:#000000;
+  color:var(--design-vis-font-color);
   display:block;
   font-size:9pt;
   content: attr(label) attr(labelth);
@@ -1703,12 +1789,12 @@ kiosk=tv
 .mdui-table-list.mdui-table-bordered tr {
   border-bottom: 1px solid rgba(0,0,0,0.1) !important;
 }
-/* ------
-   Labels
-   ------ */
+
+/* ------ Labels ------ */
+
 .mdui-title {
   z-index:2;
-  color: #000000 ;
+  color:var(--design-vis-font-color);
   font-size: 1.2em;
   font-weight: normal;
   text-shadow:none !important;
@@ -1722,10 +1808,9 @@ kiosk=tv
   opacity:0.87;
 }
 
-
 .mdui-subtitle {
   z-index:2;
-  color: #000000;
+  color:var(--design-vis-font-color);
   font-size: 0.8em;
   font-weight: normal;
   text-shadow:none !important;
@@ -1740,14 +1825,14 @@ kiosk=tv
 
 .mdui-label {
   z-index:2;
-  color:#000000 ;
+  color:var(--design-vis-font-color);
   font-weight:normal !important;
-  font-size:0.9em;
+  font-size:1em;
   text-shadow:none !important;
   letter-spacing: 0px !important;
   width:auto;
   height:auto;
-  opacity:1;
+  opacity:0.87;
 }
 .mdui-dark .mdui-label {
   color:#ffffff ;
@@ -1757,7 +1842,7 @@ kiosk=tv
 
 .mdui-value {
   z-index:2;
-  color:#000000;
+  color:var(--design-vis-font-color);
   font-weight:bold;
   font-size:1em;
   text-shadow:none !important;
@@ -1765,21 +1850,16 @@ kiosk=tv
   width:auto;
   height:auto;
   opacity:1;
-  padding-left:.25em;
-  padding-right:.25em;
-  padding-top:.25em;
-  padding-bottom:.25em;
 }
 .mdui-dark .mdui-value {
   color:#ffffff;
 }
 
-/* ------
-   States
-   ------ */
+/* ------ States ------ */
+
 .mdui-state {
   z-index:2;
-  color:#000000 !important;
+  color:var(--design-vis-font-color) !important;
   font-weight:bold;
   font-size:1em;
   text-shadow:none !important;
@@ -1816,7 +1896,7 @@ kiosk=tv
 */
 
 .mdui-input  {
-  color:rgba(0,0,0,0.7) !important;
+  color:var(--design-vis-font-color) !important;
   z-index:2;
   font-weight:normal !important;
   text-align: left !important;
@@ -1827,43 +1907,41 @@ kiosk=tv
 }
 
 .mdui-input label {
-  font-size:0.9em;
+  font-size:1em;
 }
 
-.mdui-input input[type="text"] {
-  border-bottom : 2px solid rgba(0,0,0,0.54) !important;
-  color : rgba(0,0,0,1) !important;
+.mdui-input input:not([type="button"]) {
+  border-bottom : 2px solid var(--design-vis-font-color) !important;
+  color : var(--design-vis-font-color) !important;
   background: rgba(0,0,0,0) !important;
   height:calc(100% - 2px) !important;
   border-radius:0px !important;
   margin:0px !important;
   padding:0px !important;
-  _line-height:2em !important;
-  _min-height:0px !important;
 }
-.mdui-dark .mdui-input input[type="text"] {
+.mdui-dark .mdui-input input:not([type="button"]) {
   color : rgba(255,255,255,1) !important;
   border-bottom : 2px solid rgba(255,255,255,0.54) !important;
 }
 
-.mdui-input.mdui-center-h input[type="text"] {
+.mdui-input.mdui-center-h input:not([type="button"]) {
    text-align:center !important;
 }
 
 .mdui-input input[type="button"] {
   top:-2px;
-  color: #2196F3 !important;
+  color: var(--accent-color) !important;
 }
 
-.mdui-runtime.mdui-notouch .mdui-input input[type="text"]:hover,
-.mdui-input input[type="text"]:focus {
-  border-bottom-color : #2196F3 !important;
-  box-shadow: 0 0 0 1000px rgba(0,0,0,0.2) inset;
+.mdui-input input:not([type="button"]):hover,
+.mdui-input input:not([type="button"]):focus {
+  border-bottom-color : var(--accent-color) !important;
+  box-shadow: 0 0 0 1000px rgba(0,0,0,0.05) inset;
   transition: all 0.3s ease;
 }
-.mdui-runtime.mdui-notouch .mdui-dark .mdui-input input[type="text"]:hover,
-.mdui-dark .mdui-input input[type="text"]:focus {
-  box-shadow: 0 0 0 1000px rgba(255,255,255,0.2) inset;
+.mdui-dark .mdui-input input:not([type="button"]):hover,
+.mdui-dark .mdui-input input:not([type="button"]):focus {
+  box-shadow: 0 0 0 1000px rgba(255,255,255,0.05) inset;
 }
 
 /* 500 color */
@@ -1930,13 +2008,13 @@ kiosk=tv
   -webkit-appearance: none;
   appearance: none;
   border: none;
-  color : #000000;
+  color : var(--design-vis-font-color);
   background: rgba(0,0,0,0);
   height:100% !important;
   font-size:1em !important;
   border: none;
   outline: none;
-  border-bottom : 2px solid rgba(0,0,0,0.54);
+  border-bottom : 2px solid var(--design-vis-font-color);
   width:100%;
 }
 
@@ -1961,7 +2039,7 @@ kiosk=tv
 
 .mdui-select:before {
   position: absolute;
-  color:#000000;
+  color:var(--design-vis-font-color);
   padding: 0px;
   font-family: 'Material Icons' !important;
   font-size:24px;
@@ -1974,15 +2052,15 @@ kiosk=tv
   color:#ffffff;
 }
 
-.mdui-runtime.mdui-notouch .mdui-select:hover,
+.mdui-select select:hover,
 .mdui-select select:focus {
-  border-bottom-color : #2196F3;
-  box-shadow: 0 0 0 1000px rgba(0,0,0,0.2) inset;
+  border-bottom-color : var(--accent-color);
+  box-shadow: 0 0 0 1000px rgba(0,0,0,0.05) inset;
   transition: all 0.3s ease;
 }
-.mdui-runtime.mdui-notouch .mdui-dark .mdui-select:hover,
+.mdui-dark .mdui-select:hover,
 .mdui-dark .mdui-select select:focus {
-  box-shadow: 0 0 0 1000px rgba(255,255,255,0.2) inset;
+  box-shadow: 0 0 0 1000px rgba(255,255,255,0.05) inset;
 }
 
 /* 500 color */
@@ -2359,8 +2437,8 @@ zeigt und so bedienbar ist.
   color: #000000;
   background:#ffffff;
 }
-
-
+  
+  
 .mdui-transparent-acc.mdui-slider .ui-slider-horizontal:before,
 .mdui-transparent-acc.mdui-slider .ui-slider-vertical:before,
 .mdui-transparent-acc.mdui-slider .ui-slider-horizontal .ui-slider-handle,
@@ -2454,7 +2532,7 @@ display: block;
 .mdui-radio *[id*="_radio"] {
   background:none !important;
   border:none !important;
-  color:#000000 !important;
+  color:var(--design-vis-font-color) !important;
 }
 .mdui-dark .mdui-radio *[id*="_radio"] label {
   color:#ffffff !important;
@@ -2482,16 +2560,16 @@ display: block;
 }
 
 .mdui-radio *[id*="_radio"] label.ui-state-active {
-  border-bottom-color:#2196F3 !important;
-  color:#2196F3 !important;
+  border-bottom-color:var(--accent-color) !important;
+  color:var(--accent-color) !important;
   opacity: 1;
 }
 .mdui-runtime.mdui-notouch .mdui-radio *[id*="_radio"]:hover {
-  box-shadow: 0 0 0 1000px rgba(0,0,0,0.2) inset;
+  box-shadow: 0 0 0 1000px rgba(0,0,0,0.05) inset;
   transition: all 0.3s ease;
 }
 .mdui-runtime.mdui-notouch .mdui-dark .mdui-radio *[id*="_radio"] label:hover {
-  box-shadow: 0 0 0 1000px rgba(255,255,255,0.2) inset;
+  box-shadow: 0 0 0 1000px rgba(255,255,255,0.05) inset;
 }
 
 /* Radiobuttons vertikal darstellen */
@@ -2588,7 +2666,7 @@ display: block;
   margin:0px !important;
   padding:0px !important;
   background:none !important;
-  color:#000000 !important;
+  color:var(--design-vis-font-color) !important;
 }
 .mdui-dark .mdui-chip *,
 .mdui-dark .mdui-chip-outlined * {
@@ -2598,7 +2676,7 @@ display: block;
 .mdui-runtime.mdui-notouch .mdui-chip * *:hover,
 .mdui-runtime.mdui-notouch .mdui-chip-outlined:hover,
 .mdui-runtime.mdui-notouch .mdui-chip-outlined * *:hover {
-  box-shadow: 0 0 0px 1000px rgba(0,0,0,0.25) inset !important;
+  box-shadow: 0 0 0px 1000px rgba(0,0,0,0.05) inset !important;
   transition: all 0.3s ease;
 }
 
@@ -2639,7 +2717,7 @@ display: block;
   padding-right:.5em !important;
   font-weight:normal!important;
   background:none !important;
-  color:#000000 !important;
+  color:var(--design-vis-font-color) !important;
   opacity:0.8;
 }
 .mdui-dark .mdui-chips label,
@@ -2648,28 +2726,29 @@ display: block;
 }
 
 /* background label */
-.mdui-red.mdui-chips * label:before { background-color:#f44336 !important; }
-.mdui-pink.mdui-chips * label:before { background-color:#e91e63 !important; }
-.mdui-purple.mdui-chips * label:before { background-color:#9c27b0 !important; }
-.mdui-deeppurple.mdui-chips * label:before { background-color:#673ab7 !important; }
-.mdui-indigo.mdui-chips * label:before { background-color:#3f51b5 !important; }
-.mdui-blue.mdui-chips * label:before { background-color:#2196f3 !important; }
-.mdui-lightblue.mdui-chips * label:before { background-color:#03a9f4 !important; }
-.mdui-cyan.mdui-chips * label:before { background-color:#00bcd4 !important; }
-.mdui-teal.mdui-chips * label:before { background-color:#009688 !important; }
-.mdui-green.mdui-chips * label:before { background-color:#4caf50 !important; }
-.mdui-lightgreen.mdui-chips * label:before { background-color:#8bc34a !important; }
-.mdui-lime.mdui-chips * label:before { background-color:#cddc39 !important; }
-.mdui-yellow.mdui-chips * label:before { background-color:#ffeb3b !important; }
-.mdui-amber.mdui-chips * label:before { background-color:#ffc107 !important; }
-.mdui-orange.mdui-chips * label:before { background-color:#ff9800 !important; }
-.mdui-deeporange.mdui-chips * label:before { background-color:#ff5722 !important; }
-.mdui-brown.mdui-chips * label:before { background-color:#795548 !important; }
-.mdui-grey.mdui-chips * label:before { background-color:#9e9e9e !important; }
-.mdui-darkgrey.mdui-chips * label:before { background-color:#303030 !important; }
-.mdui-bluegrey.mdui-chips * label:before { background-color:#607d8b !important; }
+.mdui-red.mdui-chips * label:before { background-color:#ff7961 !important; }
+.mdui-pink.mdui-chips * label:before { background-color:#ff6090 !important; }
+.mdui-purple.mdui-chips * label:before { background-color:#d05ce3 !important; }
+.mdui-deeppurple.mdui-chips * label:before { background-color:#9a67ea !important; }
+.mdui-indigo.mdui-chips * label:before { background-color:#757de8 !important; }
+.mdui-blue.mdui-chips * label:before { background-color:#6ec6ff !important; }
+.mdui-lightblue.mdui-chips * label:before { background-color:#67daff !important; }
+.mdui-cyan.mdui-chips * label:before { background-color:#62efff !important; }
+.mdui-teal.mdui-chips * label:before { background-color:#52c7b8 !important; }
+.mdui-green.mdui-chips * label:before { background-color:#80e27e !important; }
+.mdui-lightgreen.mdui-chips * label:before { background-color:#bef67a !important; }
+.mdui-lime.mdui-chips * label:before { background-color:#ffff6e !important; }
+.mdui-yellow.mdui-chips * label:before { background-color:#ffff72 !important; }
+.mdui-amber.mdui-chips * label:before { background-color:#fff350 !important; }
+.mdui-orange.mdui-chips * label:before { background-color:#ffc947 !important; }
+.mdui-deeporange.mdui-chips * label:before { background-color:#ff8a50 !important; }
+.mdui-brown.mdui-chips * label:before { background-color:#a98274 !important; }
+.mdui-grey.mdui-chips * label:before { background-color:#cfcfcf !important; }
+.mdui-darkgrey.mdui-chips * label:before { background-color:#383838 !important; }
+.mdui-bluegrey.mdui-chips * label:before { background-color:#8eacbb !important; }
 .mdui-white.mdui-chips * label:before { background-color:#f8f8f8 !important; }
-.mdui-black.mdui-chips * label:before { background-color:#212121 !important; }
+.mdui-black.mdui-chips * label:before { background-color:#303030 !important; }
+
 
 .mdui-chips * label:before,
 .mdui-chips-outlined * label:before {
@@ -2717,23 +2796,22 @@ display: block;
   width:100%;
   height:100%;
   border-radius: 1em;
-  background-color:#2196F3 !important;
+  background-color:var(--accent-color) !important;
   z-index:-1;
 }
 
 .mdui-chips-outlined * label.ui-state-active:before {
-  xopacity:0.8;
-  border-color:#2196F3 !important;
+  border-color:var(--accent-color) !important;
 }
 
 .mdui-runtime.mdui-notouch .mdui-chips label:hover,
 .mdui-runtime.mdui-notouch .mdui-chips-outlined label:hover {
-  box-shadow: 0 0 0px 1000px rgba(0,0,0,0.2) inset;
+  box-shadow: 0 0 0px 1000px rgba(0,0,0,0.05) inset;
   transition: all 0.3s ease;
 }
 .mdui-runtime.mdui-notouch .mdui-dark .mdui-chips label:hover,
 .mdui-runtime.mdui-notouch .mdui-dark .mdui-chips-outlined label:hover {
-  box-shadow: 0 0 0px 1000px rgba(255,255,255,0.2) inset;
+  box-shadow: 0 0 0px 1000px rgba(255,255,255,0.05) inset;
 }
 
 /* Chips vertikal darstellen */
@@ -2744,7 +2822,7 @@ display: block;
 
 
 /* outlined background label */
-.mdui-red.mdui-chips-outlined * label:not(.ui-state-active):before { border-color:#f44336 !important; }
+.mdui-red.mdui-chips-outlined * label:not(.ui-state-active):before { border-color:#ff7961 !important; }
 .mdui-pink.mdui-chips-outlined * label:not(.ui-state-active):before { border-color:#e91e63 !important; }
 .mdui-purple.mdui-chips-outlined * label:not(.ui-state-active):before { border-color:#9c27b0 !important; }
 .mdui-deeppurple.mdui-chips-outlined * label:not(.ui-state-active):before { border-color:#673ab7 !important; }
@@ -2872,12 +2950,12 @@ display: block;
     0 1px 5px 0 rgba(0, 0, 0, 0.54);
 }
 .mdui-runtime.mdui-notouch .mdui-switch:hover {
-  box-shadow: 0 0 0 1000px rgba(0,0,0,0.2) inset;
+  box-shadow: 0 0 0 1000px rgba(0,0,0,0.05) inset;
   border-radius:2px;
   transition: all 0.3s ease;
 }
 .mdui-runtime.mdui-notouch .mdui-dark .mdui-switch:hover {
-  box-shadow: 0 0 0 1000px rgba(255,255,255,0.2) inset;
+  box-shadow: 0 0 0 1000px rgba(255,255,255,0.05) inset;
 }
 
 .mdui-switch input[type="checkbox"]:checked~label:before {
@@ -2885,7 +2963,7 @@ display: block;
 }
 
 .mdui-switch input[type="checkbox"]:checked~label:after {
-  background-color: #2196F3 ;
+  background-color: var(--accent-color) ;
   -ms-transform: translate(calc(100% - 2px), -50%);
   -webkit-transform: translate(calc(100% - 2px), -50%);
   transform: translate(calc(100% - 2px), -50%);
@@ -2920,7 +2998,7 @@ display: block;
 
 
 
-
+  
 /* -----
    Info
    ----- */
@@ -2969,7 +3047,7 @@ display: block;
 }
 
 .mdui-runtime .ui-dialog-title {
-  color:#000000;
+  color:var(--design-vis-font-color);
   opacity:0.8;
 }
 .mdui-runtime .mdui-dark .ui-dialog-title {
@@ -3058,7 +3136,7 @@ display: block;
 }
 
 .mdui-runtime.mdui-notouch .ui-datepicker td a:hover {
-  box-shadow: 0 0 0 1000px rgba(255,255,255,0.2) inset;
+  box-shadow: 0 0 0 1000px rgba(255,255,255,0.05) inset;
   transition: all 0.3s ease;
 }
 
@@ -3138,33 +3216,33 @@ display: block;
 }
 @keyframes mdui-red-flash-ani  {
   0%,
-  10% {filter: drop-shadow(0px 0px 4px #F44336) drop-shadow(0px 0px 4px #F44336) drop-shadow(0px 0px 4px #F44336);
+  7% {filter: drop-shadow(0px 0px 4px #F44336) drop-shadow(0px 0px 4px #F44336) drop-shadow(0px 0px 4px #F44336);
    }
-  11% { filter:none; }
+  8% { filter:none; }
 }
 .mdui-yellow-flash {
   animation: mdui-yellow-flash-ani 1s linear infinite;
 }
 @keyframes mdui-yellow-flash-ani  {
   0%,
-  10% {filter: drop-shadow(0px 0px 4px #FFDB3B) drop-shadow(0px 0px 4px #FFDB3B) drop-shadow(0px 0px 4px #FFDB3B); }
-  11% { filter: none; }
+  7% {filter: drop-shadow(0px 0px 4px #FFDB3B) drop-shadow(0px 0px 4px #FFDB3B) drop-shadow(0px 0px 4px #FFDB3B); }
+  8% { filter: none; }
 }
 .mdui-blue-flash {
   animation: mdui-blue-flash-ani 1s linear infinite;
 }
 @keyframes mdui-blue-flash-ani  {
   0%,
-  10% {filter: drop-shadow(0px 0px 4px #2B95F3) drop-shadow(0px 0px 4px #2B95F3) drop-shadow(0px 0px 4px #2B95F3) }
-  11% { filter: none; }
+  7% {filter: drop-shadow(0px 0px 4px #2B95F3) drop-shadow(0px 0px 4px #2B95F3) drop-shadow(0px 0px 4px #2B95F3) }
+  8% { filter: none; }
 }
 .mdui-green-flash {
   animation: mdui-green-flash-ani 1s linear infinite;
 }
 @keyframes mdui-green-flash-ani  {
   0%,
-  10% {filter: drop-shadow(0px 0px 4px #4CAF50) drop-shadow(0px 0px 4px #4CAF50) drop-shadow(0px 0px 4px #4CAF50) }
-  11% { filter: none; }
+  7% {filter: drop-shadow(0px 0px 4px #4CAF50) drop-shadow(0px 0px 4px #4CAF50) drop-shadow(0px 0px 4px #4CAF50) }
+  8% { filter: none; }
 }
 
 /* -----
@@ -3237,7 +3315,7 @@ display: block;
   0%,100% {filter: drop-shadow(0px 0px 4px #4CAF50) ; }
 }
 
-
+  
 /* -----
    bargraph
    ----- */
@@ -3391,80 +3469,59 @@ display: block;
   outline:1px solid transparent;
 }
 .mdui-flow:after    {
+  border-radius:inherit;
   left:0;
-  top:20%;
+  top:0;
   content:"";
   position:absolute;
-  width:2048px;
-  height:60%;
-
+  width:100%;
+  height:100%;
+  background-color:transparent;
   background-position: 0px 0px;
   background-repeat: repeat-x;
-  background: linear-gradient(90deg, transparent 50%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,.33) 100%);
+  background: radial-gradient(ellipse 100% 40% at -50% 50%, transparent 60%, rgba(0,0,0,.2) 100%,transparent 100%);
   background-size: 16px 100%;
-  animation: keyframe-flow 60s linear infinite;
+  animation: keyframe-flow 2s linear infinite;
   opacity:1;
 }
 
 .mdui-dark .mdui-flow:after {
-  background-position: 0px 0px;
-  background-repeat: repeat-x;
-  background: linear-gradient(90deg, transparent 50%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,.33) 100%);
-  background-size: 16px 100%;
-}
-
-.mdui-slowest.mdui-flow:after   {
-  animation-duration: 202s;
-}
-.mdui-slower.mdui-flow:after    {
-  animation-duration: 135s;
-}
-.mdui-slow.mdui-flow:after  {
-  animation-duration: 90s;
-}
-.mdui-normal.mdui-flow:after  {
-  animation-duration: 60s;
-}
-.mdui-fast.mdui-flow:after  {
-  animation-duration: 40s;
-}
-.mdui-faster.mdui-flow:after    {
-  animation-duration: 26.666s;
-}
-.mdui-fastest.mdui-flow:after   {
-  animation-duration: 17.777s;
-}
-
-
-.mdui-red-acc.mdui-flow:after {
-  background: linear-gradient(90deg, transparent 50%, rgba(244,67,54,0.33) 50%, rgba(244,67,54,0.66) 100%);
-  background-size: 16px 100%;
-}
-.mdui-yellow-acc.mdui-flow:after {
-  background: linear-gradient(90deg, transparent 50%, rgba(255,253,59,0.33) 50%, rgba(255,253,59,0.66) 100%);
-  background-size: 16px 100%;
-}
-.mdui-blue-acc.mdui-flow:after {
-  background: linear-gradient(90deg, transparent 50%, rgba(40,149,243,0.33) 50%, rgba(40,149,243,0.66) 100%);
-  background-size: 16px 100%;
-}
-.mdui-green-acc.mdui-flow:after {
-  background: linear-gradient(90deg, transparent 50%, rgba(76,175,80,0.33) 50%, rgba(76,175,80,0.66) 100%);
-  background-size: 16px 100%;
-}
-.mdui-white-acc.mdui-flow:after {
-  background: linear-gradient(90deg, transparent 50%, rgba(255,255,255,0.33) 50%, rgba(255,255,255,0.66) 100%);
-  background-size: 16px 100%;
-}
-.mdui-black-acc.mdui-flow:after {
-  background: linear-gradient(90deg, transparent 50%, rgba(0,0,0,0.33) 50%, rgba(0,0,0,0.66) 100%);
-  background-size: 16px 100%;
+  background: radial-gradient(ellipse 100% 40% at -50% 50%, transparent 60%, rgba(255,255,255,.2) 100%,transparent 100%);
 }
 
 @keyframes keyframe-flow {
-    0%  { background-position: 0px 0px; }
-    100%  { background-position: 100% 0px; }
+    0%  { background-position: 0px 0px; background-size: 16px 100%;}
+    100%  { background-position: 32px 0px; background-size: 16px 100%;}
 }
+
+.mdui-slowest.mdui-flow:after {animation-duration: 6.75s;}
+.mdui-slower.mdui-flow:after  {animation-duration: 4.50s;}
+.mdui-slow.mdui-flow:after    {animation-duration: 3.00s;}
+.mdui-normal.mdui-flow:after  {animation-duration: 2.00s;}
+.mdui-fast.mdui-flow:after    {animation-duration: 1.33s;}
+.mdui-faster.mdui-flow:after  {animation-duration: 0.89s;}
+.mdui-fastest.mdui-flow:after {animation-duration: 0.59s;}
+
+.mdui-red-acc.mdui-flow:after {
+  background: radial-gradient(ellipse 100% 40% at -50% 50%, transparent 60%, rgba(244,67,54,.7) 100%,transparent 100%);
+}
+.mdui-yellow-acc.mdui-flow:after {
+  background: radial-gradient(ellipse 100% 40% at -50% 50%, transparent 60%, rgba(255,253,59,.7) 100%,transparent 100%);
+}
+.mdui-blue-acc.mdui-flow:after {
+  background: radial-gradient(ellipse 100% 40% at -50% 50%, transparent 60%, rgba(40,149,243,.7) 100%,transparent 100%);
+}
+.mdui-green-acc.mdui-flow:after {
+  background: radial-gradient(ellipse 100% 40% at -50% 50%, transparent 60%, rgba(76,175,80,.7) 100%,transparent 100%);
+}
+.mdui-white-acc.mdui-flow:after {
+  background: radial-gradient(ellipse 100% 40% at -50% 50%, transparent 60%, rgba(255,255,255,.7) 100%,transparent 100%);
+}
+.mdui-black-acc.mdui-flow:after {
+  background: radial-gradient(ellipse 100% 40% at -50% 50%, transparent 60%, rgba(0,0,0,.7) 100%,transparent 100%);
+}
+
+
 
 
 
@@ -3595,71 +3652,20 @@ display: block;
 .mdui-black { color:#212121 !important; }
 
 
-
-
-/*
-/* Weißes Raster mit 52x52 156x156 als Hintergrund 
-
-.vis-grid:before {
-  content:"";
-  position:absolute;
-  left:0;
-  top:0;
-  width:100%;
-  height:100%;
-  background-image:
-    repeating-linear-gradient(
-     transparent,
-     transparent 155px,
-     rgba(0,0,0,1) 155px,
-     rgba(0,0,0,1) 156px
-    ),
-
-    repeating-linear-gradient(to right,
-     transparent,
-     transparent 155px,
-     #000000 155px,
-     #000000 156px
-     )
-  !important;
-}
-
-.vis-grid:after {
-  content:"";
-  position:absolute;
-  left:0;
-  top:0;
-  width:100%;
-  height:100%;
-  background-image:
-    repeating-linear-gradient(
-     transparent,
-     transparent 51px,
-     #404040 52px,
-     #404040 52px
-    ),
-
-    repeating-linear-gradient(to right,
-     transparent,
-     transparent 51px,
-     #404040 52px,
-     #404040 52px
-     )
-  !important;
-}
-
-*/
-
+  
+  
+  
 
 /* -----
    Design
    ----- */
 
-.vis_container>div {
-    background: #f0f0f0 !important;
+.vis_container_edit,
+.vis_container_edit>.vis-view {
+  background: var(--design-background, #f0f0f0) !important;
 }
 
-/* Weißes Raster mit 52x52 156x156 als Hintergrund */
+/* Raster 320 / 80 / 40 */
 
 .vis-grid:before {
   content:"";
@@ -3673,31 +3679,31 @@ display: block;
     /* 320er grid */
     repeating-linear-gradient(
      transparent 0px,   transparent 319px,
-     #404040 319px,     transparent 320px
+     var(--design-grid) 320px,     transparent 321px
     ),
     repeating-linear-gradient(to right,
      transparent 0px,   transparent 319px,
-     #404040 319px,     transparent 320px
+     var(--design-grid) 320px,     transparent 321px
     ),
     
     /* 80er grid */
     repeating-linear-gradient(
      transparent 0px,   transparent 79px,
-     #a0a0a0 80px,      transparent 80px
+     var(--design-grid) 80px,      transparent 80px
     ),
     repeating-linear-gradient(to right,
      transparent 0px,   transparent 79px,
-     #a0a0a0 80px,      transparent 80px
+     var(--design-grid) 80px,      transparent 80px
     ),
     
     /* 40er grid */
     repeating-linear-gradient(
      transparent 0px,   transparent 39px,
-     #c0c0c0 40px,      transparent 40px
+     var(--design-grid) 40px,      transparent 40px
     ),
     repeating-linear-gradient(to right,
      transparent 0px,   transparent 39px,
-     #c0c0c0 40px,      transparent 40px
+     var(--design-grid) 40px,      transparent 40px
     )
     
     ;
@@ -3706,67 +3712,65 @@ display: block;
 
 /* Sichtbarkeit des Grids verringern */
 .vis-grid {
-  opacity: 0.3;
+  opacity: .1;
   z-index:0;
+  height:auto;
 }
 
 .editmode-helper {
   background: none;
 }
 
-
-/* bei [Klick] nach 5 Sek jedes Widget für 3 sek hervorheben und die ID
-einblenden */
-.vis_container_edit .vis-view:active .vis-widget:after {
-  animation: vis-view-hover-ani 5s;
-  animation-delay: 3s;
-  color:#fff;
-}
-
-/* beim :hover hervorheben und die ID einblenden */
-.vis_container_edit .vis-view .vis-widget:hover:after {
-  animation: vis-view-hover-ani;
-  animation-duration: 1s;
-  animation-iteration-count: infinite;
-  animation-delay: 0.1s;
-}
-
-
-@keyframes vis-view-hover-ani  {
-  0%,100% {
-  width:calc(100% - 2px);
-  height:calc(100% - 2px);
-  color:#0000ff;
-  position:absolute;
-  left:1px;
-  top:1px;
-  text-shadow: 0px 0px 3px white, -1px -1px 0px white, 1px 1px 0px white;
-  padding:4px;
-  padding-right:2em;
-  font-size:0.66em;
-  background: rgba(0,0,255,.1);
-  content:attr(id);
-  pointer-events: none;
-  text-align:right;
-  z-index:32000;
-  }
-}
-
 .widget-helper {
-    border: 1px dashed transparent;
+  border: 1px dashed transparent;
 }
 
 .widget_inner_helper {
-    outline: 2px dashed blue;
-    border: 2px dashed white;
-    pointer-events: none;
-    top:3px;
-    left:3px;
-    position:absolute;
-    width: calc(100% - 5px);
-    height: calc(100% - 5px);
+  outline: 2px dashed var(--design-hint-background);
+  outline-offset: -3px;
+  border: 2px solid var(--design-background);
+  pointer-events: none;
+  top:0px;
+  left:0px;
+  position:absolute;
+  width: calc(100% + 1px);
+  height: calc(100% + 1px);
 }
 
+/* beim :hover hervorheben und die ID einblenden */
+.vis_container_edit .vis-view .vis-widget:hover:before {
+  position:absolute;
+  top:0px;
+  left:0px;
+  height:100%;
+  width:100%;
+  background:inherit;
+  content:"";
+  outline: 1px solid var(--design-hint-background);
+  outline-offset: -1px;
+  opacity:1;
+  border-radius:inherit;
+}
+.vis_container_edit .vis-view .vis-widget:hover:after {
+  font-size:10px;    
+  font-weight:normal;
+  width:auto;
+  height:12px;
+  color:var(--design-hint-color);
+  position:absolute;
+  left:calc(50% - 2em);
+  top:0;
+  padding-left:0.25em;
+  margin:0;
+  background: var(--design-hint-background);
+  pointer-events: none;
+  z-index:100;
+  content:attr(id);
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  opacity:1;
+}
 
 /* container-bezeichnungen anzeigen */
 .vis_container_edit .mdui-content>div:before,
@@ -3775,17 +3779,18 @@ einblenden */
 .vis_container_edit .mdui-tnav>div:before,
 .vis_container_edit .mdui-abar>div:before,
 .vis_container_edit .mdui-bnav>div:before {
-    position:absolute;
-    top:0px;
-    left:0px;
-    content:"content";
-    background: rgba(0,0,255,0.66);
-    color:#fff;
-    font-size:0.66em;
-    font-weight:normal;
-    border-radius: 1em;
-  padding: 1px 3px;
-  z-index:32000;
+  position:absolute;
+  top:0px;
+  left:0px;
+  height:12px;
+  content:"content";
+  background: var(--design-hint-background);
+  color:var(--design-hint-color);
+  font-size:10px;
+  font-weight:normal;
+  padding: 1px;
+  z-index:100;
+  opacity:0.87;
 }
 
 .vis_container_edit .mdui-abar>div:before { content:"abar"; }
@@ -3794,31 +3799,21 @@ einblenden */
 .vis_container_edit .mdui-rnav>div:before { content:"rnav"; }
 .vis_container_edit .mdui-bnav>div:before { content:"bnav"; }
 
-.vis_container_edit .mdui-content:hover:before,
-.vis_container_edit .mdui-rnav:hover:before,
-.vis_container_edit .mdui-lnav:hover:before,
-.vis_container_edit .mdui-tnav:hover:before,
-.vis_container_edit .mdui-abar:hover:before,
-.vis_container_edit .mdui-bnav:hover:before {
-  opacity:1;
+.vis_container_edit .mdui-content.mdui-flex>div:before { content:"content flex"; }
+.vis_container_edit .mdui-abar.mdui-flex>div:before { content:"abar flex"; }
+.vis_container_edit .mdui-tnav.mdui-flex>div:before { content:"tnav flex"; }
+.vis_container_edit .mdui-lnav.mdui-flex>div:before { content:"lnav flex"; }
+.vis_container_edit .mdui-rnav.mdui-flex>div:before { content:"rnav flex"; }
+.vis_container_edit .mdui-bnav.mdui-flex>div:before { content:"bnav flex"; }
+
+/* view-in-view hervorheben 3-fach */
+.vis_container_edit .vis-tpl-basic-view ,
+.vis_container_edit .vis-tpl-basic-view .vis-tpl-basic-vie {
+    box-shadow: 0 0 1px 0px var(--design-hint-background) inset,
+    0 0 1px 0px var(--design-hint-background) inset,
+    0 0 1px 0px var(--design-hint-background) inset;
 }
 
-/* mdui-componenten: Rahmen anzeigen */
-/*
-.vis_container_edit .mdui-navitem,
-.vis_container_edit .mdui-menuitem,
-.vis_container_edit .mdui-label,
-.vis_container_edit .mdui-title,
-.vis_container_edit .mdui-subtitle,
-.vis_container_edit .mdui-value,
-.vis_container_edit .mdui-state,
-.vis_container_edit .mdui-button,
-*/
-.vis_container_edit .vis-tpl-basic-view {
-    box-shadow: 0 0 0 1000px rgba(0,0,255,.03) inset, 
-         0 0 1px 0 rgba(0,0,255,.33);
-    
-}
 .vis_container_edit .mdui-menuitem {
    outline:1px solid rgba(0,0,255,.1);
    outline-offset:-1px;
@@ -3827,55 +3822,21 @@ einblenden */
    outline:1px solid rgba(255,0,0,.1);
 }
 
-/*
-.vis_container_edit .vis-tpl-basic-view .mdui-navitem,
-.vis_container_edit .vis-tpl-basic-view .mdui-menuitem,
-.vis_container_edit .vis-tpl-basic-view .mdui-label,
-.vis_container_edit .vis-tpl-basic-view .mdui-title,
-.vis_container_edit .vis-tpl-basic-view .mdui-subtitle,
-.vis_container_edit .vis-tpl-basic-view .mdui-value,
-.vis_container_edit .vis-tpl-basic-view .mdui-state,
-.vis_container_edit .vis-tpl-basic-view .mdui-button,
-*/
-.vis_container_edit .vis-tpl-basic-view .vis-tpl-basic-view {
-    box-shadow: 0 0 1px 0 rgba(0,0,255,.33);
-}
 
-
-
-/* flex-grid anzeigen */
-
-.vis_container_edit .vis-view .mdui-flex>.vis-widget-body:before  {
-  position:absolute;
-  top:0px;
-  left:5em;
-  content: "flex";
-  width:3em;
-  height:1.5em;
-  background: rgba(0,0,255,.33);
-  color:#ffffff !important;
-  font-size:10px;
-  font-weight:normal;
-  border-radius: 1em;
-  z-index:32000;
-  display:flex;
-  align-items: center;
-  justify-content: center;
-}
+/* hide State anzeigen */
 .vis_container_edit .vis-view .mdui-hide>.vis-widget-body:before  {
   position:absolute;
+  right:16px;
   top:0px;
-  right:1.5em;
-  width:1.5em;
-  height:1.5em;
+  width:16px;
+  height:12px;
   content: "h";
-  background: rgba(255,0,0,.33);
-  color:#ffffff !important;
+  background: var(--design-hint-background);
+  color:var(--design-hint-color) !important;
   font-size:10px;
   font-weight:normal;
-  border-radius: 1em;
-  z-index:32000;
-    display:flex;
+  z-index:100;
+  display:flex;
   align-items: center;
   justify-content: center;
 
@@ -3890,18 +3851,18 @@ einblenden */
   position:absolute;
   right:0px;
   top:0px;
-  width:1.5em;
-  height:1.5em;
+  width:16px;
+  height:12px;
   content: "#";
-  background: rgba(0,0,255,.66);
-  color:#ffffff;
+  background: var(--design-hint-background);
+  color:var(--design-hint-color);
   font-size:10px;
   font-weight:normal;
-  border-radius: 1em;
-  z-index:32000;
+  z-index:100;
   display:flex;
   align-items: center;
   justify-content: center;
+  opacity:0.87;
 }
 
 .vis_container_edit .mdui-order-0>.vis-widget-body:after { content: "0"; }
@@ -4014,6 +3975,40 @@ einblenden */
 .vis_container_edit .mdui-order-98>.vis-widget-body:after { content: "98"; }
 .vis_container_edit .mdui-order-99>.vis-widget-body:after { content: "99"; }
 
+/* lnav rnav in vis positionieren 
+  --design-lnav-width:50px;
+
+.vis_container_edit .mdui-lnav {
+  top:0;
+  left:0 !important;
+  width:var(--design-lnav-width) !important;
+  height:100% !important;
+  opacity:0.5;
+}
+.vis_container_edit .mdui-rnav {
+  top:0;
+  left:calc(100% - var(--design-lnav-width)) !important;
+  width:var(--design-lnav-width) !important;
+  height:100% !important;
+  opacity:0.5;
+}
+.vis_container_edit .mdui-abar {
+  left:var(--design-lnav-width) !important;
+  width: calc(100% - var(--design-lnav-width) * 2) !important;
+}
+.vis_container_edit .mdui-tnav {
+  left:var(--design-lnav-width) !important;
+  width: calc(100% - var(--design-lnav-width) * 2) !important;
+}
+.vis_container_edit .mdui-content {
+  left:var(--design-lnav-width) !important;
+  width: calc(100% - var(--design-lnav-width) * 2) !important;
+}
+.vis_container_edit .mdui-bnav {
+  left:var(--design-lnav-width) !important;
+  width: calc(100% - var(--design-lnav-width) * 2) !important;
+}
+*/
 
 /* vis -Eigenschaften, label-column verkleinern */
 .vis-widget-tools table colgroup col:nth-child(1) {
@@ -4041,9 +4036,27 @@ einblenden */
   z-index:32000;
 }
 
-/* =====
-   end of mdui-content
-   =====*/
+/* 
+##### Changelog, next version
+
+
+
+##### ToDo 
+* flot: timespan 1em
+* grafana: Doku from=now-1h-45m m=min h=hour d=day w=week M=month y=year
+           mit / angehängter Zeitraum zeigt vollen Zeitraum
+           now/M = lfd Monat, now-1M/M = letzer Monat, now/y = lfd Jahr 
+           für mdui muss "to=now" als "to=now-0h" gesetzt werden
+  to=(wie from)
+  theme=light
+  refresh=5m
+  kiosk
+  kiosk=tv
+
+
+end of mdui-content
+--------------------------------------------------------------- 
+*/
 
 
 
@@ -4051,3 +4064,4 @@ einblenden */
 
 
 
+  

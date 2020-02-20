@@ -1,4 +1,4 @@
-### Material Design CSS 2.0 für ioBroker
+### Material Design CSS v2 für ioBroker
 
 ### ! In Überarbeitung zur Version 2.0 !
 
@@ -47,16 +47,21 @@ Beispiele: 0360 x 0640
 
 
 ### 3. Installation
-Keine. Die CSS Anweisungen müssen lediglich in einem ioBroker.vis Projekt unter "CSS / Projekt" eingefügt werden, die paar Zeilen Script unter "Skript". Beides am besten aus dem [Demo-Projekt]("ioBroker projects/MD_Demo.zip") entnehmen.
+Keine. Die CSS Anweisungen müssen lediglich in einem ioBroker.vis Projekt unter "CSS / Projekt" eingefügt werden, die paar Zeilen Script unter "Skript". Beides steht im Ordner [source](source) zur Verfügung. Heisst das eigene Projekt nicht MD_Demo, muss anschließend eine Anpassung in der CSS Datei vorgenommen werden:  
+* Der Pfad zum WebFont muss unter @font-face angepasst werden. Dort steht "MD-Demo" drin, hier muss der wirkliche Projektname eingetragen werden.
+Weitere Einstellungen sind optional:
+* Das vis Design ist per Vorgabe auf "light"-Theme, also schwarze Schrift auf weißem Grund eingestellt, wer in der vis im "dark"-Theme arbeiten möchte, muss Einstellungen unter ":root / Design time" vornehmen
+* Wenn einzelne CSS Anweisungen geändert werden sollen, dann nicht im MDUI CSS direkt ändern, sondern die CSS-Anweisung am Ende erneut angepasst einfügen
 
 
 ### 4. Anleitung
 
+Hat noch Stand v1!
 Siehe Dokument [Anleitung](docs/anleitung.pdf)
 
-Beispiel-Projekte befinden sich im Ordner "ioBroker projects", einmal ein [Demo-Projekt]("ioBroker projects/MD_Demo.zip"), welches den Umfang zeigt und einmal ein [Simple-Projekt]("ioBroker projects/MD_Simple.zip"), welches als Basis für eigene vis-Projekte verwendet werden kann. Beide Projekte (ZIP-Dateien) lassen sich in ioBroker.vis importieren.
+Beispiel-Projekte befinden sich im Ordner "ioBroker projects", einmal ein [Demo-Projekt](ioBroker projects/MD_Demo.zip), welches den Umfang zeigt und einmal ein [Simple-Projekt](ioBroker projects/MD_Simple.zip), welches als Basis für eigene vis-Projekte verwendet werden kann. Beide Projekte (ZIP-Dateien) lassen sich in ioBroker.vis importieren.
 
-### 5. MD CSS V1.x -> MD CSS V2.0
+### 5. MD CSS v1.x -> MD CSS v2
 Hier eine Kurzanleitung, wie man sein v1 Projekt nach v2 übernehmen kann. Bitte immer in einer Kopie arbeiten.
 
 * in den cardXXX
@@ -86,7 +91,7 @@ Widgets als mdui-navitem kennzeichnen
 
 
 ### 6. Changelog
-V2.0.4 08.02.2020
+v2.1 20.02.2020
 Siehe [ChangeLog](./changelog.MD).
 
 
