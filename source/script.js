@@ -2,14 +2,11 @@
    Material Design CSS for ioBroker.vis
    (c) 2017ff Uhula, MIT License
    
-   version: v2.0.3 08.02.2020
+   version: v2.1.1 23.02.2020
 
    source: https://github.com/Uhula/ioBroker-Material-Design-Style
    changelog: https://github.com/Uhula/ioBroker-Material-Design-Style/blob/master/changelog.MD
    =====
-   
-   2.0.4
-   Farbinterpretation überarbeitet, damit auch bei falschen oder nicht vorhandenen Farb-Konfiguration sinnvolle Farben verwendet werden.
 */
 
 // Zur sicheren CSS-Erkennung der Runtime eine CSS-Klasse anlegen
@@ -33,7 +30,7 @@ var MDUI = (function () {
 
 let defConfig = {"primary_color":"indigo",
                  "secondary_color":"amber",
-                 "content_color":"#ffffff"},
+                 "content_color":"#f8f8f8"},
     lastConfig = defConfig,
     styleSheet = null,
     lastPageID = "";
@@ -44,7 +41,6 @@ let defConfig = {"primary_color":"indigo",
 
 //                      light         normal        dark 
 var colors = { 
-        default:    {c200:"#6ec6ff", c500:"#2196f3", c700:"#0069c0" },        
         red:        {c200:"#ff7961", c500:"#f44336", c700:"#ba000d" },
         pink:       {c200:"#ff6090", c500:"#e91e63", c700:"#b0003a" },
         purple:     {c200:"#d05ce3", c500:"#9c27b0", c700:"#6a0080" },
@@ -228,7 +224,7 @@ function _onChangePage( ele ) {
     if ( $eles.length < 1 || $eles.length > 2) return;
 
     pageID = $eles[$eles.length-1].id;
-console.log("_onChangePage ",lastPageID," ",pageID);            
+//console.log("[MDUI.onChangePage] ",lastPageID," ",pageID);            
 
     if ( (pageID!="") && (lastPageID!=pageID) ) {
         lastPageID=pageID;
@@ -238,6 +234,7 @@ console.log("_onChangePage ",lastPageID," ",pageID);
             _patchWidgetColors();
             _handleTables();
             _handleDialogs();
+            _handleInputs();
             _initObserverSlider();
             _initObserverConfig();
             _initObserverDialog();
@@ -375,11 +372,12 @@ function _handleToggle( $ele ) {
 // - expanded, wenn es collapsed ist
 function _toggleExpand( $ele ){
     if (!$ele) return;
-    let $target = $ele.closest("[class*='mdui-card']");
+    let $target = $ele.closest("[class*='mdui-listitem']");
+    if ($target.length===0) $target = $ele.closest("[class*='mdui-card']");
     if ($target.length===0) return;
     // wurde im ele eine Höhe mit angegeben?
     let h = _getClassSuffix( $ele, "mdui-expand-" ) ;
-    if (h==="") h="68";
+    if (h==="") h="64";
     // element um 180° drehen
     let styleold = $ele.attr("styleold");
     $ele.toggleClass("mdui-active");
@@ -717,7 +715,39 @@ function _handleDialogs( ) {
         }
     });
 
-  } catch(err) { console.log( err.message ); } 
+  } catch(err) { console.log("[MDUI.handleDialogs] ", err.message ); } 
+
+}
+
+
+
+/* Aus dem "text" Input bei mdui-input-number ein "number" machen */
+function _handleInputs( ) { 
+  try {
+    $("[class*='mdui-placeholder-']").each( function (index) {
+        let s = _getClassSuffix( $(this), "mdui-placeholder-" );
+console.log(s);
+        $(this).find("input").each( function (index) {
+            $(this)[0].placeholder = s;
+        } );
+    });
+    $(".mdui-input-number input").each( function () {
+        let $ele = $(this);
+        $ele[0].type = "number";
+    });
+    $(".mdui-input-color input").each( function () {
+        let $ele = $(this);
+        $ele[0].type = "color";
+    });
+    $(".mdui-input-date input").each( function () {
+        let $ele = $(this);
+        $ele[0].type = "date";
+    });
+    $(".mdui-input-time input").each( function () {
+        let $ele = $(this);
+        $ele[0].type = "time";
+    });
+  } catch(err) { console.log("[MDUI.handleInputs] ", err.message ); } 
 
 }
 
@@ -772,7 +802,7 @@ function _getFontColor(bc) {
 
 // ersetzt in bekannten WIdgets schwarze und weisse Font 
 function _patchWidgetColors( ) {
-    let fontColor = _getFontColor( lastConfig.content_color );
+    let fontColor = _getFontColor( _getCSSColorFromConfig("content_color",lastConfig.content_color,200,defConfig.content_color) );
     let isDark = fontColor=="#ffffff";
 
     // flot Widget 
@@ -858,7 +888,7 @@ function _patchWidgetColors( ) {
 
 // holt den CSSFarbwert aus dem Colors-Array
 function _getCSSColorFromColors( color, luminance ) {
-console.log("[_getColorFromColors]",color, luminance);
+//console.log("[_getColorFromColors]",color, luminance);
     // colorType in Config?
     if (colors.hasOwnProperty(color) ) 
         switch(luminance) {
@@ -866,12 +896,12 @@ console.log("[_getColorFromColors]",color, luminance);
             case 700: color = colors[color].c700; break;
             default:  color =  colors[color].c500;
         }    
-console.log("[_getColorFromColors] return:",color);    
+//console.log("[_getColorFromColors] return:",color);    
     return color;
 }
 // wandelt den gewünschten Color-Wert in eine CSSColor um
 function _getCSSColorFromConfig( colorType, color, luminance, defColor ) {
-console.log("[_getColorFromConfig]",colorType, color, luminance, defColor);
+//console.log("[_getColorFromConfig]:",colorType,color,luminance,defColor);    
     // colorType in Config?
     if (lastConfig.hasOwnProperty(colorType) && colors.hasOwnProperty(lastConfig[colorType]) ) {
             color = _getCSSColorFromColors(lastConfig[colorType], luminance);
@@ -880,132 +910,70 @@ console.log("[_getColorFromConfig]",colorType, color, luminance, defColor);
     try {
         let $div = $("<div>");
         $div.css("border", "1px solid "+color);
-        if ($div.css("border-color")=="") color = _getCSSColorFromColors(defColor,luminance);
+        $div = $div.css("border-color");
+        if ( ($div=="") || ($div=="initial") ) color = _getCSSColorFromColors(defColor,luminance);
     } catch(err) { 
         console.log( "[MDUI.getColorFromConfig] (",color,") ", err.message ); 
         color = _getCSSColorFromColors(defColor,luminance);
     } 
-console.log("[_getColorFromConfig] return:",color);    
+
+//console.log("[_getColorFromConfig] return:",color);    
+
     return color;
 }
 
-function _addCSS(selector, bc) {
-    var fc = _getFontColor( bc );
-    
-//console.log("selector:",selector,"bc:",bc," ", _getLuminance(_hexToRGB(bc))," black:",_getLuminance(_hexToRGB(bc))," contrast:",_contrast(_hexToRGB(bc),_hexToRGB("#000000"))," font:",fc);    
 
-    // wenn die fc=#ffffff ist, also dark-scheme, dann allen untergeordneten
-    // Elementen die class mdui-dark hinzufügen
-    if (fc=='#ffffff') $(selector).addClass("mdui-dark")
+function _setBKColor(selector, bkcolor, varname) {
+    // wenn die fc=#ffffff ist, also dark-scheme, dann mdui-dark setzen
+    if (_getFontColor( bkcolor )=='#ffffff') $(selector).addClass("mdui-dark")
     else $(selector).removeClass("mdui-dark");
-
-    var css = "";
-    css += selector+' {background:'+bc+' !important;} ';
-    css += '.mdui-runtime ' + selector+' {background:'+bc+' !important;} ';
-    css += selector+' {color:'+fc+' !important;} ';
-
-    return css;
+    if (varname!="") document.documentElement.style.setProperty(varname, bkcolor); 
 }
 
 function _patchColors() {
    try {
         let primary_color = defConfig.primary_color,
             secondary_color = defConfig.secondary_color,
-            content_color = defConfig.content_color,
-            abar_color=colors[primary_color].c500, 
-            tnav_color=colors[primary_color].c500, 
-            lnav_color=content_color, 
-            rnav_color=content_color, 
-            bnav_color=colors[primary_color].c500;
+            content_color = defConfig.content_color;
 
         // lastConfig entladen
         primary_color = _getCSSColorFromConfig("primary_color",lastConfig.primary_color,500,defConfig.primary_color);
-        abar_color=primary_color; 
-        tnav_color=primary_color; 
-        bnav_color=primary_color; 
+        let abar_color=primary_color; 
+        let tnav_color=primary_color; 
+        let bnav_color=primary_color; 
 
-        var css="";
         // abar
         abar_color = _getCSSColorFromConfig("abar_color",lastConfig.abar_color,700,abar_color);
-        css += _addCSS('.mdui-abar',abar_color);
+        _setBKColor('.mdui-abar',abar_color,'--abar-background');
         
         // tnav
         tnav_color = _getCSSColorFromConfig("tnav_color",lastConfig.tnav_color,700,tnav_color);
-        css += _addCSS('.mdui-tnav',tnav_color);
+        _setBKColor('.mdui-tnav',tnav_color,'--tnav-background');
 
         // bnav
         bnav_color = _getCSSColorFromConfig("bnav_color",lastConfig.bnav_color,700,bnav_color);
-        css += _addCSS('.mdui-bnav',bnav_color);
+        _setBKColor('.mdui-bnav',bnav_color,'--bnav-background');
 
         // content
         content_color = _getCSSColorFromConfig("content_color",lastConfig.content_color,200,defConfig.content_color);
-        lnav_color = content_color;
-        rnav_color = content_color;
-        css += _addCSS('.mdui-content',content_color);
-        css += _addCSS('.ui-dialog',content_color);
-    
+        let lnav_color = content_color;
+        let rnav_color = content_color;
+        _setBKColor('.mdui-content',content_color,'--content-background');
+        _setBKColor('.ui-dialog',content_color,'');
+
         // lnav
         lnav_color = _getCSSColorFromConfig("lnav_color",lastConfig.lnav_color,500,lnav_color);
-        css += _addCSS('.mdui-lnav',lnav_color);
-    
+        _setBKColor('.mdui-lnav',lnav_color,'--lnav-background');
+
         // rnav
         rnav_color = _getCSSColorFromConfig("rnav_color",lastConfig.rnav_color,500,rnav_color);
-        css += _addCSS('.mdui-rnav',rnav_color);
-
-
+        _setBKColor('.mdui-rnav',rnav_color,'--rnav-background');
 
         // secondary
         secondary_color = _getCSSColorFromConfig("secondary_color",lastConfig.secondary_color,500,defConfig.secondary_color);
-/*
-if (lastConfig.hasOwnProperty("secondary_color")) {
-            if ( colors.hasOwnProperty(lastConfig.secondary_color) )
-                secondary_color = colors[lastConfig.secondary_color].c500
-            else secondary_color = lastConfig.secondary_color;
-        }
-*/
-css +='.mdui-button.mdui-accent * {'
-            + '  color:'+ secondary_color+';'
-            + '} ';
+        document.documentElement.style.setProperty('--accent-color', secondary_color); 
 
-        css +='.mdui-radio *[id*="_radio"] label.ui-state-active {'
-            + '  border-bottom-color:'+ secondary_color+' !important;'
-            + '  color:'+ secondary_color+' !important; '
-            + '} ';
-    
-    
-        css +='.mdui-chips * label.ui-state-active:before,'
-            + '.mdui-chips-outlined * label.ui-state-active:before {'
-            + '  background-color:'+ secondary_color+' !important; '
-            + '} ';
-            
-        css +='.mdui-chips-outlined * label.ui-state-active:before {'
-            + '  border-color:'+ secondary_color+' !important; '
-            + '} ';
-            
-
-        css +='.mdui-floatingbutton {'
-            + '  background-color:'+ secondary_color+'; '
-            + '} ';
-            
-
-             
-
-console.log("primary:",primary_color,"secondary:",secondary_color,"content:",content_color," abar:",abar_color," tnav:",tnav_color," lnav:",lnav_color);           
-
-
-    // alten inlineStyle entfernen
-    var inlineStyle = document.getElementById('mdui-style-overwrite');
-    if (inlineStyle) inlineStyle.remove();
-    inlineStyle = document.getElementById('lnav_style');
-    if (inlineStyle) inlineStyle.remove();
-    inlineStyle = document.getElementById('lnav_style_common_user');
-    if (inlineStyle) inlineStyle.remove();
-    inlineStyle = document.getElementById('lnav_style_user');
-    if (inlineStyle) inlineStyle.remove();
-
-    // neuen inlineStyle einfügen
-    document.head.insertAdjacentHTML("beforeend", "<style id='mdui-style-overwrite'>"+css+"</style>");
-
+//console.log("primary:",primary_color,"secondary:",secondary_color,"content:",content_color," abar:",abar_color," tnav:",tnav_color," lnav:",lnav_color);          
     } catch(err) { console.log( "[MDUI.patchColors] " + err.message ); } 
 }
 
@@ -1118,33 +1086,24 @@ function mdui_init() {
     $("body").on( "click", "[class*='mdui-timespan-']", function(event) { 
         MDUI.timespan( $(this) );
     } );
-   // click-Handler für "mdui-srcparam-" 
-   $("body").on( "click", "[class*='mdui-srcparam-']", function(event) { 
-    MDUI.srcparam( $(this) );
-} );
+    // click-Handler für "mdui-srcparam-" 
+    $("body").on( "click", "[class*='mdui-srcparam-']", function(event) { 
+     MDUI.srcparam( $(this) );
+    } );
 
     $( window ).on("resize", function() {
       MDUI.handleTables( $(this) );
       MDUI.onResizeWindow( $(this) );
     });
-/*    
-    // Überwachen des #vis_containers auf Änderungen (z.B. wenn views nachgeladen
-    // werden)
-    $( "#vis_container" ).on( "DOMSubtreeModified", function(event) { 
-            MDUI.onSubTreeModified( );
-    } );
-*/    
+
     MDUI.initObserverPage();
 
     // für den ersten load einmal aufrufen
     setTimeout( MDUI.onChangePage(), 100);
-
-
 }; 
 
 
 setTimeout( mdui_init(), 100); 
-
 
 // vis ... Menu ausblenden
 if (typeof app !== 'undefined') $('#cordova_menu').hide();

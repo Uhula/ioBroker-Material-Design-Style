@@ -1,6 +1,6 @@
 ### Material Design CSS v2 für ioBroker
 
-### ! In Überarbeitung zur Version 2.0 !
+### ! In Überarbeitung zur Version v2 !
 
 **Inhaltsverzeichnis**
 
@@ -20,9 +20,9 @@
 In ioBroker.vis gestaltete Views können mit diesen CCS Anweisungen so dargestellt werden, dass sie ähnlich dem  Look & Feel des Material Design Styles von Google funktionieren. Dazu gehören:
 * Application bar
 * Top-Navigation (Tabs), Bottom-Navigation, Left- und Right-Navigation (Sidepanels)
-* Cards und Tiles
-* Responsive Design (Grid, 13er/52er/156er Raster)
-* Tables, inputs, labels, states ...
+* Content, Cards, flex-box
+* Responsive Design (Grid, 80er Raster)
+* Tables, inputs, labels, states, lists, ...
 
 Siehe auch Video: [Demo-Film](video/MD4ioBrokerV2.mp4) (zum Ansehen herunterladen)
 
@@ -91,7 +91,7 @@ Widgets als mdui-navitem kennzeichnen
 
 
 ### 6. Changelog
-v2.1 20.02.2020
+v2.1.2 23.02.2020
 Siehe [ChangeLog](./changelog.MD).
 
 

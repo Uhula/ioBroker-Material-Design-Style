@@ -2,7 +2,7 @@
 ##### Material Design CSS for ioBroker.vis 
 
 (c) 2017ff Uhula, MIT License
-version: v2.0.5 08.02.2020
+version: v2.1.1 23.02.2020
 source: https://github.com/Uhula/ioBroker-Material-Design-Style
 changelog: https://github.com/Uhula/ioBroker-Material-Design-Style/blob/master/changelog.MD
 
@@ -27,20 +27,22 @@ changelog: https://github.com/Uhula/ioBroker-Material-Design-Style/blob/master/c
 
 /* (2) Umschalten vis-Edit light/dark Theme */
 :root {
-
   /* Design-time light-Theme */
-  --design-background: #f8f8f8;
-  --design-vis-font-color: #000000;
+  --content-background: #f8f8f8;
+  --design-font-color: #000000;
   --design-hint-background: #0000ff;
   --design-hint-color: #ffffff;
   --design-grid: #000000;
+  --design-black33-background:rgba(0,0,0,.33);
 
-  /* Design-time dark-Theme  
-  --design-background: #404040;
-  --design-vis-font-color: #ffffff;
+  /* Design-time dark-Theme */
+  /* FÜR DAS DARK_THEME DIESE ZEILE LÖSCHEN    
+  --content-background: #404040;
+  --design-font-color: #ffffff;
   --design-hint-background: #ff8000;
   --design-hint-color: #ffffff;
   --design-grid: #ffffff;
+  --design-black33-background:rgba(255,255,255,.33);
   */
 }
 
@@ -51,17 +53,20 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 */
 
 /* Variable  */
-
-/* js-Zugriff: root.style.setProperty('--time', duration + "s"); */
-  
 :root {
   --divider-color: rgba(0,0,0,0.1);
   --divider-color-dark: rgba(255,255,255,0.2);
   --accent-color: #ffc107;
+  --abar-background: #0069c0;
+  --tnav-background: #0069c0;
+  --bnav-background: #0069c0;
+  --lnav-background: #0069c0;
+  --rnav-background: #0069c0;
 }
 :root.mdui-runtime {
-  --design-background: #ffffff;
-  --design-vis-font-color: #000000;
+  --content-background: #f8f8f8;
+  --design-font-color: #000000;
+  --design-black33-background:rgba(0,0,0,.33);
 }
   
 
@@ -121,26 +126,35 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 
 /* zentrieren */
 
-.mdui-center-v,
+.mdui-center-v {
+  display:flex;
+  align-items: center;
+}
 .mdui-center-v .vis-widget-body,
 .mdui-center-v .vis-widget-body *  {
   display:flex !important;
   align-items: center;
 }
-.mdui-center-h,
+.mdui-center-h  {
+  display:flex;
+  justify-content: center;
+}
 .mdui-center-h .vis-widget-body,
 .mdui-center-h .vis-widget-body *  {
   display:flex !important;
   justify-content: center;
 }
-.mdui-center,
+.mdui-center {
+  display:flex;
+  align-items: center;
+  justify-content: center;
+}
 .mdui-center .vis-widget-body,
 .mdui-center .vis-widget-body * {
   display:flex !important;
   align-items: center;
   justify-content: center;
 }
-
 /* rotieren */
 
 .mdui-rotate-000{ transform:rotate(0deg); transform-origin: center left; }
@@ -323,12 +337,12 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 .vis-view .ui-widget {
   font-family: Roboto, Arial;
   font-size: 16px !important;
-  color:var(--design-vis-font-color);
+  color:var(--design-font-color);
 }
 
 .vis_container_edit>.vis-view {
   background:#000000;
-  color:var(--design-vis-font-color);
+  color:var(--design-font-color);
   font-family: Roboto, Arial;
   font-size: 16px !important;
 }
@@ -497,7 +511,7 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 /* ----- application bar ----- */
 
 .mdui-abar {
-  background:#0069c0 !important;
+  background: var(--abar-background) !important;
   z-index:99;
   border:none !important;
   transition: left 0.25s ease;
@@ -517,7 +531,7 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 /* ----- top navigation ----- */
 
 .mdui-tnav {
-  background:#0069c0 !important;
+  background: var(--tnav-background) !important;
   border:none !important;
   z-index:98;
   border-bottom: 1px solid rgba(0,0,0,0.2) !important;
@@ -545,7 +559,7 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 /* ----- content ----- */
 
 .mdui-content {
-  background:var(--design-background) !important;
+  background:var(--content-background) !important;
   overflow-y:auto !important;
   overflow-x:auto !important;
   transition: left 0.25s ease;
@@ -690,7 +704,7 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 /* ----- bottom navigation ----- */
 
 .mdui-bnav {
-  background:var(--accent-color) !important;
+  background:var(--bnav-color) !important;
   z-index:98;
   border:none;
   box-shadow:0px -2px 4px -1px rgba(0,0,0,0.45);
@@ -714,7 +728,7 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 /* ----- left navigation ----- */
 
 .mdui-lnav {
-  background: var(--design-background) !important;
+  background: var(--content-background) !important;
   transition: width 0.25s ease;
 }
 
@@ -724,7 +738,7 @@ ab hier nichts mehr ändern, nur am Ende anfügen
   left: 0px !important;
   width: 0px !important;
   height: 100% !important;
-  background: #0069c0 !important;
+  background: var(--lnav-background) !important;
   border:none !important;
   z-index:200;
   overflow-x:hidden;
@@ -766,7 +780,7 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 /* -----  right navigation -----  */
 
 .mdui-rnav {
-  background: var(--design-background) !important;
+  background: var(--content-background) !important;
 }
 
 .mdui-runtime .mdui-rnav {
@@ -775,7 +789,7 @@ ab hier nichts mehr ändern, nur am Ende anfügen
   left: 100% !important;
   width: 0 !important;
   height: 100% !important;
-  background: #ffffff !important;
+  background: var(--rnav-background) !important;
   border:none !important;
   z-index:200;
   box-shadow: 0 10px 20px rgba(0,0,0,0.39), 0 6px 6px rgba(0,0,0,0.43);
@@ -1064,7 +1078,7 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 /* ----- menuitem ----- */
 
 .mdui-menu {
-  background:var(--design-background) !important;
+  background:var(--content-background) !important;
   box-shadow: 0 0 0 1px rgba(0,0,0,0.1), 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.25);
   border-radius:4px;
 }
@@ -1073,8 +1087,8 @@ ab hier nichts mehr ändern, nur am Ende anfügen
   box-shadow: 0 0 0 1px rgba(0,0,0,0.5), 0 14px 28px rgba(0,0,0,0.87), 0 10px 10px rgba(0,0,0,1);
 }
 .mdui-menuitem {
-  color:var(--design-vis-font-color);
-  background:var(--design-background) !important;
+  color:var(--design-font-color);
+  background:var(--content-background) !important;
   font-size:1em !important;
   font-weight:normal !important;
   overflow:hidden;
@@ -1099,7 +1113,7 @@ ab hier nichts mehr ändern, nur am Ende anfügen
   background:none;
   border:none;
   font-weight:normal;
-  color:var(--design-vis-font-color);
+  color:var(--design-font-color);
 }
 .mdui-dark .mdui-menuitem .vis-widget-body,
 .mdui-dark .mdui-menuitem .vis-widget-body * {
@@ -1129,7 +1143,7 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 .mdui-button * {
   background:none !important;
   border:none !important;
-  color:var(--design-vis-font-color);
+  color:var(--design-font-color);
 }
 
 .mdui-dark .mdui-input .ui-button,
@@ -1207,7 +1221,7 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 .mdui-button-outlined,
 .mdui-button-outlined * {
   background:none !important;
-  color:var(--design-vis-font-color) !important;
+  color:var(--design-font-color) !important;
   font-weight:normal !important;
 }
 .mdui-dark .mdui-button-outlined,
@@ -1343,7 +1357,7 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 }
 
 .mdui-button-raised * {
-  color:var(--design-vis-font-color);
+  color:var(--design-font-color);
   background: none !important;
   border:none !important;
   font-weight: normal !important;
@@ -1428,7 +1442,7 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 .mdui-list {
   border: 1px solid var(--divider-color) !important;
   background: transparent;
-  color:var(--design-vis-font-color);
+  color:var(--design-font-color);
   overflow:auto; 
 }
 .mdui-dark .mdui-list {
@@ -1460,7 +1474,7 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 .mdui-listitem {
   border-bottom: 1px solid var(--divider-color) !important;
   background: transparent;
-  color:var(--design-vis-font-color);
+  color:var(--design-font-color);
 }
 .mdui-dark .mdui-listitem {
   border-bottom: 1px solid var(--divider-color-dark) !important;
@@ -1497,7 +1511,7 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 .mdui-navitem .vis-widget-body {
   background:none !important;
   border:none !important;
-  color:var(--design-vis-font-color) !important;
+  color:var(--design-font-color) !important;
   font-size:1em !important;
   font-weight:normal !important;
   border-radius:0px !important;
@@ -1582,7 +1596,7 @@ ab hier nichts mehr ändern, nur am Ende anfügen
   position: absolute;
   font-family: 'Material Icons' !important;
   font-size:24px;
-  color:var(--design-vis-font-color);
+  color:var(--design-font-color);
   top: calc(50% - 0.5em);
   left:calc(100% - 1.1em);
   content: "expand_more";
@@ -1628,7 +1642,7 @@ mdui-table[-r(responsewidth)][-w(colwidth)][-c(colcount)][-l]
 }
 
 [class*="mdui-table"] tr th {
-  color:var(--design-vis-font-color);
+  color:var(--design-font-color);
   opacity:0.54 !important;
   font-weight:normal;
   font-size:0.8em;
@@ -1657,7 +1671,7 @@ mdui-table[-r(responsewidth)][-w(colwidth)][-c(colcount)][-l]
 
 [class*="mdui-table"] tr td {
   padding:6px;
-  color:var(--design-vis-font-color);
+  color:var(--design-font-color);
 }
 .mdui-dark [class*="mdui-table"] tr td {
   color:#ffffff;
@@ -1708,7 +1722,7 @@ mdui-table[-r(responsewidth)][-w(colwidth)][-c(colcount)][-l]
 .mdui-table-raised tbody tr td:before,
 .mdui-table-outlined tbody tr td:before,
 .mdui-table-list tbody tr td:before {
-  color:var(--design-vis-font-color);
+  color:var(--design-font-color);
   display:block;
   font-size:9pt;
   content: attr(label) attr(labelth);
@@ -1794,7 +1808,7 @@ mdui-table[-r(responsewidth)][-w(colwidth)][-c(colcount)][-l]
 
 .mdui-title {
   z-index:2;
-  color:var(--design-vis-font-color);
+  color:var(--design-font-color);
   font-size: 1.2em;
   font-weight: normal;
   text-shadow:none !important;
@@ -1810,7 +1824,7 @@ mdui-table[-r(responsewidth)][-w(colwidth)][-c(colcount)][-l]
 
 .mdui-subtitle {
   z-index:2;
-  color:var(--design-vis-font-color);
+  color:var(--design-font-color);
   font-size: 0.8em;
   font-weight: normal;
   text-shadow:none !important;
@@ -1825,7 +1839,7 @@ mdui-table[-r(responsewidth)][-w(colwidth)][-c(colcount)][-l]
 
 .mdui-label {
   z-index:2;
-  color:var(--design-vis-font-color);
+  color:var(--design-font-color);
   font-weight:normal !important;
   font-size:1em;
   text-shadow:none !important;
@@ -1842,7 +1856,7 @@ mdui-table[-r(responsewidth)][-w(colwidth)][-c(colcount)][-l]
 
 .mdui-value {
   z-index:2;
-  color:var(--design-vis-font-color);
+  color:var(--design-font-color);
   font-weight:bold;
   font-size:1em;
   text-shadow:none !important;
@@ -1859,7 +1873,7 @@ mdui-table[-r(responsewidth)][-w(colwidth)][-c(colcount)][-l]
 
 .mdui-state {
   z-index:2;
-  color:var(--design-vis-font-color) !important;
+  color:var(--design-font-color) !important;
   font-weight:bold;
   font-size:1em;
   text-shadow:none !important;
@@ -1896,7 +1910,7 @@ mdui-table[-r(responsewidth)][-w(colwidth)][-c(colcount)][-l]
 */
 
 .mdui-input  {
-  color:var(--design-vis-font-color) !important;
+  color:var(--design-font-color) !important;
   z-index:2;
   font-weight:normal !important;
   text-align: left !important;
@@ -1911,8 +1925,8 @@ mdui-table[-r(responsewidth)][-w(colwidth)][-c(colcount)][-l]
 }
 
 .mdui-input input:not([type="button"]) {
-  border-bottom : 2px solid var(--design-vis-font-color) !important;
-  color : var(--design-vis-font-color) !important;
+  border-bottom : 2px solid var(--design-font-color) !important;
+  color : var(--design-font-color) !important;
   background: rgba(0,0,0,0) !important;
   height:calc(100% - 2px) !important;
   border-radius:0px !important;
@@ -2008,13 +2022,13 @@ mdui-table[-r(responsewidth)][-w(colwidth)][-c(colcount)][-l]
   -webkit-appearance: none;
   appearance: none;
   border: none;
-  color : var(--design-vis-font-color);
+  color : var(--design-font-color);
   background: rgba(0,0,0,0);
   height:100% !important;
   font-size:1em !important;
   border: none;
   outline: none;
-  border-bottom : 2px solid var(--design-vis-font-color);
+  border-bottom : 2px solid var(--design-font-color);
   width:100%;
 }
 
@@ -2039,7 +2053,7 @@ mdui-table[-r(responsewidth)][-w(colwidth)][-c(colcount)][-l]
 
 .mdui-select:before {
   position: absolute;
-  color:var(--design-vis-font-color);
+  color:var(--design-font-color);
   padding: 0px;
   font-family: 'Material Icons' !important;
   font-size:24px;
@@ -2532,7 +2546,7 @@ display: block;
 .mdui-radio *[id*="_radio"] {
   background:none !important;
   border:none !important;
-  color:var(--design-vis-font-color) !important;
+  color:var(--design-font-color) !important;
 }
 .mdui-dark .mdui-radio *[id*="_radio"] label {
   color:#ffffff !important;
@@ -2666,7 +2680,7 @@ display: block;
   margin:0px !important;
   padding:0px !important;
   background:none !important;
-  color:var(--design-vis-font-color) !important;
+  color:var(--design-font-color) !important;
 }
 .mdui-dark .mdui-chip *,
 .mdui-dark .mdui-chip-outlined * {
@@ -2717,7 +2731,7 @@ display: block;
   padding-right:.5em !important;
   font-weight:normal!important;
   background:none !important;
-  color:var(--design-vis-font-color) !important;
+  color:var(--design-font-color) !important;
   opacity:0.8;
 }
 .mdui-dark .mdui-chips label,
@@ -2760,14 +2774,14 @@ display: block;
   height:100%;
   border: 1px solid transparent !important;
   border-radius: 1em;
-  background:rgba(0,0,0,0.2) !important;
+  background:var(--design-black33-background) !important;
   z-index:-1;
 }
 .mdui-dark .mdui-chips label:before {
-  background:rgba(255,255,255,0.2) !important;
+  background:rgba(255,255,255,0.33) !important;
 }
 .mdui-chips-outlined label:before {
-  border-color: rgba(0,0,0,.33) !important;
+  border-color: var(--design-black33-background) !important;
   background:none !important;
 }
 .mdui-dark .mdui-chips-outlined label:before {
@@ -3027,14 +3041,13 @@ display: block;
 .mdui-runtime .ui-dialog {
   box-shadow: 0 0 0 1px rgba(0,0,0,0.3), 0 14px 28px rgba(0,0,0,0.65), 0 10px 10px rgba(0,0,0,0.62);
   border:none;
-  background:#ffffff !important;
+  background: var(--content-background) !important;
   border-radius:2px;
   position:absolute;
   z-index: 2147483647 !important;
 }
 .mdui-runtime .mdui-dark.ui-dialog {
   box-shadow: 0 0 0 1px rgba(0,0,0,0.5), 0 14px 28px rgba(0,0,0,0.87), 0 10px 10px rgba(0,0,0,1), 0 0 0 1000px rgba(255,255,255,.24) inset;
-  xbackground:#606060 !important;
 }
 
 .mdui-runtime .ui-dialog .vis-view {
@@ -3047,7 +3060,7 @@ display: block;
 }
 
 .mdui-runtime .ui-dialog-title {
-  color:var(--design-vis-font-color);
+  color:var(--design-font-color);
   opacity:0.8;
 }
 .mdui-runtime .mdui-dark .ui-dialog-title {
@@ -3662,7 +3675,7 @@ display: block;
 
 .vis_container_edit,
 .vis_container_edit>.vis-view {
-  background: var(--design-background, #f0f0f0) !important;
+  background: var(--content-background, #f0f0f0) !important;
 }
 
 /* Raster 320 / 80 / 40 */
@@ -3728,7 +3741,7 @@ display: block;
 .widget_inner_helper {
   outline: 2px dashed var(--design-hint-background);
   outline-offset: -3px;
-  border: 2px solid var(--design-background);
+  border: 2px solid var(--content-background);
   pointer-events: none;
   top:0px;
   left:0px;
@@ -4039,7 +4052,17 @@ display: block;
 /* 
 ##### Changelog, next version
 
-
+## V2.1.1 23.02.2020
+### CSS
+* mdui-center[-h|-v]: Benutzte die CSS "display: !important" Eigenschaft, was dazu führte, dass die vis-Visibility Funktion, die auch über "display" geht, nicht mehr funktionierte. "!important" entfernt.
+* weitere CSS-Variablen für die Farben (abar, ...) eingeführt
+* ui-dialog: Korrektur der Hintergrundfarbe
+### vis-Editor
+* 
+### script
+* Umbau des Setzens der Farben auf die neuen CSS-Variablen. Damit entfällt das (unsichere) anhängen von CSS-Anweisungen, welches manchmal fehl schlug, wenn die CSS Reihenfolge durch timing-Probleme nicht wie erwartet war. 
+### MD_Demo
+* 
 
 ##### ToDo 
 * flot: timespan 1em

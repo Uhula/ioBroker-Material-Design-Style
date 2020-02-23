@@ -1,3 +1,15 @@
+## V2.1.1 23.02.2020
+### CSS
+* mdui-center[-h|-v]: Benutzte die CSS "display: !important" Eigenschaft, was dazu führte, dass die vis-Visibility Funktion, die auch über "display" geht, nicht mehr funktionierte. "!important" entfernt.
+* weitere CSS-Variablen für die Farben (abar, ...) eingeführt
+* ui-dialog: Korrektur der Hintergrundfarbe
+### vis-Editor
+* 
+### script
+* Umbau des Setzens der Farben auf die neuen CSS-Variablen. Damit entfällt das (unsichere) anhängen von CSS-Anweisungen, welches manchmal fehl schlug, wenn die CSS Reihenfolge durch timing-Probleme nicht wie erwartet war. 
+### MD_Demo
+* 
+
 ## V2.1 20.02.2020
 ### CSS
 * mdui-value: padding entfernt
