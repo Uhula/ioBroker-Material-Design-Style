@@ -9,8 +9,9 @@
 3. [Installation](#3-installation)
 4. [Anleitung](#4-anleitung)
 5. [MD CSS V1.x -> MD CSS V2.0](#5-)
-6. [Changelog](#5-changelog)
-7. [Sonstiges](#6-sonstiges)
+6. [Vorlagen, Wiki](#6-templates)
+7. [Changelog](#7-changelog)
+8. [Sonstiges](#8-sonstiges)
 
 
 ![Beispiel 1280x0720 Main](docs/MD_1280x0720_Main.png?raw=true "Beispiel 1280x0720 Main")
@@ -89,12 +90,15 @@ Widgets als mdui-navitem kennzeichnen
 * * content um mdui-flex ergänzen
 * * [optional] wenn eine automatische Höhenanpassung der cardXXX mit mdui-rows-<n>-tor-<m> im contXXX zugewiesen wurde, dann im pageXXX den content um mdui-flex-stretch erweitern
 
+### 6. Vorlagen, Wiki
+Im [Wiki](https://github.com/Uhula/ioBroker-Material-Design-Style/wiki) (siehe Schaltfläche oben) sind mehrere Vorlagen, bestehend aus serverseitigem Script und vis-Views, vorhanden, welche z.B. als Beispiel für die Anzeige von Log-Daten im MDCSS Design erlauben.
 
-### 6. Changelog
+
+### 7. Changelog
 v2.1.2 23.02.2020
 Siehe [ChangeLog](./changelog.MD).
 
 
-### 7. Sonstiges
+### 8. Sonstiges
 
 :copyright:2017ff Uhula, see [MIT license](./license.md).
