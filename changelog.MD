@@ -1,3 +1,19 @@
+## V2.2 10.03.2020
+### CSS
+* mdui-table-striped: Funktioniert nun auch bei basic-Table (JSON)
+* mdui-listitem: Überlanger Text wird nun per word-wrap umgebrochen 
+* mdui-list-striped: versucht in einer mdui-list jede 2.Zeile etwas dunkler/heller einzufärben
+* color1, color2 und color3 hinzugefügt: Diese können in der mdui-config (abar-View) mit eigenen Farbwerten belegt werden und können dann wie die anderen Farben in den CSS verwendet werden. Bsp: mdui-color1, mdui-color2-bg usw.
+Angabe im mdui-config über "color1":"#ff0000", "color1_dark":"#800000", "color2":"#ff0000", "color2_dark":"#800000", "color3":"#ff0000", "color3_dark":"#800000" (dark für Verwendung im dark-Theme)
+
+### vis-Editor
+* 
+
+### script
+
+### MD_Demo
+* Einstellungen um die neuen 3 frei wählbaren Farben color1-3 erweitert (werden auf der Seite "Schaltflächen" ausgewertet)
+
 ## V2.1.1 23.02.2020
 ### CSS
 * mdui-center[-h|-v]: Benutzte die CSS "display: !important" Eigenschaft, was dazu führte, dass die vis-Visibility Funktion, die auch über "display" geht, nicht mehr funktionierte. "!important" entfernt.

@@ -2,7 +2,7 @@
    Material Design CSS for ioBroker.vis
    (c) 2017ff Uhula, MIT License
    
-   version: v2.1.1 23.02.2020
+   version: v2.2 10.03.2020
 
    source: https://github.com/Uhula/ioBroker-Material-Design-Style
    changelog: https://github.com/Uhula/ioBroker-Material-Design-Style/blob/master/changelog.MD
@@ -30,7 +30,14 @@ var MDUI = (function () {
 
 let defConfig = {"primary_color":"indigo",
                  "secondary_color":"amber",
-                 "content_color":"#f8f8f8"},
+                 "content_color":"#f8f8f8",
+                 "color1":"#ff0000",
+                 "color1_dark":"#800000",
+                 "color2":"#00ff00",
+                 "color2_dark":"#008000",
+                 "color3":"#0000ff",
+                 "color3_dark":"#000080"
+                },
     lastConfig = defConfig,
     styleSheet = null,
     lastPageID = "";
@@ -972,6 +979,23 @@ function _patchColors() {
         // secondary
         secondary_color = _getCSSColorFromConfig("secondary_color",lastConfig.secondary_color,500,defConfig.secondary_color);
         document.documentElement.style.setProperty('--accent-color', secondary_color); 
+
+        // custom
+        let custom = _getCSSColorFromConfig("color1",lastConfig.color1,200,defConfig.color1);
+console.log(custom);        
+        document.documentElement.style.setProperty('--color1', custom); 
+        custom = _getCSSColorFromConfig("color1_dark",lastConfig.color1_dark,500,defConfig.color1_dark);
+        document.documentElement.style.setProperty('--color1-dark', custom); 
+
+        custom = _getCSSColorFromConfig("color2",lastConfig.color2,200,defConfig.color2);
+        document.documentElement.style.setProperty('--color2', custom); 
+        custom = _getCSSColorFromConfig("color2_dark",lastConfig.color2_dark,500,defConfig.color2_dark);
+        document.documentElement.style.setProperty('--color2-dark', custom); 
+
+        custom = _getCSSColorFromConfig("color3",lastConfig.color3,200,defConfig.color3);
+        document.documentElement.style.setProperty('--color3', custom); 
+        custom = _getCSSColorFromConfig("color3_dark",lastConfig.color3_dark,500,defConfig.color3_dark);
+        document.documentElement.style.setProperty('--color3-dark', custom); 
 
 //console.log("primary:",primary_color,"secondary:",secondary_color,"content:",content_color," abar:",abar_color," tnav:",tnav_color," lnav:",lnav_color);          
     } catch(err) { console.log( "[MDUI.patchColors] " + err.message ); } 
