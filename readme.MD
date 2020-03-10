@@ -8,8 +8,8 @@
 2. [Systemanforderungen](#2-systemanforderungen)
 3. [Installation](#3-installation)
 4. [Anleitung](#4-anleitung)
-5. [MD CSS V1.x -> MD CSS V2.0](#5-MD CSS v1.x -> MD CSS v2)
-6. [Vorlagen, Wiki](#6-Vorlagen, Wiki)
+5. [MD CSS V1.x -> MD CSS V2.0](#5)
+6. [Vorlagen, Wiki](#6)
 7. [Changelog](#7-changelog)
 8. [Sonstiges](#8-sonstiges)
 
