@@ -541,6 +541,7 @@ buildState (stateDef, json) { try {
                         ++stateDef.count_msg;
                         json.push({'msgtype':stateDef.msgtype, 'statetype':stateDef._statetype,'name':stateDef.name, 'id':stateDef.device_id, 'msg':stateDef.msg, 
                                    'hint':stateDef.hint, 'ts':stateDef.ts, 'val':stateDef.state,
+                                   'barDisplay':(stateDef.bar1.display=='block' || stateDef.bar2.display=='block')?'flex':'none',
                                    'bar1Display':stateDef.bar1.display, 'bar1Min':stateDef.bar1.min, 'bar1Max':stateDef.bar1.max, 'bar1Val':stateDef.bar1.val, 'bar1Text':stateDef.bar1.text,
                                    'bar2Display':stateDef.bar2.display, 'bar2Min':stateDef.bar2.min, 'bar2Max':stateDef.bar2.max, 'bar2Val':stateDef.bar2.val, 'bar2Text':stateDef.bar2.text
                                    });
@@ -599,12 +600,11 @@ header :
 <th style="text-align:left;">Gerät</th>
 <th style="text-align:left; min-width:12em;">Meldung</th>
 <th style="text-align:left;">Hinweis</th>
-<th style="text-align:left;">ID, Wert</th>
-<th style="text-align:left;">Art</th>
+<th style="text-align:left;">ID, Art</th>
 <th style="text-align:left;">Zeit</th>
 </tr>`,
 row : 
-`<tr>
+`<tr style='border-left-color:{borderColor};'>
 <td><i class='material-icons mdui-center {iconColor}' style='font-size:1.5em;'>{icon}</i></td>
 <td>{name}</td>
 <td>{msg}
@@ -629,8 +629,7 @@ row :
     </div>
 </td>
 <td class="mdui-subtitle">{hint}</td>
-<td class="mdui-subtitle">{id}</td>
-<td class="mdui-subtitle">{statetype}</td>
+<td class="mdui-subtitle">{id} {statetype}</td>
 <td class="mdui-subtitle">{datetime}</td>
 </tr>`
 }
@@ -646,7 +645,7 @@ row :
       <div class="mdui-subtitle"><b>{hint}</b></div>
     </div> 
 
-    <div style="flex:1 1 0; display:flex; flex-wrap:wrap;">
+    <div style="flex:1 1 0; display:{barDisplay}; flex-wrap:wrap;">
       <div style="min-width:6em; display:{bar1Display}; margin-right:1em; flex:1 0 0;">
         <div style="width:100%; height:4px; margin-top:4px; display:flex; border-radius:1em;
                     background-image: linear-gradient(90deg, #4caf50 0%, #4caf50 {bar1Val}%, rgba(0,0,0,.2) {bar1Val}%)" >
@@ -682,10 +681,10 @@ row :
             entry.datetime = formatDate(entry.ts, "TT.MM.JJJJ SS:mm:ss");
             if (this.fitsFilter(':' + entry.msgtype + ':' + entry.statetype +':'+entry.name + ':' + entry.id + ':' + entry.msg + ':' + entry.hint + ':',filter)) {
                 switch (entry.msgtype) {
-                    case this.MSG_TYPE_OK    : entry.icon = 'check_circle_outline'; entry.iconColor='mdui-green'; break;
-                    case this.MSG_TYPE_WARN  : entry.icon = 'warning'; entry.iconColor='mdui-amber'; break;
-                    case this.MSG_TYPE_ERROR : entry.icon = 'error'; entry.iconColor='mdui-red'; break;
-                    default                  : entry.icon = 'info'; entry.iconColor='mdui-blue'; 
+                    case this.MSG_TYPE_OK    : entry.icon = 'check_circle_outline'; entry.iconColor='mdui-green'; entry.borderColor='#4caf50'; break;
+                    case this.MSG_TYPE_WARN  : entry.icon = 'warning'; entry.iconColor='mdui-amber'; entry.borderColor='#ffc107'; break;
+                    case this.MSG_TYPE_ERROR : entry.icon = 'error'; entry.iconColor='mdui-red'; entry.borderColor='#f44336'; break;
+                    default                  : entry.icon = 'info'; entry.iconColor='mdui-blue'; entry.borderColor='#2196f3'; 
                 }
                 tr = tmpTable.row;    
                 for (let [key, value] of Object.entries(entry)) tr = tr.replace(new RegExp('{'+key+'}','g'),value);
