@@ -1,3 +1,22 @@
+## V2.3 10.03.2020
+### CSS
+* Scrollbars: werden in webkit-Browser (Chrome, Edge, Fully, Safari) nun feiner und abgerundet dargestellt
+* mdui-shape-X für Safari-Browser mit "-webkit-"-Präfix versehen - vielleicht hilft es
+* neben der Symbol-Darstellung über <i class="material-icons">home</i> kann nun auch verkürzt <i class="mdui-icon">home</i> genutzt werden
+* optionale Nutzung der MaterialDesignIcons (https://github.com/Templarian/MaterialDesign-Webfont). Siehe Anmerkungen zur Konfiguration am Anfang der CSS Datei. In der vis Nutzung in der Form: <i class="mdui-mdi">&#xF02DC;</i> 
+* mdui-table-outlined: Zeichnen des outlined-Rahmens nun per border, nicht mehr box-shadow. Damit kann im table-HTML gezielt der linke Rahmen (<tr style="border-left-color:red;">) oder der ganze Rahmen (<tr style="border-color:red;">) eingefärbt werden
+* mdui-table-list|raised|outlined: Die Anordnung wird nun via flex statt float durchgeführt inkl. Größenanpassung der blöcke. Dadurch ergibt sich eine harmonischere Darstellung
+
+
+### vis-Editor
+* 
+### script
+* mdui-page-name: Der Widgetinhalt wird nach jedem Seitenwechsel mit dem page-Viewnamen gefüllt, kann in basic-HTMLs zur Anzeige des page-Viewnamens genutzt werden
+* mdui-page-title: Wie mdui-page-name, allerdings wird der Name noch aufbereitet. Kleinbuchstaben am Anfang werden ignoriert und '_' werden zu Leerzeichen gewandelt. "pageMeine_ioBroker_Vis" -> "Meine ioBroker Vis"
+
+### MD_Demo
+* 
+
 ## V2.2 10.03.2020
 ### CSS
 * mdui-table-striped: Funktioniert nun auch bei basic-Table (JSON)

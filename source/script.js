@@ -2,7 +2,7 @@
    Material Design CSS for ioBroker.vis
    (c) 2017ff Uhula, MIT License
    
-   version: v2.2 10.03.2020
+   version: v2.3 21.03.2020
 
    source: https://github.com/Uhula/ioBroker-Material-Design-Style
    changelog: https://github.com/Uhula/ioBroker-Material-Design-Style/blob/master/changelog.MD
@@ -252,6 +252,27 @@ function _onChangePage( ele ) {
             $("#vis_container>:not([style*='display: none']) .mdui-favicon img").each( function (index) {
                 if ($(this)[0].src)
                      $("link[rel='shortcut icon']").attr("href", $(this)[0].src);
+            });
+            
+            // page-name anpassen
+            let pagename = window.location.hash.substr(1,255);
+            $(".mdui-page-name").each( function (index) {
+                $(this).html( pagename );
+            });
+            $(".mdui-page-title").each( function (index) {
+                // "pageMeine_ioBroker_Vis" -> "Meine ioBroker Vis"
+                let title = '';
+                let c;
+                for (let i=0; i<pagename.length; i++) {
+                    c = pagename[i];
+                    if (title=='') {
+                        if (c==c.toUpperCase()) title += c; 
+                    } else {
+                        if (c=='_') c = ' '; 
+                        title += c;
+                    }    
+                }
+                $(this).html( title );
             });
 
         }, 100);

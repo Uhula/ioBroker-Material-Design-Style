@@ -2,15 +2,16 @@
 ##### Material Design CSS for ioBroker.vis 
 
 (c) 2017ff Uhula, MIT License
-version: v2.2 10.03.2020
+version: v2.3 21.03.2020
 source: https://github.com/Uhula/ioBroker-Material-Design-Style
 changelog: https://github.com/Uhula/ioBroker-Material-Design-Style/blob/master/changelog.MD
 
 ##### Konfiguration
 
-(1) Der Pfad zum WebFont muss unter @font-face angepasst werden. Dort steht "MD-Demo" drin, hier muss der wirkliche Projektname eingetragen werden.
-(2) Das vis Design ist per Vorgabe auf "light"-Theme, also schwarze Schrift auf weißem Grund eingestellt, wer in der vis im "dark"-Theme arbeiten möchte, muss Einstellungen unter ":root / Design time" vornehmen
-(3) Wenn einzelne CSS Anweisungen geändert werden sollen, dann nicht im MDUI CSS direkt ändern, sondern die CSS-Anweisung am Ende erneut angepasst einfügen
+(1) Der Pfad zum Material Icons-WebFont muss unter @font-face angepasst werden. Dort steht "MD-Demo" drin, hier muss der wirkliche Projektname eingetragen werden.
+(2) Sollen auch Icons aus dem "Material Design Icons" Projekt nutzbar sein, so sind die umfgassenden Kommentarzeichen bei (2) zu entfernen. Die "Material Design Icons" umfassen rund 5000 Icons welche 
+(3) Das vis Design ist per Vorgabe auf "light"-Theme, also schwarze Schrift auf weißem Grund eingestellt, wer in der vis im "dark"-Theme arbeiten möchte, muss Einstellungen unter ":root / Design time" vornehmen
+(4) Wenn einzelne CSS Anweisungen geändert werden sollen, dann nicht im MDUI CSS direkt ändern, sondern die CSS-Anweisung am Ende erneut angepasst einfügen
 */
 
 /* (1) An Projektnamen anpassen (MD_Demo ersetzen) */
@@ -19,13 +20,26 @@ changelog: https://github.com/Uhula/ioBroker-Material-Design-Style/blob/master/c
   font-style: normal;
   font-weight: 400;
   src: url(/vis.0/MD_Demo/images/MaterialIcons-Regular.eot); /* For IE6-8 */
-  src: local('Material Icons'),
-       local('MaterialIcons-Regular'),
-       url(/vis.0/MD_Demo/images/MaterialIcons-Regular.woff) format('woff'),
+  src: url(/vis.0/MD_Demo/images/MaterialIcons-Regular.woff) format('woff'),
        url(/vis.0/MD_Demo/images/MaterialIcons-Regular.ttf) format('truetype');
+       
 }
 
-/* (2) Umschalten vis-Edit light/dark Theme */
+/* (2) Zur Nutung der MaterialDesignIcons (https://github.com/Templarian/MaterialDesign-Webfont/tree/master/fonts) die den @font-face Block umfassenden Kommentare entfernen und die Projektnamen (MD_) durch die eigenen ersetzen. Aus dem angegebenen Link müssen die Font-Dateien via vis-Dateimanager in den (project)/images Ordner kopiert werden.
+In der vis Nutzung in der Form: <i class="mdui-mdi">&#xF02DC;</i> */
+
+/* FÜR DIE zusätzlichen MaterialDesignIcons DIESE ZEILE LÖSCHEN    
+@font-face {
+  font-family: "Material Design Icons";
+  src: url("../fonts/materialdesignicons-webfont.eot?v=5.0.45");
+  src: url("/vis.0/MD_Demo/images/materialdesignicons-webfont.woff?v=5.0.45") format("woff"), 
+  url("/vis.0/MD_Demo/images/materialdesignicons-webfont.ttf?v=5.0.45") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+FÜR DIE zusätzlichen MaterialDesignIcons DIESE ZEILE LÖSCHEN    */
+
+/* (3) Umschalten vis-Edit light/dark Theme */
 :root {
   /* Design-time light-Theme */
   --content-background: #f8f8f8;
@@ -43,7 +57,7 @@ changelog: https://github.com/Uhula/ioBroker-Material-Design-Style/blob/master/c
   --design-hint-color: #ffffff;
   --design-grid: #ffffff;
   --design-black33-background:rgba(255,255,255,.33);
-  */
+  FÜR DAS DARK_THEME DIESE ZEILE LÖSCHEN */
 }
 
 
@@ -78,7 +92,9 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 
 /* Generell */
 
-.material-icons {
+.mdui-mdi,
+.material-icons, 
+.mdui-icon {
   font-family: 'Material Icons';
   font-style: normal !important;
   font-size: 1.5em;  /* Preferred icon size */
@@ -98,8 +114,14 @@ ab hier nichts mehr ändern, nur am Ende anfügen
   font-feature-settings: 'liga';
 }
 
-.mdui-dark .material-icons {
+.mdui-dark .mdui-mdi,
+.mdui-dark .material-icons,
+.mdui-dark .mdui-icon {
   color:#ffffff;
+}
+
+.mdui-mdi {
+  font-family: "Material Design Icons";
 }
 
 /* das box Modell für alle Elemente auf border-box setzen */
@@ -129,6 +151,36 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 .mdui-toggle.ui-state-active img {
   transform: rotate(180deg);
 }
+
+/* Scrollbar: anderer Style (außer Firefox) */
+::-webkit-scrollbar { 
+    width: 0.5em; 
+    height: 0.5em; 
+}
+::-webkit-scrollbar-button { 
+    height:0px;
+}
+::-webkit-scrollbar-track { 
+    background: transparent; 
+    border-radius:1em;
+}
+::-webkit-scrollbar-track:hover { 
+    background: var(--divider-color); 
+} 
+.mdui-dark ::-webkit-scrollbar-track:hover { 
+    background: var(--divider-color-dark);
+}
+::-webkit-scrollbar-thumb { 
+    background-color: var(--divider-color); 
+    border-radius: 1em; 
+}
+.mdui-dark ::-webkit-scrollbar-thumb  { 
+    background-color: var(--divider-color-dark); 
+}
+::-webkit-scrollbar-thumb:hover { 
+    background: var(--accent-color); 
+}
+
 
 /* zentrieren */
 
@@ -302,27 +354,34 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 
 .mdui-shape-circle {
   clip-path: circle(50% at 50% 50%);
+  -webkit-clip-path: circle(50% at 50% 50%);
 }
 
 .mdui-shape-semicircle {
   clip-path: circle(50% at 0% 50%);
+  -webkit-clip-path: circle(50% at 0% 50%);
 }
 .mdui-shape-quadrant {
   clip-path: circle(50% at 0% 0%);
+  -webkit-clip-path: circle(50% at 0% 0%);
 }
 
 .mdui-shape-triangle {
   clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
+  -webkit-clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
 }
 
 .mdui-shape-corner {
   clip-path: polygon(0% 0%, 100% 0%, 100% 100%);
+  -webkit-clip-path: polygon(0% 0%, 100% 0%, 100% 100%);
 }
 .mdui-shape-arrow08 {
   clip-path: polygon(0% calc(50% - 4px), calc(100% - 12px) calc(50% - 4px), calc(100% - 12px) 0%, 100% 50%, calc(100% - 12px) 100%, calc(100% - 12px) calc(50% + 4px), 0% calc(50% + 4px));
+  -webkit-clip-path: polygon(0% calc(50% - 4px), calc(100% - 12px) calc(50% - 4px), calc(100% - 12px) 0%, 100% 50%, calc(100% - 12px) 100%, calc(100% - 12px) calc(50% + 4px), 0% calc(50% + 4px));
 }
 .mdui-shape-arrow16 {
   clip-path: polygon(0% calc(50% - 8px), calc(100% - 24px) calc(50% - 8px), calc(100% - 24px) 0%, 100% 50%, calc(100% - 24px) 100%, calc(100% - 24px) calc(50% + 8px), 0% calc(50% + 8px));
+  -webkit-clip-path: polygon(0% calc(50% - 8px), calc(100% - 24px) calc(50% - 8px), calc(100% - 24px) 0%, 100% 50%, calc(100% - 24px) 100%, calc(100% - 24px) calc(50% + 8px), 0% calc(50% + 8px));
 }
 .mdui-shape-arrow08[class*="mdui-rotate-"],
 .mdui-shape-arrow16[class*="mdui-rotate-"],
@@ -867,6 +926,7 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 [class*="mdui-card"].mdui-title-white80-bg:after { background:rgba(255,255,255,0.8); }
 [class*="mdui-card"].mdui-title-white90-bg:after { background:rgba(255,255,255,0.9); }
 
+
 [class*="mdui-card"].mdui-title-red-bg:after { background:#ffcdd2;}
 [class*="mdui-card"].mdui-title-pink-bg:after { background:#f8bbd0;}
 [class*="mdui-card"].mdui-title-purple-bg:after { background:#e1bee7;}
@@ -890,6 +950,7 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 [class*="mdui-card"].mdui-title-white-bg:after { background:#ffffff;}
 [class*="mdui-card"].mdui-title-black-bg:after { background:#a0a0a0;}
 
+
 .mdui-dark [class*="mdui-card"].mdui-title-red-bg:after { background:#f44336; }
 .mdui-dark [class*="mdui-card"].mdui-title-pink-bg:after { background:#e91e63; }
 .mdui-dark [class*="mdui-card"].mdui-title-purple-bg:after { background:#9c27b0; }
@@ -912,8 +973,6 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 .mdui-dark [class*="mdui-card"].mdui-title-bluegrey-bg:after { background:#607d8b; }
 .mdui-dark [class*="mdui-card"].mdui-title-white-bg:after { background:#f8f8f8; }
 .mdui-dark [class*="mdui-card"].mdui-title-black-bg:after { background:#212121; }
-
-
 
 /* ----- Cards ----- */
 
@@ -1687,6 +1746,7 @@ mdui-table[-r(responsewidth)][-w(colwidth)][-c(colcount)][-l]
   background:none !important;
 }
 
+
 [class*="mdui-table"] tr th {
   color:var(--design-font-color);
   opacity:0.54 !important;
@@ -1720,7 +1780,7 @@ mdui-table[-r(responsewidth)][-w(colwidth)][-c(colcount)][-l]
 }
 
 [class*="mdui-table"] tr {
-  border-left: .2em solid transparent;
+  border-left: .3em solid transparent;
 }
 
 [class*="mdui-table"] tr td {
@@ -1756,7 +1816,8 @@ mdui-table[-r(responsewidth)][-w(colwidth)][-c(colcount)][-l]
 .mdui-table-raised tbody,
 .mdui-table-outlined tbody,
 .mdui-table-list tbody{
-  display: block;
+  display: flex;
+  flex-wrap:wrap;
   width:100%;
 }
 
@@ -1764,6 +1825,7 @@ mdui-table[-r(responsewidth)][-w(colwidth)][-c(colcount)][-l]
 .mdui-table-outlined tbody tr,
 .mdui-table-list tbody tr{
   display: block;
+  flex: 1 0 auto;
   padding: 6px;
   overflow: hidden;
 }
@@ -1772,7 +1834,7 @@ mdui-table[-r(responsewidth)][-w(colwidth)][-c(colcount)][-l]
 .mdui-table-list tbody tr td {
   display: block;
   padding:0;
-  padding-bottom:4px;
+  padding-bottom:0px;
   border-bottom-width: 0px;
 }
 .mdui-table-raised tbody tr td:before,
@@ -1793,7 +1855,6 @@ mdui-table[-r(responsewidth)][-w(colwidth)][-c(colcount)][-l]
 /* table-raised */
 .mdui-table-raised tbody tr {
   margin:4px;
-  float:left;
   background:rgba(255,255,255,0.2);
   box-shadow:
     0 0 0 1px rgba(255,255,255,0.025),
@@ -1809,15 +1870,13 @@ mdui-table[-r(responsewidth)][-w(colwidth)][-c(colcount)][-l]
 
 /* table-outlined */
 .mdui-table-outlined tbody tr {
-  margin: 4px;
-  float:left;
-  background:rgba(255,255,255,0.1);
-  box-shadow: 0 0 0 1px rgba(0,0,0,0.33);
-  border-radius:4px;
+  margin: 0.25em;
+  border: 1px solid rgba(0,0,0,0.2);
+  border-left-width: .3em;
+  border-radius:0.4em;
 }
 .mdui-dark .mdui-table-outlined tbody tr {
-  background:rgba(255,255,255,0.05);
-  box-shadow: 0 0 0 1px rgba(255,255,255,0.33);
+  border-color: rgba(255,255,255,0.33);
 }
 .mdui-dark .mdui-table-striped tr:nth-child(even) {
   background:rgba(255,255,255,0.1);
@@ -1826,8 +1885,16 @@ mdui-table[-r(responsewidth)][-w(colwidth)][-c(colcount)][-l]
 
 /* table-list */
 .mdui-table-list tbody tr {
-  padding:8px 8px 4px 8px;
+  padding:0.25em;
+  margin-bottom:0.25em;
+  display:flex;
+  flex-wrap:wrap;
 }
+.mdui-table-list tbody tr td {
+  min-width:60%;
+  flex: 1 0 1;
+}
+
 .mdui-table-list:not(.mdui-table-striped) tbody tr {
   box-shadow:
     0 1px 0px 0px rgba(255,255,255,0.5);
@@ -1847,13 +1914,13 @@ mdui-table[-r(responsewidth)][-w(colwidth)][-c(colcount)][-l]
 }
 
 .mdui-table-list tbody tr td:first-child {
-  font-weight:bold;
+  font-size:1.1em;
 }
 .mdui-table-list tbody tr td:first-child:before {
   display:none;
 }
 .mdui-table-list tbody tr td:not(:first-child) {
-  padding-left:16px;
+  padding-left:1em;
 }
 
 .mdui-table-list.mdui-table-bordered tr {
@@ -1881,13 +1948,13 @@ mdui-table[-r(responsewidth)][-w(colwidth)][-c(colcount)][-l]
 .mdui-subtitle {
   z-index:2;
   color:var(--design-font-color);
-  font-size: 0.8em;
+  font-size: 0.83em;
   font-weight: normal;
   text-shadow:none !important;
   letter-spacing: 0px !important;
   width:auto;
   height:auto;
-  opacity:0.66;
+  opacity:0.87;
 }
 .mdui-dark .mdui-subtitle {
   color:#ffffff ;
@@ -4202,19 +4269,24 @@ display: block;
 /* 
 ##### Changelog, next version
 
-## V2.2 10.03.2020
+## V2.3 10.03.2020
 ### CSS
-* mdui-table-striped: Funktioniert nun auch bei basic-Table (JSON)
-* mdui-listitem: Überlanger Text wird nun per word-wrap umgebrochen 
-* mdui-list-striped: versucht in einer mdui-list jede 2.Zeile etwas dunkler/heller einzufärben
-* mdui-table: 
-* color1, color2 und color3 hinzugefügt: Diese können in der mdui-config (abar-View) mit eigenen Farbwerten belegt werden und können dann wie die anderen Farben in den CSS verwendet werden. Bsp: mdui-color1, mdui-color2-bg usw.
-Angabe im mdui-config über "color1":"#ff0000", "color1_dark":"#800000", "color2":"#ff0000", "color2_dark":"#800000", "color3":"#ff0000", "color3_dark":"#800000" (dark für Verwendung im dark-Theme)
+* Scrollbars: werden in webkit-Browser (Chrome, Edge, Fully, Safari) nun feiner und abgerundet dargestellt
+* mdui-shape-X für Safari-Browser mit "-webkit-"-Präfix versehen - vielleicht hilft es
+* neben der Symbol-Darstellung über <i class="material-icons">home</i> kann nun auch verkürzt <i class="mdui-icon">home</i> genutzt werden
+* optionale Nutzung der MaterialDesignIcons (https://github.com/Templarian/MaterialDesign-Webfont). Siehe Anmerkungen zur Konfiguration am Anfang der CSS Datei. In der vis Nutzung in der Form: <i class="mdui-mdi">&#xF02DC;</i> 
+* mdui-table-outlined: Zeichnen des outlined-Rahmens nun per border, nicht mehr box-shadow. Damit kann im table-HTML gezielt der linke Rahmen (<tr style="border-left-color:red;">) oder der ganze Rahmen (<tr style="border-color:red;">) eingefärbt werden
+* mdui-table-list|raised|outlined: Die Anordnung wird nun via flex statt float durchgeführt inkl. Größenanpassung der blöcke. Dadurch ergibt sich eine harmonischere Darstellung
+
+
 ### vis-Editor
 * 
 ### script
+* mdui-page-name: Der Widgetinhalt wird nach jedem Seitenwechsel mit dem page-Viewnamen gefüllt, kann in basic-HTMLs zur Anzeige des page-Viewnamens genutzt werden
+* mdui-page-title: Wie mdui-page-name, allerdings wird der Name noch aufbereitet. Kleinbuchstaben am Anfang werden ignoriert und '_' werden zu Leerzeichen gewandelt. "pageMeine_ioBroker_Vis" -> "Meine ioBroker Vis"
+
 ### MD_Demo
-* Einstellungen um die neuen 3 frei wählbaren Farben color1-3 erweitert (werden auf der Seite "Schaltflächen" ausgewertet)
+* 
 
 ##### ToDo 
 * flot: timespan 1em
