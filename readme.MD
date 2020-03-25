@@ -55,7 +55,6 @@ Weitere Einstellungen sind optional:
 
 ### 4. Anleitung
 
-Hat noch Stand v1!
 Siehe Dokument [Anleitung](docs/anleitung.pdf)
 
 Beispiel-Projekte befinden sich im Ordner "ioBroker projects", einmal ein [Demo-Projekt](ioBroker projects/MD_Demo.zip), welches den Umfang zeigt und einmal ein [Simple-Projekt](ioBroker projects/MD_Simple.zip), welches als Basis für eigene vis-Projekte verwendet werden kann. Beide Projekte (ZIP-Dateien) lassen sich in ioBroker.vis importieren.
