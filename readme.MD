@@ -1,7 +1,5 @@
 ### Material Design CSS v2 für ioBroker
 
-### ! In Überarbeitung zur Version v2 !
-
 **Inhaltsverzeichnis**
 
 1. [Funktionsumfang](#1-funktionsumfang)
