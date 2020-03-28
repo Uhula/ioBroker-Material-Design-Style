@@ -1,3 +1,17 @@
+## V2.4 28.03.2020
+### CSS
+* alle clip-path Angaben für Safari-Browser mit "-webkit-"-Präfix versehen
+* mdui-state-outlined: wie mdui-state aber zusätzlich mit einem Rahmen (-ol = outline) versehen. Die Rahmenfarbe kann entweder fix unter CSS Klasse (mdui-state-outlined mdui-red-ol) oder besser in den Wertelisten der Widgets (<div class="mdui-green-ol">OK</i>) angegeben werden.
+* scrollbar-pimp für touch-Geräte entfernt, erfolgt nur noch für Desktop Browser
+
+### script
+* mdui-page-name und mdui-page-title verarbeiten nun auch Umlaute korrekt
+
+
+### MD_Demo
+* cardStates, cardStastesOutlined überarbeitet. Sie zeigen nun alle möglichen mdui-state Arten an
+
+
 ## V2.3 10.03.2020
 ### CSS
 * Scrollbars: werden in webkit-Browser (Chrome, Edge, Fully, Safari) nun feiner und abgerundet dargestellt

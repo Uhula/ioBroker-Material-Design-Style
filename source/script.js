@@ -2,7 +2,7 @@
    Material Design CSS for ioBroker.vis
    (c) 2017ff Uhula, MIT License
    
-   version: v2.3 21.03.2020
+   version: v2.4 28.03.2020
 
    source: https://github.com/Uhula/ioBroker-Material-Design-Style
    changelog: https://github.com/Uhula/ioBroker-Material-Design-Style/blob/master/changelog.MD
@@ -255,7 +255,7 @@ function _onChangePage( ele ) {
             });
             
             // page-name anpassen
-            let pagename = window.location.hash.substr(1,255);
+            let pagename = decodeURI( window.location.hash.substr(1,255) );
             $(".mdui-page-name").each( function (index) {
                 $(this).html( pagename );
             });
@@ -1003,7 +1003,6 @@ function _patchColors() {
 
         // custom
         let custom = _getCSSColorFromConfig("color1",lastConfig.color1,200,defConfig.color1);
-console.log(custom);        
         document.documentElement.style.setProperty('--color1', custom); 
         custom = _getCSSColorFromConfig("color1_dark",lastConfig.color1_dark,500,defConfig.color1_dark);
         document.documentElement.style.setProperty('--color1-dark', custom); 

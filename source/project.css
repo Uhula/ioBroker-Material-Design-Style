@@ -2,7 +2,7 @@
 ##### Material Design CSS for ioBroker.vis 
 
 (c) 2017ff Uhula, MIT License
-version: v2.3 21.03.2020
+version: v2.4 28.03.2020
 source: https://github.com/Uhula/ioBroker-Material-Design-Style
 changelog: https://github.com/Uhula/ioBroker-Material-Design-Style/blob/master/changelog.MD
 
@@ -47,16 +47,16 @@ FÜR DIE zusätzlichen MaterialDesignIcons DIESE ZEILE LÖSCHEN    */
   --design-hint-background: #0000ff;
   --design-hint-color: #ffffff;
   --design-grid: #000000;
-  --design-black33-background:rgba(0,0,0,.33);
+  --design-color-033:rgba(0,0,0,.33);
 
   /* Design-time dark-Theme */
-  /* FÜR DAS DARK_THEME DIESE ZEILE LÖSCHEN    
+  /* FÜR DAS DARK_THEME DIESE ZEILE LÖSCHEN     
   --content-background: #404040;
   --design-font-color: #ffffff;
   --design-hint-background: #ff8000;
   --design-hint-color: #ffffff;
   --design-grid: #ffffff;
-  --design-black33-background:rgba(255,255,255,.33);
+  --design-color-033:rgba(255,255,255,.33);
   FÜR DAS DARK_THEME DIESE ZEILE LÖSCHEN */
 }
 
@@ -86,7 +86,7 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 :root.mdui-runtime {
   --content-background: #f8f8f8;
   --design-font-color: #000000;
-  --design-black33-background:rgba(0,0,0,.33);
+  --design-color-033:rgba(0,0,0,.33);
 }
   
 
@@ -112,12 +112,6 @@ ab hier nichts mehr ändern, nur am Ende anfügen
   -moz-osx-font-smoothing: grayscale;
   /* Support for IE. */
   font-feature-settings: 'liga';
-}
-
-.mdui-dark .mdui-mdi,
-.mdui-dark .material-icons,
-.mdui-dark .mdui-icon {
-  color:#ffffff;
 }
 
 .mdui-mdi {
@@ -153,31 +147,31 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 }
 
 /* Scrollbar: anderer Style (außer Firefox) */
-::-webkit-scrollbar { 
+.mdui-runtime.mdui-notouch ::-webkit-scrollbar { 
     width: 0.5em; 
     height: 0.5em; 
 }
-::-webkit-scrollbar-button { 
+.mdui-runtime.mdui-notouch ::-webkit-scrollbar-button { 
     height:0px;
 }
-::-webkit-scrollbar-track { 
+.mdui-runtime.mdui-notouch ::-webkit-scrollbar-track { 
     background: transparent; 
     border-radius:1em;
 }
-::-webkit-scrollbar-track:hover { 
+.mdui-runtime.mdui-notouch ::-webkit-scrollbar-track:hover { 
     background: var(--divider-color); 
 } 
-.mdui-dark ::-webkit-scrollbar-track:hover { 
+.mdui-runtime.mdui-notouch .mdui-dark ::-webkit-scrollbar-track:hover { 
     background: var(--divider-color-dark);
 }
-::-webkit-scrollbar-thumb { 
+.mdui-runtime.mdui-notouch ::-webkit-scrollbar-thumb { 
     background-color: var(--divider-color); 
     border-radius: 1em; 
 }
-.mdui-dark ::-webkit-scrollbar-thumb  { 
+.mdui-runtime.mdui-notouch .mdui-dark ::-webkit-scrollbar-thumb  { 
     background-color: var(--divider-color-dark); 
 }
-::-webkit-scrollbar-thumb:hover { 
+.mdui-runtime.mdui-notouch ::-webkit-scrollbar-thumb:hover { 
     background: var(--accent-color); 
 }
 
@@ -1994,29 +1988,85 @@ mdui-table[-r(responsewidth)][-w(colwidth)][-c(colcount)][-l]
 
 /* ------ States ------ */
 
-.mdui-state {
+[class*='mdui-state'] {
   z-index:2;
-  color:var(--design-font-color) !important;
+  color:var(--design-font-color);
   font-weight:bold;
   font-size:1em;
   text-shadow:none !important;
   letter-spacing: 0px !important;
-  border-radius: 2px 8px;
+  border-radius: 0em 0.4em 0.4em 0.4em;
 }
-.mdui-dark .mdui-state{
-  color:#ffffff !important;
+.mdui-dark [class*='mdui-state'] {
+  color:#ffffff;
+  text-shadow: 1px 1px 2px white;
+}
+[class*='mdui-state'] i {
+  font-weight:normal;
+}
+.mdui-state [class*="-bg"],
+.mdui-state [class*="-bg"] .vis-widget-body:not(i),
+.mdui-state[class*="-bg"] .vis-widget-body>*:not(i) {
+  padding-left:0.25em;
+  padding-right:0.25em;
+  font-weight:normal;
+  color: var(--design-font-color) !important;
+}
+.mdui-dark .mdui-state [class*="-bg"],
+.mdui-dark .mdui-state [class*="-bg"] .vis-widget-body,
+.mdui-dark .mdui-state[class*="-bg"] .vis-widget-body>* {
+  color: white !important;
 }
 
-.mdui-state [class*="-bg"] {
-  padding:0.25em !important;    
-}
-
-.mdui-state .vis-widget-body div,
-.mdui-state .vis-widget-body div * {
+.mdui-state .vis-widget-body div {
   width:100%;
   height:100%;
 }
 
+.mdui-state-outlined {
+  font-weight:normal;
+}
+
+.mdui-state-outlined[class*="-ol"] {
+  border-radius: 0em 0.4em 0.4em 0.4em;
+  border: 1px solid var(--design-color-033);
+  padding-left:0.25em;
+  padding-right:0.25em;
+}
+.mdui-dark .mdui-state-outlined[class*="-ol"] {
+  border-color: rgba(255,255,255,.33);
+}
+.mdui-state-outlined[class*="-bg"] {
+  color: var(--design-font-color) !important;
+}
+.mdui-dark .mdui-state-outlined[class*="-bg"] {
+  color: white !important;
+}
+
+.mdui-state-outlined .vis-widget-body>div {
+  height:100%;
+  width: 100%;
+}
+
+.mdui-state-outlined .vis-widget-body [class*="mdui-"]:not(i) {
+  height:100%;
+  width:100%;
+  border-radius: 0em 0.4em 0.4em 0.4em;
+  border: 1px solid var(--design-color-033);
+  padding-left:0.25em;
+  padding-right:0.25em;
+  text-shadow: 1px solid black;
+}
+.mdui-dark .mdui-state-outlined .vis-widget-body [class*="mdui-"]:not(i) {
+  border-color: rgba(255,255,255,.33);
+}
+
+.mdui-state-outlined .vis-widget-body [class*="-bg"] {
+  color: var(--design-font-color) !important;
+}
+.mdui-dark .mdui-state-outlined .vis-widget-body [class*="-bg"] {
+  color: white !important;
+}
 
 
 /* -----
@@ -2932,14 +2982,14 @@ display: block;
   height:100%;
   border: 1px solid transparent !important;
   border-radius: 1em;
-  background:var(--design-black33-background) !important;
+  background:var(--design-color-033) !important;
   z-index:-1;
 }
 .mdui-dark .mdui-chips label:before {
   background:rgba(255,255,255,0.33) !important;
 }
 .mdui-chips-outlined label:before {
-  border-color: var(--design-black33-background) !important;
+  border-color: var(--design-color-033) !important;
   background:none !important;
 }
 .mdui-dark .mdui-chips-outlined label:before {
@@ -3544,7 +3594,7 @@ display: block;
 }
 
 .mdui-h-bargraph.mdui-segment-10 {
-    clip-path: polygon(
+  clip-path: polygon(
        0% 100%,  0% 0%,  9% 0%,  9% 100%,
       10% 100%, 10% 0%, 19% 0%, 19% 100%,
       20% 100%, 20% 0%, 29% 0%, 29% 100%,
@@ -3556,13 +3606,27 @@ display: block;
       80% 100%, 80% 0%, 89% 0%, 89% 100%,
       90% 100%, 90% 0%, 100% 0%, 100% 100%
     ) ;
+  -webkit-clip-path: polygon(
+       0% 100%,  0% 0%,  9% 0%,  9% 100%,
+      10% 100%, 10% 0%, 19% 0%, 19% 100%,
+      20% 100%, 20% 0%, 29% 0%, 29% 100%,
+      30% 100%, 30% 0%, 39% 0%, 39% 100%,
+      40% 100%, 40% 0%, 49% 0%, 49% 100%,
+      50% 100%, 50% 0%, 59% 0%, 59% 100%,
+      60% 100%, 60% 0%, 69% 0%, 69% 100%,
+      70% 100%, 70% 0%, 79% 0%, 79% 100%,
+      80% 100%, 80% 0%, 89% 0%, 89% 100%,
+      90% 100%, 90% 0%, 100% 0%, 100% 100%
+    ) ;    
 }
 
 .mdui-h-bargraph.mdui-triangle  {
-    clip-path: polygon(0% 40%, 100% 0%, 100% 100%, 0% 60%);
+  clip-path: polygon(0% 40%, 100% 0%, 100% 100%, 0% 60%);
+  -webkit-clip-path: polygon(0% 40%, 100% 0%, 100% 100%, 0% 60%);
 }
 .mdui-h-bargraph.mdui-ramp  {
-    clip-path: polygon(0% 80%, 100% 0%, 100% 100%, 0% 100%);
+  clip-path: polygon(0% 80%, 100% 0%, 100% 100%, 0% 100%);
+  -webkit-clip-path: polygon(0% 80%, 100% 0%, 100% 100%, 0% 100%);
 }
 
 .mdui-h-bargraph.mdui-segment-10.mdui-ramp {
@@ -3578,9 +3642,33 @@ display: block;
       89% 100%, 89%  7%, 80% 16%, 80% 100%,
      100% 100%,100%  0%, 90%  8%, 90% 100%
     );
+    -webkit-clip-path: polygon(
+       9% 100%,  9% 71%,  0% 80%,  0% 100%,
+      19% 100%, 19% 63%, 10% 72%, 10% 100%,
+      29% 100%, 29% 55%, 20% 64%, 20% 100%,
+      39% 100%, 39% 47%, 30% 56%, 30% 100%,
+      49% 100%, 49% 39%, 40% 48%, 40% 100%,
+      59% 100%, 59% 31%, 50% 40%, 50% 100%,
+      69% 100%, 69% 23%, 60% 32%, 60% 100%,
+      79% 100%, 79% 15%, 70% 24%, 70% 100%,
+      89% 100%, 89%  7%, 80% 16%, 80% 100%,
+     100% 100%,100%  0%, 90%  8%, 90% 100%
+    );
 }
 .mdui-h-bargraph.mdui-segment-10.mdui-triangle {
     clip-path: polygon(
+       9% 37%,  9% 63%,  0% 60%,  0% 40%,
+      19% 33%, 19% 67%, 10% 64%, 10% 36%,
+      29% 29%, 29% 71%, 20% 68%, 20% 32%,
+      39% 25%, 39% 75%, 30% 72%, 30% 28%,
+      49% 21%, 49% 79%, 40% 76%, 40% 24%,
+      59% 17%, 59% 83%, 50% 80%, 50% 20%,
+      69% 13%, 69% 87%, 60% 84%, 60% 16%,
+      79%  9%, 79% 91%, 70% 88%, 70% 12%,
+      89%  5%, 89% 95%, 80% 92%, 80% 8%,
+      100% 0%, 100% 100%, 90% 96%, 90% 4%
+    );
+    -webkit-clip-path: polygon(
        9% 37%,  9% 63%,  0% 60%,  0% 40%,
       19% 33%, 19% 67%, 10% 64%, 10% 36%,
       29% 29%, 29% 71%, 20% 68%, 20% 32%,
@@ -3607,13 +3695,27 @@ display: block;
      100% 80%, 0% 80%, 0% 89%,100% 89% ,
      100% 90%, 0% 90%, 0% 100%,100% 100%
     ) ;
+    -webkit-clip-path: polygon(
+     100%  0%, 0%  0%, 0%  9%,100%  9% ,
+     100% 10%, 0% 10%, 0% 19%,100% 19% ,
+     100% 20%, 0% 20%, 0% 29%,100% 29% ,
+     100% 30%, 0% 30%, 0% 39%,100% 39% ,
+     100% 40%, 0% 40%, 0% 49%,100% 49% ,
+     100% 50%, 0% 50%, 0% 59%,100% 59% ,
+     100% 60%, 0% 60%, 0% 69%,100% 69% ,
+     100% 70%, 0% 70%, 0% 79%,100% 79% ,
+     100% 80%, 0% 80%, 0% 89%,100% 89% ,
+     100% 90%, 0% 90%, 0% 100%,100% 100%
+    ) ;
 }
 
 .mdui-v-bargraph.mdui-triangle  {
     clip-path: polygon(60% 0%, 100% 100%, 0% 100%, 40% 0%);
+    -webkit-clip-path: polygon(60% 0%, 100% 100%, 0% 100%, 40% 0%);
 }
 .mdui-v-bargraph.mdui-ramp  {
     clip-path: polygon(100% 0%, 100% 100%, 0% 100%, 80% 0%);
+    -webkit-clip-path: polygon(100% 0%, 100% 100%, 0% 100%, 80% 0%);
 }
 
 .mdui-v-bargraph.mdui-segment-10.mdui-ramp {
@@ -3629,9 +3731,33 @@ display: block;
     100%  89%,  7% 89%, 16% 80%, 100% 80%,
     100% 100%, 0% 100%,  8% 90%, 100% 90%
     );
+    -webkit-clip-path: polygon(
+    100%   9%, 71%  9%, 80%  0%, 100%  0%,
+    100%  19%, 63% 19%, 72% 10%, 100% 10%,
+    100%  29%, 55% 29%, 64% 20%, 100% 20%,
+    100%  39%, 47% 39%, 56% 30%, 100% 30%,
+    100%  49%, 39% 49%, 48% 40%, 100% 40%,
+    100%  59%, 31% 59%, 40% 50%, 100% 50%,
+    100%  69%, 23% 69%, 32% 60%, 100% 60%,
+    100%  79%, 15% 79%, 24% 70%, 100% 70%,
+    100%  89%,  7% 89%, 16% 80%, 100% 80%,
+    100% 100%, 0% 100%,  8% 90%, 100% 90%
+    );
 }
 .mdui-v-bargraph.mdui-segment-10.mdui-triangle {
     clip-path: polygon(
+     37%   9%, 63%  9%, 60%  0%, 40%  0%,
+     33%  19%, 67% 19%, 64% 10%, 36% 10%,
+     29%  29%, 71% 29%, 68% 20%, 32% 20%,
+     25%  39%, 75% 39%, 72% 30%, 28% 30%,
+     21%  49%, 79% 49%, 76% 40%, 24% 40%,
+     17%  59%, 83% 59%, 80% 50%, 20% 50%,
+     13%  69%, 87% 69%, 84% 60%, 16% 60%,
+      9%  79%, 91% 79%, 88% 70%, 12% 70%,
+      5%  89%, 95% 89%, 92% 80%,  8% 80%,
+      0% 100%,100% 100%,96% 90%,  4% 90%
+    );
+    -webkit-clip-path: polygon(
      37%   9%, 63%  9%, 60%  0%, 40%  0%,
      33%  19%, 67% 19%, 64% 10%, 36% 10%,
      29%  29%, 71% 29%, 68% 20%, 32% 20%,
@@ -3798,34 +3924,54 @@ display: block;
 .mdui-dark .mdui-color2-bg { background-color:var(--color2-dark) !important; }
 .mdui-dark .mdui-color3-bg { background-color:var(--color3-dark) !important; }
 
+/* border für -outlined (-ol) */
+.mdui-red-ol { border-color:#f44336 !important; }
+.mdui-pink-ol { border-color:#e91e63 !important; }
+.mdui-purple-ol { border-color:#9c27b0 !important; }
+.mdui-deeppurple-ol { border-color:#673ab7 !important; }
+.mdui-indigo-ol { border-color:#3f51b5 !important; }
+.mdui-blue-ol { border-color:#2196f3 !important; }
+.mdui-lightblue-ol { border-color:#03a9f4 !important; }
+.mdui-cyan-ol { border-color:#00bcd4 !important; }
+.mdui-teal-ol { border-color:#009688 !important; }
+.mdui-green-ol { border-color:#4caf50 !important; }
+.mdui-lightgreen-ol { border-color:#8bc34a !important; }
+.mdui-lime-ol { border-color:#cddc39 !important; }
+.mdui-yellow-ol { border-color:#ffeb3b !important; }
+.mdui-amber-ol { border-color:#ffc107 !important; }
+.mdui-orange-ol { border-color:#ff9800 !important; }
+.mdui-deeporange-ol { border-color:#ff5722 !important; }
+.mdui-brown-ol { border-color:#795548 !important; }
+.mdui-grey-ol { border-color:#9e9e9e !important; }
+.mdui-darkgrey-ol { border-color:#303030 !important; }
+.mdui-bluegrey-ol { border-color:#607d8b !important; }
+.mdui-white-ol { border-color:#f8f8f8 !important; }
+.mdui-black-ol { border-color:#212121 !important; }
 
-/* outline */
-.mdui-red-ol { outline-color:#f44336 !important; }
-.mdui-pink-ol { outline-color:#e91e63 !important; }
-.mdui-purple-ol { outline-color:#9c27b0 !important; }
-.mdui-deeppurple-ol { outline-color:#673ab7 !important; }
-.mdui-indigo-ol { outline-color:#3f51b5 !important; }
-.mdui-blue-ol { outline-color:#2196f3 !important; }
-.mdui-lightblue-ol { outline-color:#03a9f4 !important; }
-.mdui-cyan-ol { outline-color:#00bcd4 !important; }
-.mdui-teal-ol { outline-color:#009688 !important; }
-.mdui-green-ol { outline-color:#4caf50 !important; }
-.mdui-lightgreen-ol { outline-color:#8bc34a !important; }
-.mdui-lime-ol { outline-color:#cddc39 !important; }
-.mdui-yellow-ol { outline-color:#ffeb3b !important; }
-.mdui-amber-ol { outline-color:#ffc107 !important; }
-.mdui-orange-ol { outline-color:#ff9800 !important; }
-.mdui-deeporange-ol { outline-color:#ff5722 !important; }
-.mdui-brown-ol { outline-color:#795548 !important; }
-.mdui-grey-ol { outline-color:#9e9e9e !important; }
-.mdui-darkgrey-ol { outline-color:#303030 !important; }
-.mdui-bluegrey-ol { outline-color:#607d8b !important; }
-.mdui-white-ol { outline-color:#f8f8f8 !important; }
-.mdui-black-ol { outline-color:#212121 !important; }
+.mdui-black10-ol { border-color:rgba(0,0,0,.1) !important; }
+.mdui-black20-ol { border-color:rgba(0,0,0,.2) !important; }
+.mdui-black30-ol { border-color:rgba(0,0,0,.3) !important; }
+.mdui-black40-ol { border-color:rgba(0,0,0,.4) !important; }
+.mdui-black50-ol { border-color:rgba(0,0,0,.5) !important; }
+.mdui-black60-ol { border-color:rgba(0,0,0,.6) !important; }
+.mdui-black70-ol { border-color:rgba(0,0,0,.7) !important; }
+.mdui-black80-ol { border-color:rgba(0,0,0,.8) !important; }
+.mdui-black90-ol { border-color:rgba(0,0,0,.9) !important; }
 
-.mdui-color1-ol { outline-color:var(-color1) !important; }
-.mdui-color2-ol { outline-color:var(-color2) !important; }
-.mdui-color3-ol { outline-color:var(-color3) !important; }
+.mdui-white10-ol { border-color:rgba(255,255,255,.1) !important; }
+.mdui-white20-ol { border-color:rgba(255,255,255,.2) !important; }
+.mdui-white30-ol { border-color:rgba(255,255,255,.3) !important; }
+.mdui-white40-ol { border-color:rgba(255,255,255,.4) !important; }
+.mdui-white50-ol { border-color:rgba(255,255,255,.5) !important; }
+.mdui-white60-ol { border-color:rgba(255,255,255,.6) !important; }
+.mdui-white70-ol { border-color:rgba(255,255,255,.7) !important; }
+.mdui-white80-ol { border-color:rgba(255,255,255,.8) !important; }
+.mdui-white90-ol { border-color:rgba(255,255,255,.9) !important; }
+
+.mdui-color1-ol { border-color:var(-color1) !important; }
+.mdui-color2-ol { border-color:var(-color2) !important; }
+.mdui-color3-ol { border-color:var(-color3) !important; }
+
 
 /* border */
 .mdui-red-border { border-color:#f44336 !important; }
@@ -3856,32 +4002,36 @@ display: block;
 .mdui-color3-border { border-color:var(--color3) !important; }
 
 /* (font) color */
-.mdui-red { color:#f44336 !important; }
-.mdui-pink { color:#e91e63 !important; }
-.mdui-purple { color:#9c27b0 !important; }
-.mdui-deeppurple { color:#673ab7 !important; }
-.mdui-indigo { color:#3f51b5 !important; }
-.mdui-blue { color:#2196f3 !important; }
-.mdui-lightblue { color:#03a9f4 !important; }
-.mdui-cyan { color:#00bcd4 !important; }
-.mdui-teal { color:#009688 !important; }
-.mdui-green { color:#4caf50 !important; }
-.mdui-lightgreen { color:#8bc34a !important; }
-.mdui-lime { color:#cddc39 !important; }
-.mdui-yellow { color:#ffeb3b !important; }
-.mdui-amber { color:#ffc107 !important; }
-.mdui-orange { color:#ff9800 !important; }
-.mdui-deeporange { color:#ff5722 !important; }
-.mdui-brown { color:#795548 !important; }
-.mdui-grey { color:#9e9e9e !important; }
-.mdui-darkgrey { color:#303030 !important; }
-.mdui-bluegrey { color:#607d8b !important; }
-.mdui-white { color:#f8f8f8 !important; }
-.mdui-black { color:#212121 !important; }
+.mdui-red, .mdui-dark .mdui-red { color:#f44336 !important; }
+.mdui-pink, .mdui-dark .mdui-pink { color:#e91e63 !important; }
+.mdui-purple, .mdui-dark .mdui-purple { color:#9c27b0 !important; }
+.mdui-deeppurple, .mdui-dark .mdui-deeppurple { color:#673ab7 !important; }
+.mdui-indigo, .mdui-dark .mdui-indigo { color:#3f51b5 !important; }
+.mdui-blue, .mdui-dark .mdui-blue { color:#2196f3 !important; }
+.mdui-lightblue, .mdui-dark .mdui-lightblue { color:#03a9f4 !important; }
+.mdui-cyan, .mdui-dark .mdui-cyan { color:#00bcd4 !important; }
+.mdui-teal, .mdui-dark .mdui-teal { color:#009688 !important; }
+.mdui-green, .mdui-dark .mdui-green { color:#4caf50 !important; }
+.mdui-lightgreen, .mdui-dark .mdui-lightgreen { color:#8bc34a !important; }
+.mdui-lime, .mdui-dark .mdui-lime { color:#cddc39 !important; }
+.mdui-yellow, .mdui-dark .mdui-yellow { color:#ffeb3b !important; }
+.mdui-amber, .mdui-dark .mdui-amber { color:#ffc107 !important; }
+.mdui-orange, .mdui-dark .mdui-orange { color:#ff9800 !important; }
+.mdui-deeporange, .mdui-dark .mdui-deeporange { color:#ff5722 !important; }
+.mdui-brown, .mdui-dark .mdui-brown { color:#795548 !important; }
+.mdui-grey, .mdui-dark .mdui-grey { color:#9e9e9e !important; }
+.mdui-darkgrey, .mdui-dark .mdui-darkgrey { color:#303030 !important; }
+.mdui-bluegrey, .mdui-dark .mdui-bluegrey { color:#607d8b !important; }
+.mdui-white, .mdui-dark .mdui-white { color:#f8f8f8 !important; }
+.mdui-black, .mdui-dark .mdui-black { color:#212121 !important; }
 
 .mdui-color1 { color:var(--color1) !important; }
 .mdui-color2 { color:var(--color2) !important; }
 .mdui-color3 { color:var(--color3) !important; }
+
+.mdui-dark .mdui-color1 { color:var(--color1-dark) !important; }
+.mdui-dark .mdui-color2 { color:var(--color2-dark) !important; }
+.mdui-dark .mdui-color3 { color:var(--color3-dark) !important; }
 
   
   
@@ -4269,24 +4419,22 @@ display: block;
 /* 
 ##### Changelog, next version
 
-## V2.3 10.03.2020
+## V2.4 28.03.2020
 ### CSS
-* Scrollbars: werden in webkit-Browser (Chrome, Edge, Fully, Safari) nun feiner und abgerundet dargestellt
-* mdui-shape-X für Safari-Browser mit "-webkit-"-Präfix versehen - vielleicht hilft es
-* neben der Symbol-Darstellung über <i class="material-icons">home</i> kann nun auch verkürzt <i class="mdui-icon">home</i> genutzt werden
-* optionale Nutzung der MaterialDesignIcons (https://github.com/Templarian/MaterialDesign-Webfont). Siehe Anmerkungen zur Konfiguration am Anfang der CSS Datei. In der vis Nutzung in der Form: <i class="mdui-mdi">&#xF02DC;</i> 
-* mdui-table-outlined: Zeichnen des outlined-Rahmens nun per border, nicht mehr box-shadow. Damit kann im table-HTML gezielt der linke Rahmen (<tr style="border-left-color:red;">) oder der ganze Rahmen (<tr style="border-color:red;">) eingefärbt werden
-* mdui-table-list|raised|outlined: Die Anordnung wird nun via flex statt float durchgeführt inkl. Größenanpassung der blöcke. Dadurch ergibt sich eine harmonischere Darstellung
-
+* alle clip-path Angaben für Safari-Browser mit "-webkit-"-Präfix versehen
+* mdui-state-outlined: wie mdui-state aber zusätzlich mit einem Rahmen (-ol = outline) versehen. Die Rahmenfarbe kann entweder fix unter CSS Klasse (mdui-state-outlined mdui-red-ol) oder besser in den Wertelisten der Widgets (<div class="mdui-green-ol">OK</i>) angegeben werden.
+* scrollbar-pimp für touch-Geräte entfernt, erfolgt nur noch für Desktop Browser
 
 ### vis-Editor
 * 
+
 ### script
-* mdui-page-name: Der Widgetinhalt wird nach jedem Seitenwechsel mit dem page-Viewnamen gefüllt, kann in basic-HTMLs zur Anzeige des page-Viewnamens genutzt werden
-* mdui-page-title: Wie mdui-page-name, allerdings wird der Name noch aufbereitet. Kleinbuchstaben am Anfang werden ignoriert und '_' werden zu Leerzeichen gewandelt. "pageMeine_ioBroker_Vis" -> "Meine ioBroker Vis"
+* mdui-page-name und mdui-page-title verarbeiten nun auch Umlaute korrekt
+*
 
 ### MD_Demo
-* 
+* cardStates, cardStastesOutlined überarbeitet. Sie zeigen nun alle möglichen mdui-state Arten an
+*
 
 ##### ToDo 
 * flot: timespan 1em
