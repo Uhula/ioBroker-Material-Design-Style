@@ -43,6 +43,7 @@ Beispiele: 0360 x 0640
 
 ### 2. Systemanforderungen
 * ioBroker.vis
+* der "Material Design Widgets" Adapter (aus ca. 2018) darf nicht installiert sein, da dort die MDCSS in einer alten Version 1.8 enthalten sind!
 
 
 ### 3. Installation
