@@ -5,11 +5,12 @@ table- bzw. list-Anzeige. Die Instanzen werden aktiv mit on-Handler auf connecte
 In jedem Log-Ordner 
 * befindet sich ein table- und list-HTML State, welcher direkt in der vis angezeigt werden kann (jeweils im basic-string (unescaped) Widget). 
 * kann ein filter als string (Bsp:':hasupdate:') oder als RegExp (Bsp:'/warn|error/') festgelegt werden, welcher beim Aufbau der table-/list-HTML States berücksichtigt wird. 
-* kann die Sortierreihenfolge festgelegt werden
+* kann die Sortierreihenfolge festgelegt werden, in der table-Ansicht auch via Klick auf die Header
 * kann die Anzeige als "normal" oder "compact" geschaltet werden
+* Instanzen können gestoppt/gestartet werden
 
 **** Voraussetzungen
-Nutzung der MDCSS v2.x (siehe: https://forum.iobroker.net/topic/30363/projekt-mdcss-v2-material-design-css-version-2)
+Nutzung der MDCSS v2.x (siehe: https://forum.iobroker.net/topic/30363/projekt-mdcss-v2-material-design-css-version-2), für die Sortierdarstellung im Header MDCSS v2.5
 
 **** Installation
 Einfach als serverseitiges Script installieren und starten. Beim 1.Start werden die notwendigen States unter STATE_PATH = 
@@ -290,7 +291,10 @@ class MduiBase {
       // -----------------------  
     
     
-      // var
+      // logs-Pbject initialisieren
+      this.logs = [];
+      for (let i=0; i<=this.MAX_LOG_FOLDER && i<10; i++) 
+          this.logs.push({sortBy:'', sortAscending:'', sortByOld:'', filter:'' });
     
       // init der states
       this.states.push( { id:'version',     common:{name:'installed script-version', write:false, def:this.VERSION} } );
@@ -326,7 +330,11 @@ class MduiBase {
         this.subscribers.push( on( this.STATE_PATH+'toggleInstanceID', obj => { this.onToggleInstanceID(obj) } ));
         this.subscribers.push( on( new RegExp( this.STATE_PATH+'*.showAs' ), obj => { this.onShowAs(obj) } ));
         this.subscribers.push( on( new RegExp( this.STATE_PATH+'*.filter' ), obj => { this.onFilter(obj) } ));
-        this.subscribers.push( on( new RegExp( this.STATE_PATH+'*.sortBy' ), obj => { this.onChangeSortBy(obj) } ));
+    //    this.subscribers.push( on( new RegExp( this.STATE_PATH+'*.sortBy' ), obj => { this.onChangeSortBy(obj) } ));
+        this.subscribers.push( on( {id: new RegExp( this.STATE_PATH+'*.sortBy' ), change: "any"} , obj => { this.onChangeSortBy(obj) } ));
+    
+        
+    
         this.subscribers.push( on( new RegExp( this.STATE_PATH+'*.sortAscending' ), obj => { this.onChangeSortAscending(obj) } ));
         this.subscribers.push( on( new RegExp( this.SELECT_ALIVE ), obj => { this.onBuildHTML(obj) } ));
         this.subscribers.push( on( new RegExp( this.SELECT_UPDATEJSON ), obj => { this.onBuildHTML(obj) } ));
@@ -377,9 +385,26 @@ class MduiBase {
     onFilter(obj) {
       this.onBuildHTML();
     }
+    
+    //
+    // beim gleichen sortBy Sortierreihenfolge umdrehen
+    // 
     onChangeSortBy(obj) {
+      let i = parseInt( obj.id.substr(this.STATE_PATH.length + 3, 1) );
+      if (i>=0 && i<this.logs.length) {
+         if (this.logs[i].sortByOld == obj.state.val) {
+             if (this.existState(this.logs[i].id+'.sortAscending')) {
+               this.setState(this.logs[i].id+'.sortAscending', !this.logs[i].sortAscending);
+               return;
+             }
+         }      
+      }
+      this.logs[i].sortByOld = obj.state.val;
       this.onBuildHTML();
     }
+    //
+    //
+    //
     onChangeSortAscending (obj) {
       this.onBuildHTML();
     }
@@ -388,7 +413,7 @@ class MduiBase {
     // getVal(id, def)
     //
     getVal(id, def) {try {
-        if ( $(id).length==0) return def;
+        if ( !existsState(id) ) return def;
         else {
             let val = getState(id).val;
             if (!val) val=def; 
@@ -503,62 +528,73 @@ class MduiBase {
       json.unshift( entrySum );
       // build table/list HTML
       for (let i=0; i<=this.MAX_LOG_FOLDER && i<10; i++) {
-          let idState = 'log'+i;
-          let filter = '';
-          if (this.existState(idState+'.filter')) filter = this.getState(idState+'.filter').val;
-          let showCompact = this.SHOW_NORMAL;
-          if (this.existState(idState+'.showAs')) showCompact = this.getState(idState+'.showAs').val;
+          let log = this.logs[i];
+          log.id = 'log'+i;
+          log.statePath = this.STATE_PATH+log.id;
+          log.filter = '';
+          if (this.existState(log.id+'.filter')) log.filter = this.getState(log.id+'.filter').val;
+          log.showAs = this.SHOW_NORMAL;
+          if (this.existState(log.id+'.showAs')) log.showAs = this.getState(log.id+'.showAs').val;
+          log.showcompact = log.showAs==this.SHOW_COMPACT?'none':'';
       
           for (let j = 0; j < json.length; j++) { 
-              json[j].showcompact = showCompact==this.SHOW_COMPACT?'none':'';
+              json[j].showcompact = log.showAs==this.SHOW_COMPACT?'none':'';
           }
     
-          this.sortBy = '';
-          this.sortAscending = true;
-          if (this.existState(idState+'.sortBy')) this.sortBy = this.getState(idState+'.sortBy').val;
-          if (this.existState(idState+'.sortAscending')) this.sortAscending = this.getState(idState+'.sortAscending').val;
     
-          if ( this.sortBy!='') {
+          // beim gleichen sortBy -> Reihenfolge ändern
+          log.sortBy = '';
+          log.sortAscending = true;
+          if (this.existState(log.id+'.sortAscending')) log.sortAscending = this.getState(log.id+'.sortAscending').val;
+          if (this.existState(log.id+'.sortBy')) log.sortBy = this.getState(log.id+'.sortBy').val; 
+          log.sortbytitle = 'mdui-sortable';
+          log.sortbyname = 'mdui-sortable';
+          log.sortbyuptime = 'mdui-sortable';
+          log.sortbymemrss = 'mdui-sortable';
+          log.sortbymemheapused = 'mdui-sortable';
+          log.sortbymemheaptotal = 'mdui-sortable';
+          log.sortbycpu = 'mdui-sortable';
+    
+    
+          if ( log.sortBy!='') {
+              if (log.sortAscending) log['sortby'+log.sortBy] = 'mdui-sort-ascending';
+              else log['sortby'+log.sortBy] = 'mdui-sort-descending';
               // Summenwerte immer oben
               let entrySum = json.shift();
-              json.sort( this.compareNodes.bind(this) );
+              json.sort( (l,r) => {
+                    let lv=l['name'],rv=r['name'];
+                    if (l.hasOwnProperty(log.sortBy)) lv=l[log.sortBy];
+                    if (r.hasOwnProperty(log.sortBy)) rv=r[log.sortBy];
+                    return ((lv < rv) ? -1 : (lv > rv) ? 1 : 0) * (log.sortAscending?1:-1);
+              } );
               json.unshift( entrySum );
           }
     
-          this.convertJSON2HTML(json, idState, filter, showCompact==this.SHOW_COMPACT?'none':'');
+          this.convertJSON2HTML(json, log);
       }
     } catch(err) { this.logError( 'onBuildHTML: '+err.message ); }  }
     
-    //
-    // compareNodes
-    //
-    compareNodes(l,r) {
-      let lv=l['name'],rv=r['name'];
-      if (l.hasOwnProperty(this.sortBy)) lv=l[this.sortBy];
-      if (r.hasOwnProperty(this.sortBy)) rv=r[this.sortBy];
-      return ((lv < rv) ? -1 : (lv > rv) ? 1 : 0) * (this.sortAscending?1:-1);
-    }
     
     //
     // JSON -> HTML
     //
-    convertJSON2HTML(json, idState, filter, showcompact) {
+    convertJSON2HTML(json, log) {
     const tmpTable = {
     header : 
     `<tr>
     <th style="text-align:left;"> </th>
-    <th style="text-align:left;">Titel</th>
-    <th style="text-align:left;">Name</th>
+    <th class="{sortbytitle}" style="text-align:left;" onclick="vis.setValue('`+log.statePath+`.sortBy','title');">Titel</th>
+    <th class="{sortbyname}" style="text-align:left;" onclick="vis.setValue('`+log.statePath+`.sortBy','name');">Name</th>
     <th style="display:{showcompact}; text-align:left;">Version</th>
     <th style="display:{showcompact}; text-align:left;">akt.Vers.</th>
     <th style="display:{showcompact}; text-align:left;">Aktiv</th>
     <th style="display:{showcompact}; text-align:left;">Verb.</th>
     <th style="display:{showcompact}; text-align:left;">Alive</th>
-    <th style="display:{showcompact}; text-align:left;">Laufzeit</th>
-    <th style="display:{showcompact}; text-align:right;">Rss</th>
-    <th style="display:{showcompact}; text-align:right;">HeapUsed</th>
-    <th style="display:{showcompact}; text-align:right;">HeapTotal</th>
-    <th style="display:{showcompact}; text-align:right;">CPU</th>
+    <th class="{sortbyuptime}" style="display:{showcompact}; text-align:left;" onclick="vis.setValue('`+log.statePath+`.sortBy','uptime');">Laufzeit</th>
+    <th class="{sortbymemrss}" style="display:{showcompact}; text-align:right;" onclick="vis.setValue('`+log.statePath+`.sortBy','memrss');">Rss</th>
+    <th class="{sortbymemheapused}" style="display:{showcompact}; text-align:right;" onclick="vis.setValue('`+log.statePath+`.sortBy','memheapused');">HeapUsed</th>
+    <th class="{sortbymemheaptotal}" style="display:{showcompact}; text-align:right;" onclick="vis.setValue('`+log.statePath+`.sortBy','memheaptotal');">HeapTotal</th>
+    <th class="{sortbycpu}" style="display:{showcompact}; text-align:right;" onclick="vis.setValue('`+log.statePath+`.sortBy','cpu');">CPU</th>
     <th style="display:{showcompact}; text-align:left;">Beschreibung</th>
     <th style="display:{showcompact}; text-align:left;">Modus</th>
     <th style="display:{showcompact}; text-align:left;">Bild</th>
@@ -623,17 +659,19 @@ class MduiBase {
     </div>`}
     
       // build htmlTable and htmlList
-      let htmlTable  = "<table><thead>"+tmpTable.header.replace(new RegExp('{showcompact}','g'),showcompact)+"</thead><tbody>";
+      let htmlTable  = "<table><thead>"+tmpTable.header+"</thead><tbody>";
+      for (let [key, value] of Object.entries(log)) htmlTable = htmlTable.replace(new RegExp('{'+key+'}','g'),value);
+    
       let htmlList  = "";
       let entry, tr;
       let count = 0;
       // filter as regex?
-      if ( filter!==undefined && typeof filter == 'string' && filter.startsWith('/') && filter.endsWith('/') && (filter.length>=2) )  {
-          filter = new RegExp(filter.substr(1,filter.length-2), 'i');
+      if ( log.filter!==undefined && typeof log.filter == 'string' && log.filter.startsWith('/') && log.filter.endsWith('/') && (log.filter.length>=2) )  {
+          log.filter = new RegExp(log.filter.substr(1,log.filter.length-2), 'i');
       }
       for (var i = 0; i < json.length && count<this.MAX_TABLE_ROWS; i++) { 
           entry = json[i];
-              if (this.fitsFilter(':' + entry.msgtype + ':' + entry.title +':'+entry.name + ':' + entry.id + ':' + entry.uptime + ':' + entry.memrss + ':' + entry.desc + ':' ,filter)) {
+              if (this.fitsFilter(':' + entry.msgtype + ':' + entry.title +':'+entry.name + ':' + entry.id + ':' + entry.uptime + ':' + entry.memrss + ':' + entry.desc + ':' ,log.filter)) {
                   switch (entry.msgtype) {
                       case this.MSG_TYPE_OK       : entry.icon = 'check_circle_outline'; entry.iconColor='mdui-green'; break;
                       case this.MSG_TYPE_WARN     : entry.icon = 'warning'; entry.iconColor='mdui-amber'; break;
@@ -652,10 +690,10 @@ class MduiBase {
               }
       }
       htmlTable+="</body></table>";    
-      this.setState(idState+'.table', htmlTable);  
-      this.setState(idState+'.list', htmlList);  
-      this.setState(idState+'.count', count);  
-      this.setState(idState+'.lastUpdate', +new Date());  
+      this.setState(log.id+'.table', htmlTable);  
+      this.setState(log.id+'.list', htmlList);  
+      this.setState(log.id+'.count', count);  
+      this.setState(log.id+'.lastUpdate', +new Date());  
     }
     
     } // class
