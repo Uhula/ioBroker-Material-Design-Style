@@ -1,12 +1,11 @@
-/* =====
-   Material Design CSS for ioBroker.vis
-   (c) 2017ff Uhula, MIT License
+/* 
+#### Material Design CSS for ioBroker.vis
+(c) 2017ff Uhula, MIT License
    
-   version: v2.4 28.03.2020
+version: v2.5 30.04.2020
 
-   source: https://github.com/Uhula/ioBroker-Material-Design-Style
-   changelog: https://github.com/Uhula/ioBroker-Material-Design-Style/blob/master/changelog.MD
-   =====
+source: https://github.com/Uhula/ioBroker-Material-Design-Style
+changelog: https://github.com/Uhula/ioBroker-Material-Design-Style/blob/master/changelog.MD
 */
 
 // Zur sicheren CSS-Erkennung der Runtime eine CSS-Klasse anlegen
@@ -29,7 +28,7 @@ var MDUI = (function () {
 
 
 let defConfig = {"primary_color":"indigo",
-                 "secondary_color":"amber",
+                 "secondary_color":"blue",
                  "content_color":"#f8f8f8",
                  "color1":"#ff0000",
                  "color1_dark":"#800000",
@@ -45,9 +44,12 @@ let defConfig = {"primary_color":"indigo",
     observerConfig = null;
     observerPage = null;
     observerDialog = null;
+    swipe = {enabled:false};
+    tooltip = {hint:null, timeout:null};
+    lockclick = false;
 
 //                      light         normal        dark 
-var colors = { 
+let colors = { 
         red:        {c200:"#ff7961", c500:"#f44336", c700:"#ba000d" },
         pink:       {c200:"#ff6090", c500:"#e91e63", c700:"#b0003a" },
         purple:     {c200:"#d05ce3", c500:"#9c27b0", c700:"#6a0080" },
@@ -131,7 +133,7 @@ function _initObserverConfig() {
     
 }
 
-// für mdui-config Elemente überwachen
+// vis_container überwachen: childlist
 function _initObserverPage() {
     observerPage.disconnect();
     let nodelist = document.querySelectorAll('#vis_container');
@@ -147,7 +149,7 @@ function _initObserverPage() {
     
 }
 
-// für mdui-config Elemente überwachen
+// ui-dialog
 function _initObserverDialog() {
     observerDialog.disconnect();
     let nodelist = document.querySelectorAll('.ui-dialog');
@@ -160,7 +162,6 @@ function _initObserverDialog() {
            });
         }
     }
-    
 }
 
 // ui-slider haben keine Werte im HTML, lediglich "left" bzw. "bottom" (bei vertikal)
@@ -233,6 +234,13 @@ function _onChangePage( ele ) {
     pageID = $eles[$eles.length-1].id;
 //console.log("[MDUI.onChangePage] ",lastPageID," ",pageID);            
 
+    // wenn ein ui-datepicker hinzugekommen ist, dann dort die Farben anpassen
+    if (this.datepickerCount != $(".ui-datepicker").length ) {
+        this.datepickerCount = $(".ui-datepicker").length;
+        _patchColors();
+    }
+
+    // beim Seitenwechsel ausführen
     if ( (pageID!="") && (lastPageID!=pageID) ) {
         lastPageID=pageID;
         setTimeout( function () { 
@@ -242,6 +250,7 @@ function _onChangePage( ele ) {
             _handleTables();
             _handleDialogs();
             _handleInputs();
+            _handleVIS();
             _initObserverSlider();
             _initObserverConfig();
             _initObserverDialog();
@@ -280,7 +289,7 @@ function _onChangePage( ele ) {
     _initObserverPage();
 }
 
-// wenn sich die config ändert, muss evtl ein reload der Seite stattfinden
+// wenn ein Dialog sichtbar wird, dann seine Farben anpassen
 function _onChangeDialog( ele ) {
     _patchWidgetColors();
     //_handleDialogs();
@@ -341,6 +350,41 @@ function _getScrollbarHeight() {
     $outer.remove();
     return 100 - heightWithScroll;
 }
+
+// action: command(param1,param2,...)
+function _executeAction(action){ try {
+    if (action) {
+        let cmd = action.split('(')[0];
+        let param = action.split('(')[1];
+        param = param.slice(0,param.length-1);
+        param = param.split(',');
+        switch (cmd.toUpperCase() ) {
+            case 'SETVALUE' :
+                vis.setValue(param[0], param[1]);
+                break;
+            case 'CHANGEVIEW' :
+                vis.changeView( param[0] );
+                break;
+            //showMessage(message, title, icon, width, callback)                
+            case 'SHOWMESSAGE' :
+                vis.showMessage( param[0], param[1], param[2], param[3] );
+                _patchColors();
+                break;
+        }
+    }
+} catch(err) { console.log( "[MDUI._executeAction] " + err.message ); } 
+}
+
+
+function _isDarkTheme(ele) {
+  while (ele) {
+      if (ele.classList.contains('mdui-dark'))
+          return true;
+      ele = ele.parentElement;
+  };
+  return false;
+}
+
 
 function _formatDatetime(date, format) {
     function fill(comp) {
@@ -754,7 +798,6 @@ function _handleInputs( ) {
   try {
     $("[class*='mdui-placeholder-']").each( function (index) {
         let s = _getClassSuffix( $(this), "mdui-placeholder-" );
-console.log(s);
         $(this).find("input").each( function (index) {
             $(this)[0].placeholder = s;
         } );
@@ -779,6 +822,74 @@ console.log(s);
 
 }
 
+/*  */
+function _handleVIS( ) { try {
+
+    function _addHeadline(headline) {
+        return `<tr>
+<td class='mdui-value mdui-blue'>${headline}</td>
+<td></td>
+</tr>`;
+    }
+
+    function _addRow(key, keydef, val) {
+        let icon = keydef.hasOwnProperty('icon')?keydef.icon:'';
+        return `<tr>
+<td class='mdui-subtitle' style='width:50%;'>${key}</td>
+<td class='mdui-label' style='width:50%;'>${val}</td>
+</tr>`;
+    }
+
+    const VIS_INFO = {
+        'version':{'icon':'build'},
+        'user':{'icon':'person'},
+        'language':{'icon':'language'},
+        'instance':{'icon':'looks_one'},
+        'activeView':{'icon':'crop_square'},
+        'isTouch':{'icon':'touch_app'},
+        '__views_count':{},
+        '__states_count':{}
+        };
+    const VIS_INFO_CONN = {
+        'namespace':{},
+        '_isConnected':{},
+        '_reloadInterval':{},
+        '_reconnectInterval':{}
+        };
+    const HEAD = `<table style='width:100%; table-layout:fixed; word-break:break-all;'>`;
+    const FOOT = `</table>`;
+
+    vis.__views_count = Object.keys(vis.views).length;
+    vis.__states_count = Math.round( Object.keys(vis.states).length / 4);
+        
+    $(".mdui-vis-info").each( function () {
+        let ele = $(this)[0];
+        let html='', key='';
+        html += _addHeadline('vis');
+        for (key in VIS_INFO) 
+            html += _addRow(key,VIS_INFO[key],vis[key]);
+            
+        html += _addHeadline('vis connection');
+        for (key in VIS_INFO_CONN) 
+            html += _addRow(key,VIS_INFO_CONN[key],vis.conn[key]);
+
+        html += _addHeadline('views');
+        for (key in vis.views) {
+            let val=vis.views[key].hasOwnProperty('widgets')?Object.keys(vis.views[key].widgets).length:'0';
+            html += _addRow(key,{},val+' Widgets');
+        }
+        html += _addHeadline('states');
+        for (key in vis.states) {
+            if (key.includes('.val'))
+                html += _addRow(key,{},vis.states[key]);
+        }
+        
+        ele.innerHTML = HEAD + html + FOOT;
+    });
+} catch(err) { console.log("[MDUI.handleVIS] ", err.message ); } 
+}
+
+
 // wandelt ein integer in die #rrggbb Darstellung um
 function _toRGB(n) {
     if ( (n.length>0) && ((n[0]<"0") || (n[0]>"9")) )
@@ -796,6 +907,12 @@ function _hexToRGB(hex) {
         ? [parseInt(result[1],16),parseInt(result[2],16),parseInt(result[3],16)]
         : [0,0,0];
 };
+
+//
+function _hexToRGBA(hex, transparence) {
+    let RGB = _hexToRGB(hex);
+    return 'rgba('+RGB[0]+','+RGB[1]+','+RGB[2]+','+transparence+')';
+}
 
 function _getLuminance(r, g, b) {
     var a = [r, g, b].map(function (v) {
@@ -830,7 +947,7 @@ function _getFontColor(bc) {
 
 // ersetzt in bekannten WIdgets schwarze und weisse Font 
 function _patchWidgetColors( ) {
-    let fontColor = _getFontColor( _getCSSColorFromConfig("content_color",lastConfig.content_color,200,defConfig.content_color) );
+    let fontColor = _getFontColor( _getColorFromConfig("content_color",lastConfig.content_color,200,defConfig.content_color) );
     let isDark = fontColor=="#ffffff";
 
     // flot Widget 
@@ -915,8 +1032,7 @@ function _patchWidgetColors( ) {
 }
 
 // holt den CSSFarbwert aus dem Colors-Array
-function _getCSSColorFromColors( color, luminance ) {
-//console.log("[_getColorFromColors]",color, luminance);
+function _getColorFromColors( color, luminance ) {
     // colorType in Config?
     if (colors.hasOwnProperty(color) ) 
         switch(luminance) {
@@ -924,25 +1040,25 @@ function _getCSSColorFromColors( color, luminance ) {
             case 700: color = colors[color].c700; break;
             default:  color =  colors[color].c500;
         }    
-//console.log("[_getColorFromColors] return:",color);    
     return color;
 }
+
 // wandelt den gewünschten Color-Wert in eine CSSColor um
-function _getCSSColorFromConfig( colorType, color, luminance, defColor ) {
+function _getColorFromConfig( colorType, color, luminance, defColor ) {
 //console.log("[_getColorFromConfig]:",colorType,color,luminance,defColor);    
     // colorType in Config?
     if (lastConfig.hasOwnProperty(colorType) && colors.hasOwnProperty(lastConfig[colorType]) ) {
-            color = _getCSSColorFromColors(lastConfig[colorType], luminance);
+            color = _getColorFromColors(lastConfig[colorType], luminance);
         } 
     // Check color
     try {
         let $div = $("<div>");
         $div.css("border", "1px solid "+color);
         $div = $div.css("border-color");
-        if ( ($div=="") || ($div=="initial") ) color = _getCSSColorFromColors(defColor,luminance);
+        if ( ($div=="") || ($div=="initial") ) color = _getColorFromColors(defColor,luminance);
     } catch(err) { 
         console.log( "[MDUI.getColorFromConfig] (",color,") ", err.message ); 
-        color = _getCSSColorFromColors(defColor,luminance);
+        color = _getColorFromColors(defColor,luminance);
     } 
 
 //console.log("[_getColorFromConfig] return:",color);    
@@ -965,56 +1081,59 @@ function _patchColors() {
             content_color = defConfig.content_color;
 
         // lastConfig entladen
-        primary_color = _getCSSColorFromConfig("primary_color",lastConfig.primary_color,500,defConfig.primary_color);
+        primary_color = _getColorFromConfig("primary_color",lastConfig.primary_color,500,defConfig.primary_color);
         let abar_color=primary_color; 
         let tnav_color=primary_color; 
         let bnav_color=primary_color; 
 
         // abar
-        abar_color = _getCSSColorFromConfig("abar_color",lastConfig.abar_color,700,abar_color);
+        abar_color = _getColorFromConfig("abar_color",lastConfig.abar_color,700,abar_color);
         _setBKColor('.mdui-abar',abar_color,'--abar-background');
         
         // tnav
-        tnav_color = _getCSSColorFromConfig("tnav_color",lastConfig.tnav_color,700,tnav_color);
+        tnav_color = _getColorFromConfig("tnav_color",lastConfig.tnav_color,700,tnav_color);
         _setBKColor('.mdui-tnav',tnav_color,'--tnav-background');
 
         // bnav
-        bnav_color = _getCSSColorFromConfig("bnav_color",lastConfig.bnav_color,700,bnav_color);
+        bnav_color = _getColorFromConfig("bnav_color",lastConfig.bnav_color,700,bnav_color);
         _setBKColor('.mdui-bnav',bnav_color,'--bnav-background');
 
         // content
-        content_color = _getCSSColorFromConfig("content_color",lastConfig.content_color,200,defConfig.content_color);
+        content_color = _getColorFromConfig("content_color",lastConfig.content_color,200,defConfig.content_color);
         let lnav_color = content_color;
         let rnav_color = content_color;
         _setBKColor('.mdui-content',content_color,'--content-background');
         _setBKColor('.ui-dialog',content_color,'');
+        _setBKColor('.ui-datepicker',content_color,'');
 
         // lnav
-        lnav_color = _getCSSColorFromConfig("lnav_color",lastConfig.lnav_color,500,lnav_color);
+        lnav_color = _getColorFromConfig("lnav_color",lastConfig.lnav_color,500,lnav_color);
         _setBKColor('.mdui-lnav',lnav_color,'--lnav-background');
 
         // rnav
-        rnav_color = _getCSSColorFromConfig("rnav_color",lastConfig.rnav_color,500,rnav_color);
+        rnav_color = _getColorFromConfig("rnav_color",lastConfig.rnav_color,500,rnav_color);
         _setBKColor('.mdui-rnav',rnav_color,'--rnav-background');
 
         // secondary
-        secondary_color = _getCSSColorFromConfig("secondary_color",lastConfig.secondary_color,500,defConfig.secondary_color);
+        secondary_color = _getColorFromConfig("secondary_color",lastConfig.secondary_color,500,defConfig.secondary_color);
         document.documentElement.style.setProperty('--accent-color', secondary_color); 
+        document.documentElement.style.setProperty('--accent-color-033', _hexToRGBA(secondary_color, 0.33)); 
+
 
         // custom
-        let custom = _getCSSColorFromConfig("color1",lastConfig.color1,200,defConfig.color1);
+        let custom = _getColorFromConfig("color1",lastConfig.color1,200,defConfig.color1);
         document.documentElement.style.setProperty('--color1', custom); 
-        custom = _getCSSColorFromConfig("color1_dark",lastConfig.color1_dark,500,defConfig.color1_dark);
+        custom = _getColorFromConfig("color1_dark",lastConfig.color1_dark,500,defConfig.color1_dark);
         document.documentElement.style.setProperty('--color1-dark', custom); 
 
-        custom = _getCSSColorFromConfig("color2",lastConfig.color2,200,defConfig.color2);
+        custom = _getColorFromConfig("color2",lastConfig.color2,200,defConfig.color2);
         document.documentElement.style.setProperty('--color2', custom); 
-        custom = _getCSSColorFromConfig("color2_dark",lastConfig.color2_dark,500,defConfig.color2_dark);
+        custom = _getColorFromConfig("color2_dark",lastConfig.color2_dark,500,defConfig.color2_dark);
         document.documentElement.style.setProperty('--color2-dark', custom); 
 
-        custom = _getCSSColorFromConfig("color3",lastConfig.color3,200,defConfig.color3);
+        custom = _getColorFromConfig("color3",lastConfig.color3,200,defConfig.color3);
         document.documentElement.style.setProperty('--color3', custom); 
-        custom = _getCSSColorFromConfig("color3_dark",lastConfig.color3_dark,500,defConfig.color3_dark);
+        custom = _getColorFromConfig("color3_dark",lastConfig.color3_dark,500,defConfig.color3_dark);
         document.documentElement.style.setProperty('--color3-dark', custom); 
 
 //console.log("primary:",primary_color,"secondary:",secondary_color,"content:",content_color," abar:",abar_color," tnav:",tnav_color," lnav:",lnav_color);          
@@ -1044,8 +1163,369 @@ function _onResizeWindow( $ele ) {
 
 }
 
+// ----------------------------
+// swipe
+// ----------------------------
+
+// mdui-swipe-left?dist=48&background=red&icon=delete&text=Löschen&action=setValue(demo_listitem,listitem0+swipeleft+delete)
+function _checkSwipeTo(swipeTo, swipeX) { try {
+    swipeX.enabled = false;
+    let s = _getSuffix( swipe.ele.className, 'mdui-swipe-'+swipeTo+'?' );
+    if (!s || s=='') return;
+    s = '{"'+s.replace(/:/g,'":"')+'"}';
+    s = s.replace(/;/g,'","');
+    s = s.replace(/\+/g,' ');
+    swipeX.opt = JSON.parse(s);
+
+    swipeX.enabled = swipeX.opt.dist!=null;
+    if (swipeX.enabled) {
+        swipeX.ele = document.createElement('div');         
+        swipeX.ele.style.position = 'absolute';   
+        swipeX.ele.style.overflow = 'hidden';   
+        swipeX.ele.style.zIndex = '32000';   
+        switch (swipeTo) {
+            case 'left' : 
+              swipeX.ele.style.left = (swipe.ele.offsetLeft + swipe.ele.offsetWidth - 2)+'px';
+              swipeX.ele.style.top = swipe.ele.offsetTop+'px';
+              swipeX.ele.style.height = swipe.ele.offsetHeight+'px';
+              swipeX.ele.style.width = '0px';
+              break;
+            case 'right' : 
+              swipeX.ele.style.left = swipe.ele.offsetLeft + 2 +'px';
+              swipeX.ele.style.top = swipe.ele.offsetTop+'px';
+              swipeX.ele.style.height = swipe.ele.offsetHeight+'px';
+              swipeX.ele.style.width = '0px';
+              break;
+            case 'up' : 
+              swipeX.ele.style.left = swipe.ele.offsetLeft+'px';
+              swipeX.ele.style.top = (swipe.ele.offsetTop+swipe.ele.offsetHeight-2)+'px';
+              swipeX.ele.style.height = '0px';
+              swipeX.ele.style.width = swipe.ele.offsetWidth+'px';
+              break;
+            case 'down' : 
+              swipeX.ele.style.left = swipe.ele.offsetLeft+'px';
+              swipeX.ele.style.top = swipe.ele.offsetTop+2+'px';
+              swipeX.ele.style.height = '0px';
+              swipeX.ele.style.width = swipe.ele.offsetWidth+'px';
+              break;
+        }
+        if (swipeX.opt.background) {
+            swipeX.ele.style.background = _getColorFromColors( swipeX.opt.background, swipe.isDarkTheme?500:200 );
+        }
+        swipeX.ele.style.display = 'flex';
+        swipeX.ele.style.alignItems = 'center';
+        swipeX.ele.style.justifyContent = 'center';
+        swipeX.ele.style.flexWrap = 'wrap';
+        s='';
+        if (swipeX.opt.icon)
+            s ='<div class="mdui-icon">'+swipeX.opt.icon+'</div>';
+        if (swipeX.opt.text)
+            s+= '<div style="font-size:0.7em">'+swipeX.opt.text+'</div>'
+        swipeX.ele.innerHTML=s;        
+        // als sibling anhängen
+        swipe.ele.parentNode.insertBefore(swipeX.ele, swipe.ele.nextSibling);  }    
+    } catch(err) { console.log( "[MDUI._checkSwipeTo] " + err.message ); } 
+}
 
 
+//
+function _swipeStart() {
+    swipe.swipeLeft={enabled:false};
+    swipe.swipeRight={enabled:false};
+    swipe.swipeUp={enabled:false};
+    swipe.swipeDown={enabled:false};
+
+//    swipe.ele.classList.remove('mdui-lockclick');
+    lockclick = false;
+    swipe.isDarkTheme = _isDarkTheme(swipe.ele);
+
+    // auf jede swipe-Art untersuchen
+    _checkSwipeTo('left',swipe.swipeLeft);
+    _checkSwipeTo('right',swipe.swipeRight);
+    _checkSwipeTo('up',swipe.swipeUp);
+    _checkSwipeTo('down',swipe.swipeDown);
+    
+    swipe.enabled =  swipe.swipeLeft.enabled || swipe.swipeRight.enabled || swipe.swipeUp.enabled || swipe.swipeDown.enabled;
+}
+
+//
+//
+function _swipeMove() {
+    if (!swipe.enabled) return false;
+    let x=0, y=0;
+    const tresholdStart = 0.25;
+    const tresholdEnd = 0.90;
+
+    // welche swipes sind aktiv?
+    if (swipe.swipeLeft.enabled) {
+          swipe.swipeLeft.val = swipe.clientX - swipe.fromX;
+          if ( 0-swipe.swipeLeft.val > swipe.swipeLeft.opt.dist ) swipe.swipeLeft.val = 0-swipe.swipeLeft.opt.dist;
+          swipe.swipeLeft.active = swipe.swipeLeft.val <= 0-swipe.swipeLeft.opt.dist*tresholdStart;
+          swipe.swipeLeft.swiped = swipe.swipeLeft.val <= (0-swipe.swipeLeft.opt.dist)*tresholdEnd;
+          if (swipe.swipeLeft.active) x = swipe.swipeLeft.val; 
+    }
+    if (swipe.swipeRight.enabled) {
+          swipe.swipeRight.val = swipe.clientX - swipe.fromX;
+          if ( swipe.swipeRight.val > swipe.swipeRight.opt.dist ) swipe.swipeRight.val = swipe.swipeRight.opt.dist;
+          swipe.swipeRight.active = swipe.swipeRight.val >= swipe.swipeRight.opt.dist*tresholdStart;
+          swipe.swipeRight.swiped = swipe.swipeRight.val >= swipe.swipeRight.opt.dist*tresholdEnd;
+          if (swipe.swipeRight.active) x = swipe.swipeRight.val; 
+    }
+    if (swipe.swipeUp.enabled) {
+          swipe.swipeUp.val = swipe.clientY - swipe.fromY;
+          if ( 0-swipe.swipeUp.val > swipe.swipeUp.opt.dist ) swipe.swipeUp.val = 0-swipe.swipeUp.opt.dist;
+          swipe.swipeUp.active = swipe.swipeUp.val <= 0-swipe.swipeUp.opt.dist*tresholdStart;
+          swipe.swipeUp.swiped = swipe.swipeUp.val <= (0-swipe.swipeUp.opt.dist)*tresholdEnd;
+          if (swipe.swipeUp.active) y = swipe.swipeUp.val; 
+    }
+    if (swipe.swipeDown.enabled) {
+          swipe.swipeDown.val = swipe.clientY - swipe.fromY;
+          if ( swipe.swipeDown.val > swipe.swipeDown.opt.dist ) swipe.swipeDown.val = swipe.swipeDown.opt.dist;
+          swipe.swipeDown.active = swipe.swipeDown.val >= swipe.swipeDown.opt.dist*tresholdStart;
+          swipe.swipeDown.swiped = swipe.swipeDown.val >= swipe.swipeDown.opt.dist*tresholdEnd;
+          if (swipe.swipeDown.active) y = swipe.swipeDown.val; 
+    }
+
+
+    // aktive swipes anwenden
+    if (swipe.swipeLeft.enabled)
+        if (swipe.swipeLeft.active ) {
+            swipe.swipeLeft.ele.style.width = (0-swipe.swipeLeft.val)+'px';
+            swipe.swipeLeft.ele.style.transform = 'translate('+swipe.swipeLeft.val+'px,'+y+'px)';
+            if (swipe.swipeLeft.swiped) swipe.swipeLeft.ele.style.borderRadius = '0';
+            else swipe.swipeLeft.ele.style.borderRadius = '0 5em 5em 0';
+        } else {
+            swipe.swipeLeft.ele.style.width = '0';
+        }
+    if (swipe.swipeRight.enabled)
+        if (swipe.swipeRight.active ) {
+            swipe.swipeRight.ele.style.width = swipe.swipeRight.val+'px';
+            swipe.swipeRight.ele.style.transform = 'translate(0px,'+y+'px)';
+            if (swipe.swipeRight.swiped) swipe.swipeRight.ele.style.borderRadius = '0';
+            else swipe.swipeRight.ele.style.borderRadius = '5em 0  0 5em';
+        } else {
+             swipe.swipeRight.ele.style.width = '0';
+        }
+    if (swipe.swipeUp.enabled)
+        if (swipe.swipeUp.active) {
+            swipe.swipeUp.ele.style.height = (0-swipe.swipeUp.val)+'px';
+            swipe.swipeUp.ele.style.transform = 'translate('+x+'px,'+swipe.swipeUp.val+'px)';
+            if (swipe.swipeUp.swiped) swipe.swipeUp.ele.style.borderRadius = '0';
+            else swipe.swipeUp.ele.style.borderRadius = '0 0 5em 5em';
+        } else {
+            swipe.swipeUp.ele.style.height = '0';
+        }
+    if (swipe.swipeDown.enabled)
+        if (swipe.swipeDown.active ) {
+            swipe.swipeDown.ele.style.height = swipe.swipeDown.val+'px';
+            swipe.swipeDown.ele.style.transform = 'translate('+x+'px,0px)';
+            if (swipe.swipeDown.swiped) swipe.swipeDown.ele.style.borderRadius = '0';
+            else swipe.swipeDown.ele.style.borderRadius = '5em 5em 0 0';
+        } else {
+            swipe.swipeDown.ele.style.height = '0';
+        }
+    
+    if (x==0 && y==0) {
+        swipe.ele.style.transform = 'none'; 
+        return true;
+    } else {
+        swipe.ele.style.transform = 'translate('+x+'px,'+y+'px)'; 
+        // nach dem 1.swipe click sperren
+//        swipe.ele.classList.add('mdui-lockclick');
+        lockclick = true;
+        return false;
+    }
+
+}
+
+
+function _swipeEnd() {
+    if (!swipe.enabled) return;
+
+    if (swipe.swipeLeft.enabled) swipe.swipeLeft.ele.remove();
+    if (swipe.swipeRight.enabled) swipe.swipeRight.ele.remove();
+    if (swipe.swipeUp.enabled) swipe.swipeUp.ele.remove();
+    if (swipe.swipeDown.enabled) swipe.swipeDown.ele.remove();
+
+    swipe.ele.style.transform = 'none';
+
+    if ( swipe.swipeLeft.swiped ) _executeAction(swipe.swipeLeft.opt.action);
+    if ( swipe.swipeRight.swiped ) _executeAction(swipe.swipeRight.opt.action); 
+    if ( swipe.swipeUp.swiped ) _executeAction(swipe.swipeUp.opt.action);
+    if ( swipe.swipeDown.swiped ) _executeAction(swipe.swipeDown.opt.action);
+
+    swipe.enabled = false;
+}
+
+function _swipeTouchStart(event, $ele) {
+    let touchobj = event.originalEvent.changedTouches[0]; // erster Finger
+    swipe.fromX = parseInt(touchobj.clientX); 
+    swipe.fromY = parseInt(touchobj.clientY);
+    swipe.ele = $ele[0];
+    _swipeStart();
+}
+
+function _swipeTouchMove(event, $ele) {
+    if (!swipe.enabled) return;
+    let touchobj = event.originalEvent.changedTouches[0]; // erster Finger
+    swipe.clientX = parseInt(touchobj.clientX);
+    swipe.clientY = parseInt(touchobj.clientY);
+    _swipeMove();
+    event.preventDefault();
+    event.stopImmediatePropagation();
+}
+
+function _swipeTouchEnd(event, $ele) {
+    if (!swipe.enabled) return;
+    _swipeEnd();
+}
+
+function _swipeMouseDown(event, $ele) {
+    if (swipe.enabled) return;
+    swipe.fromX = parseInt(event.originalEvent.x);
+    swipe.fromY = parseInt(event.originalEvent.y);
+    swipe.ele = $ele[0];
+    _swipeStart();
+    if (swipe.enabled) {
+      _captureMouseEvents(_swipeMouseMove, _swipeMouseUp);
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+    }
+}
+function _swipeMouseMove(event, $ele) {
+    if (!swipe.enabled) return;
+    swipe.clientX = parseInt(event.originalEvent.x);
+    swipe.clientY = parseInt(event.originalEvent.y);
+    if (_swipeMove()) {
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+    }
+}
+function _swipeMouseUp(event, $ele) {
+console.log('_swipeMouseUp' );
+    if (!swipe.enabled) return;
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    _swipeEnd();
+    _releaseMouseEvents(_swipeMouseMove, _swipeMouseUp);
+}
+
+function _releaseMouseEvents(move,up) {
+  document.removeEventListener ('mousemove', move, true);
+  document.removeEventListener ('mouseup', up, true);
+}
+
+function _captureMouseEvents (move,up) {
+  document.addEventListener ('mousemove', move, true);
+  document.addEventListener ('mouseup', up, true);
+}
+
+// ----------------------------
+// click
+// ----------------------------
+function _click(event, $ele) { try {
+console.log('_click');
+
+    // durch swipe gelockt?
+/*
+if (ele.classList.contains('mdui-lockclick')) {
+        ele.classList.remove('mdui-lockclick');
+        return;
+    }
+*/
+    if (lockclick) {
+        lockclick=false;
+        return;
+    }
+    let s = _getSuffix( $ele[0].className, 'mdui-click?' );
+    if (!s || s=='') return;
+    s = '{"'+s.replace(/:/g,'":"')+'"}';
+    s = s.replace(/;/g,'","');
+    s = s.replace(/\+/g,' ');
+    let opt = JSON.parse(s);
+      
+    if (opt.action)
+        _executeAction(opt.action);
+
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+        
+} catch(err) { console.log( "[MDUI._click] " + err.message ); } 
+}
+
+// ----------------------------
+// tooltip
+// ----------------------------
+
+// mdui-tooltip?text:(text);background:(color);state:(stateid)
+function _tooltipShow(ele) { try {
+    if (tooltip.timeout!=null) clearTimeout(tooltip.timeout);
+    tooltip.timeout = null;
+    if (tooltip.hint!=null) tooltip.hint.remove(); 
+    tooltip.ele = ele;
+
+    tooltip.timeout = setTimeout( () => {
+      let s = _getSuffix( tooltip.ele.className, 'mdui-tooltip?' );
+      if (!s || s=='') return;
+      s = '{"'+s.replace(/:/g,'":"')+'"}';
+      s = s.replace(/;/g,'","');
+      s = s.replace(/\+/g,' ');
+      tooltip.opt = JSON.parse(s);
+      // text aus state ?
+      if (tooltip.opt.state && vis.states.hasOwnProperty(tooltip.opt.state+'.val'))
+          tooltip.opt.text += ' ' + vis.states[tooltip.opt.state+'.val'];
+
+      let rect = tooltip.ele.getBoundingClientRect();
+      let win = tooltip.ele.ownerDocument.defaultView;
+      rect.top = rect.top + win.pageYOffset,
+      rect.left = rect.left + win.pageXOffset
+
+      tooltip.hint = document.createElement('div');         
+      tooltip.hint.classList.add('mdui-tooltip');
+      tooltip.hint.style.left = rect.left+'px';
+      tooltip.hint.style.top = rect.top+'px';    
+      if (tooltip.opt.background)
+          tooltip.hint.style.background = _getColorFromColors( tooltip.opt.background, 500) ;
+      tooltip.hint.innerHTML=tooltip.opt.text;
+      document.documentElement.appendChild(tooltip.hint);   
+      tooltip.width = tooltip.hint.clientWidth;
+      tooltip.height = tooltip.hint.clientHeight;
+      let x = (rect.left-tooltip.width/2+tooltip.ele.offsetWidth/2);
+      if (x<0) x = 8;
+      if (x+tooltip.width > document.documentElement.clientWidth) x=document.documentElement.clientWidth - tooltip.width - 8;
+      tooltip.hint.style.left = Math.floor(x)+'px';
+      let y = rect.top + tooltip.ele.offsetHeight + 8;
+      if (y+tooltip.height > document.documentElement.clientHeight) y= document.documentElement.clientHeight - tooltip.height - rect.height - 8;
+      tooltip.hint.style.top = Math.floor(y)+'px';
+      
+      tooltip.timeout = setTimeout(_tooltipHide, 1000 + s.length * 40);
+    }, 700);
+} catch(err) { console.log( "[MDUI._tooltipShow] " + err.message ); } 
+}
+
+function _tooltipHide() {
+    if (tooltip.timeout!=null) clearTimeout(tooltip.timeout);
+    tooltip.timeout = null;
+    if (tooltip.hint==null) return;
+    tooltip.hint.remove(); 
+    tooltip.hint = null; 
+}
+
+function _tooltipMouseEnter(event, $ele) {
+    _tooltipShow($ele[0]);
+    event.preventDefault();
+    event.stopImmediatePropagation();
+}
+
+function _tooltipMouseLeave(event, $ele) {
+    _tooltipHide(); 
+    event.preventDefault();
+    event.stopImmediatePropagation();
+}
 
 
 return {
@@ -1062,12 +1542,19 @@ return {
     onChangePage : _onChangePage,
     onLoad : _onLoad,
     patchColors : _patchColors,
+    swipeTouchStart : _swipeTouchStart,
+    swipeTouchMove : _swipeTouchMove,
+    swipeTouchEnd : _swipeTouchEnd,
+    swipeMouseDown : _swipeMouseDown,
+    swipeMouseMove : _swipeMouseMove,
+    swipeMouseUp : _swipeMouseUp,
+    tooltipMouseEnter : _tooltipMouseEnter,
+    tooltipMouseLeave : _tooltipMouseLeave,
+    click : _click,
     onResizeWindow : _onResizeWindow
 };
 
 })();
-
-
 
 // Eventhandler für body-Delegators setzen (früher:#vis_container) 
 function mdui_init() {
@@ -1132,7 +1619,44 @@ function mdui_init() {
     } );
     // click-Handler für "mdui-srcparam-" 
     $("body").on( "click", "[class*='mdui-srcparam-']", function(event) { 
-     MDUI.srcparam( $(this) );
+        MDUI.srcparam( $(this) );
+    } );
+
+    // event-Handler für "mdui-swipe" 
+    $("body").on( "touchstart", "[class*='mdui-swipe']", function(event) { 
+        MDUI.swipeTouchStart(event, $(this) );
+    } );
+    $("body").on( "touchmove", "[class*='mdui-swipe']", function(event) { 
+        MDUI.swipeTouchMove(event, $(this) );
+    } );
+    $("body").on( "touchend", "[class*='mdui-swipe']", function(event) { 
+        MDUI.swipeTouchEnd(event, $(this) );
+    } );
+
+    $("body").on( "mousedown", "[class*='mdui-swipe']", function(event) { 
+        MDUI.swipeMouseDown(event, $(this) );
+    } );
+    $("body").on( "mousemove", "[class*='mdui-swipe']", function(event) { 
+        MDUI.swipeMouseMove(event, $(this) );
+    } );
+    $("body").on( "mouseup", "[class*='mdui-swipe']", function(event) { 
+        MDUI.swipeMouseUp(event, $(this) );
+    } );
+
+    // event-Handler für "mdui-click" 
+    $("body").on( "click", "[class*='mdui-click']", function(event) { 
+        MDUI.click(event, $(this) );
+    } );
+
+    // event-Handler für tooltips
+    $("body").on( "mouseenter", "[class*='mdui-tooltip']", function(event) { 
+        MDUI.tooltipMouseEnter(event, $(this) );
+    } );
+    $("body").on( "mouseleave", "[class*='mdui-tooltip']", function(event) { 
+        MDUI.tooltipMouseLeave(event, $(this) );
+    } );
+    $("body").on( "click", "[class*='mdui-tooltip']", function(event) { 
+        MDUI.tooltipMouseLeave(event, $(this) );
     } );
 
     $( window ).on("resize", function() {
@@ -1144,6 +1668,8 @@ function mdui_init() {
 
     // für den ersten load einmal aufrufen
     setTimeout( MDUI.onChangePage(), 100);
+    
+    
 }; 
 
 
@@ -1151,3 +1677,5 @@ setTimeout( mdui_init(), 100);
 
 // vis ... Menu ausblenden
 if (typeof app !== 'undefined') $('#cordova_menu').hide();
+
+

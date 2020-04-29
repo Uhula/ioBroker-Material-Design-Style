@@ -2,10 +2,14 @@
 ##### Material Design CSS for ioBroker.vis 
 
 (c) 2017ff Uhula, MIT License
-version: v2.4 28.03.2020
 source: https://github.com/Uhula/ioBroker-Material-Design-Style
 changelog: https://github.com/Uhula/ioBroker-Material-Design-Style/blob/master/changelog.MD
-
+*/
+:root {
+  --release : 'MDCSS v2.5';
+  --release-date : '30.04.2020';
+}
+/*
 ##### Konfiguration
 
 (1) Der Pfad zum Material Icons-WebFont muss unter @font-face angepasst werden. Dort steht "MD-Demo" drin, hier muss der wirkliche Projektname eingetragen werden.
@@ -46,51 +50,60 @@ FÜR DIE zusätzlichen MaterialDesignIcons DIESE ZEILE LÖSCHEN    */
   --design-font-color: #000000;
   --design-hint-background: #0000ff;
   --design-hint-color: #ffffff;
-  --design-grid: #000000;
-  --design-color-033:rgba(0,0,0,.33);
+  --design-grid: #8080ff;
+  --frame-color:#cfcfcf;
+  --frame-color-dark:#707070;
+  --design-fontsize : 0.9em;
 
   /* Design-time dark-Theme */
   /* FÜR DAS DARK_THEME DIESE ZEILE LÖSCHEN     
-  --content-background: #404040;
+  --content-background: #303030;
   --design-font-color: #ffffff;
   --design-hint-background: #ff8000;
   --design-hint-color: #ffffff;
   --design-grid: #ffffff;
-  --design-color-033:rgba(255,255,255,.33);
+  --frame-color:#707070;
+  --frame-color-dark:#707070;
+  --design-fontsize : 0.9em;
   FÜR DAS DARK_THEME DIESE ZEILE LÖSCHEN */
 }
 
 
-/* --------------------------------------------------------------- 
+
+/* 
 ##### Start des MDUI-Contents 
-ab hier nichts mehr ändern, nur am Ende anfügen 
+
+ab hier nichts mehr ändern, nur am Ende eigene CSS Anweisungen anfügen 
 */
 
-/* Variable  */
+/* ----- Variable -----  */
 :root {
-  --divider-color: rgba(0,0,0,0.1);
-  --divider-color-dark: rgba(255,255,255,0.1);
-  --accent-color: #ffc107;
+  --divider-color  : rgba(0,0,0,0.05);
+  --divider-color-dark: rgba(255,255,255,0.066);
+  --hover-color    : rgba(0,0,0,.1);
+  --hover-color-dark: rgba(255,255,255,.2);
+  --accent-color   : #2196f3;
+  --accent-color-033 : rgba(33,150,243,.33);
   --abar-background: #0069c0;
   --tnav-background: #0069c0;
   --bnav-background: #0069c0;
   --lnav-background: #0069c0;
   --rnav-background: #0069c0;
-  --color1        : #ff0000;
-  --color1-dark   : #800000;
-  --color2        : #00ff00;
-  --color2-dark   : #008000;
-  --color3        : #0000ff;
-  --color3-dark   : #000080;
+  --color1         : #ff0000;
+  --color1-dark    : #800000;
+  --color2         : #00ff00;
+  --color2-dark    : #008000;
+  --color3         : #0000ff;
+  --color3-dark    : #000080;
 }
 :root.mdui-runtime {
   --content-background: #f8f8f8;
   --design-font-color: #000000;
-  --design-color-033:rgba(0,0,0,.33);
+  --frame-color:#cfcfcf;
 }
   
 
-/* Generell */
+/* ----- Generell ----- */
 
 .mdui-mdi,
 .material-icons, 
@@ -124,19 +137,76 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 }
 
 :focus {
-  outline: 0px red solid;
+  outline-width: 0px;
 }
 
-/* hide nur zur Laufzeit anwenden, nicht im Editor */
+:fullscreen {
+  background-color: yellow;
+  margin:16px !important;
+}
+
+.vis-view,
+.vis-view .ui-widget {
+  font-family: Roboto, Arial;
+  font-size: 16px !important;
+  color:var(--design-font-color);
+}
+
+.vis_container_edit>.vis-view {
+  background:#000000;
+  color:var(--design-font-color);
+  font-family: Roboto, Arial;
+  font-size: 16px !important;
+}
+
+
+/* ----- Schrift ----- */
+
+.mdui-font-bold {
+  font-weight:bold !important;
+}
+
+.mdui-font-size-2em {
+  font-size:2em !important;
+}
+
+.mdui-font-size-3em {
+  font-size:3em !important;
+}
+
+
+/* ----- hides und shows ----- */
+
 .mdui-runtime .mdui-hide {
   visibility:hidden !important;
   height:0 !important;
   opacity: 0 !important;
-  transition:all  0.33s ease;
+  transition:height 0.33s ease;
 }
 .mdui-runtime .mdui-hide-show {
-  transition:all  0.33s ease;
+  transition:height 0.33s ease;
 }
+
+/* auf touch-Geräten verstecken */
+.mdui-runtime.mdui-touch .mdui-hide-touch {
+  display:none;
+}
+
+/* auf notouch-Geräten verstecken */
+.mdui-runtime.mdui-notouch .mdui-hide-notouch {
+  display:none;
+}
+
+/* auf touch-Geräten anzeigen */
+.mdui-runtime.mdui-notouch .mdui-show-touch {
+  display:none;
+}
+
+/* auf notouch-Geräten verstecken */
+.mdui-runtime.mdui-touch .mdui-show-notouch {
+  display:none;
+}
+
 
 .mdui-toggle img {
   transition: transform 0.3s ease;
@@ -146,7 +216,9 @@ ab hier nichts mehr ändern, nur am Ende anfügen
   transform: rotate(180deg);
 }
 
+
 /* Scrollbar: anderer Style (außer Firefox) */
+
 .mdui-runtime.mdui-notouch ::-webkit-scrollbar { 
     width: 0.5em; 
     height: 0.5em; 
@@ -176,7 +248,7 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 }
 
 
-/* zentrieren */
+/* ----- zentrieren ----- */
 
 .mdui-center-v {
   display:flex;
@@ -207,7 +279,9 @@ ab hier nichts mehr ändern, nur am Ende anfügen
   align-items: center;
   justify-content: center;
 }
-/* rotieren */
+
+
+/* ----- Rotationen ----- */
 
 .mdui-rotate-000{ transform:rotate(0deg); transform-origin: center left; }
 .mdui-rotate-015{ transform:rotate(15deg); transform-origin: center left; }
@@ -329,7 +403,9 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 .mdui-rotateZ-cw.mdui-fastest,
 .mdui-rotateZ-ccw.mdui-fastest{ animation-duration:1.185s; }
 
-/* Skalierungen */
+
+/* ----- Skalierungen ----- */
+
 .mdui-scale-010 { transform: scale(0.1); transform-origin: 0% 0%; }
 .mdui-scale-020 { transform: scale(0.2); transform-origin: 0% 0%; }
 .mdui-scale-025 { transform: scale(0.25); transform-origin: 0% 0%; }
@@ -344,7 +420,8 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 .mdui-scale-080 { transform: scale(0.8); transform-origin: 0% 0%; }
 .mdui-scale-090 { transform: scale(0.9); transform-origin: 0% 0%; }
 
-/* Shapes */
+
+/* ----- Shapes ----- */
 
 .mdui-shape-circle {
   clip-path: circle(50% at 50% 50%);
@@ -385,47 +462,14 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 .mdui-shape-corner[class*="mdui-rotate-"] { transform-origin: center center;}
 
 
+/* ----- ripple effect ----- */
 
-/* Standard syntax */
-:fullscreen {
-  background-color: yellow;
-  margin:16px !important;
-}
-
-.vis-view,
-.vis-view .ui-widget {
-  font-family: Roboto, Arial;
-  font-size: 16px !important;
-  color:var(--design-font-color);
-}
-
-.vis_container_edit>.vis-view {
-  background:#000000;
-  color:var(--design-font-color);
-  font-family: Roboto, Arial;
-  font-size: 16px !important;
-}
-
-.mdui-font-bold {
-  font-weight:bold !important;
-}
-
-.mdui-font-size-2em {
-  font-size:2em !important;
-}
-
-.mdui-font-size-3em {
-  font-size:3em !important;
-}
-
-/* ripple effect */
-
-.mdui-button .vis-widget-body:before,
-.mdui-ripple .vis-widget-body:before,
-.mdui-button-outlined .vis-widget-body:before,
-.mdui-button-raised .vis-widget-body:before,
-.mdui-menuitem .vis-widget-body:before,
-.mdui-navitem .vis-widget-body:before {
+.mdui-runtime .mdui-button .vis-widget-body:before,
+.mdui-runtime .mdui-ripple .vis-widget-body:before,
+.mdui-runtime .mdui-button-outlined .vis-widget-body:before,
+.mdui-runtime .mdui-button-raised .vis-widget-body:before,
+.mdui-runtime .mdui-menuitem .vis-widget-body:before,
+.mdui-runtime .mdui-navitem .vis-widget-body:before {
   content: "";
   display: block;
   position: absolute;
@@ -453,6 +497,46 @@ ab hier nichts mehr ändern, nur am Ende anfügen
   transition: 0s;
 }
 
+/* ----- hover effect ----- */
+
+.mdui-notouch :not(.mdui-dark) .mdui-switch:hover,
+.mdui-notouch :not(.mdui-dark) .mdui-select:hover,
+.mdui-notouch :not(.mdui-dark) .mdui-input:not(:focus):hover,
+.mdui-notouch :not(.mdui-dark) .mdui-chips label:hover,
+.mdui-notouch :not(.mdui-dark) .mdui-chips-outlined label:hover,
+.mdui-notouch :not(.mdui-dark) .mdui-radio *[id*="_radio"] label:hover,
+.mdui-notouch :not(.mdui-dark) .mdui-listitem[onclick]:hover,
+.mdui-notouch :not(.mdui-dark) .mdui-listitem[class*='mdui-click']:hover,
+.mdui-notouch :not(.mdui-dark) .mdui-button:hover,
+.mdui-notouch :not(.mdui-dark) .mdui-ripple:hover,
+.mdui-notouch :not(.mdui-dark) .mdui-button-outlined:hover,
+.mdui-notouch :not(.mdui-dark) .mdui-button-raised:hover,
+.mdui-notouch :not(.mdui-dark) .ui-dialog-buttonpane button:hover,
+.mdui-notouch :not(.mdui-dark) .mdui-menuitem:hover,
+.mdui-notouch :not(.mdui-dark) .mdui-navitem:hover {
+    background-blend-mode:multiply;
+    background-image: linear-gradient(var(--hover-color),var(--hover-color)) !important;
+}
+
+.mdui-notouch .mdui-dark .mdui-switch:hover,
+.mdui-notouch .mdui-dark .mdui-select:hover,
+.mdui-notouch .mdui-dark .mdui-input:not(:focus):hover,
+.mdui-notouch .mdui-dark .mdui-chips label:hover,
+.mdui-notouch .mdui-dark .mdui-chips-outlined label:hover,
+.mdui-notouch .mdui-dark .mdui-radio *[id*="_radio"] label:hover,
+.mdui-notouch .mdui-dark .mdui-listitem[onclick]:hover,
+.mdui-notouch .mdui-dark .mdui-listitem[class*='mdui-click']:hover,
+.mdui-notouch .mdui-dark .mdui-button:hover,
+.mdui-notouch .mdui-dark .mdui-ripple:hover,
+.mdui-notouch .mdui-dark .mdui-button-outlined:hover,
+.mdui-notouch .mdui-dark .mdui-button-raised:hover,
+.mdui-notouch .mdui-dark .ui-dialog-buttonpane button:hover,
+.mdui-notouch .mdui-dark .mdui-menuitem:hover,
+.mdui-notouch .mdui-dark .mdui-navitem:hover {
+    background-blend-mode:multiply;
+    background-image: linear-gradient(var(--hover-color-dark),var(--hover-color-dark)) !important;
+}
+
 
 /* Wetter meteoblue in dark */
 
@@ -463,7 +547,8 @@ ab hier nichts mehr ändern, nur am Ende anfügen
     color : #ff0000 !important;
 }
 
-/* Grid 80er Raster */
+/* ----- Grid 80er Raster ----- */
+
 [class*="mdui-cols-1"] {min-width:80px; max-width:80px;}
 [class*="mdui-cols-2"] {min-width:160px; max-width:160px;}
 [class*="mdui-cols-3"] {min-width:240px; max-width:240px;}
@@ -565,6 +650,24 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 [class*="-tor-23"] {max-height:1840px;}
 [class*="-tor-24"] {max-height:1920px;}
 
+
+/* ----- tooltip ----- */
+
+.mdui-runtime .mdui-tooltip {
+  position: fixed;
+  text-decoration: none;
+  background: var(--accent-color);
+  color: #121212;
+  overflow:visible;
+  border-radius:0.5em;
+  padding:0.5em;
+  display : flex;
+  align-items : center;
+  justify-content : center;
+  text-align:center;
+  z-index: 2147483647;
+  border: 1px solid #121212;
+}
 
 
 /* ----- application bar ----- */
@@ -980,14 +1083,13 @@ ab hier nichts mehr ändern, nur am Ende anfügen
   top:2px;
   width:calc(100% - 4px);
   height:calc(100% - 4px);
-  background: rgba(255,255,255,0);
+  background: transparent;
   border: none !important;
   pointer-events: none;
   z-index: -1;
 }
 .mdui-dark .mdui-card:before {
   color:#ffffff;
-  background-color: rgba(255,255,255,0);
 }
 
 
@@ -1012,7 +1114,7 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 }
 .mdui-dark .mdui-card-raised:before {
   color: #ffffff;
-  background-color: rgba(255,255,255,0.12); /* 12% elevation */
+  background-color: rgba(255,255,255,0.12);
   box-shadow: none;
 }
 .mdui-card-raised[class*="mdui-title"]:after {
@@ -1045,7 +1147,7 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 }
 .mdui-dark .mdui-card-outlined:before {
   color:#ffffff;
-  background-color: rgba(255,255,255,0.05); /* 5% elevation */
+  background-color: rgba(0,0,0,0.12);   
   border-color: rgba(255,255,255,.33) !important; 
 }
 
@@ -1165,14 +1267,6 @@ ab hier nichts mehr ändern, nur am Ende anfügen
   color:#ffffff;
 }
 
-.mdui-runtime.mdui-notouch .mdui-menuitem:hover {
-  box-shadow: 0 0 0 1000px rgba(0,0,0,0.05) inset !important;
-  transition: all 0.3s ease;
-}
-.mdui-runtime.mdui-notouch .mdui-dark .mdui-menuitem:hover {
-  box-shadow: 0 0 0 1000px rgba(255,255,255,0.05) inset !important;
-}
-
 .mdui-menuitem .vis-widget-body,
 .mdui-menuitem .vis-widget-body * {
   display:flex;
@@ -1190,12 +1284,13 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 
 /* ----- Buttons ----- */
 
-.mdui-input .ui-button,
+.ui-dialog-buttonpane button,
 .mdui-button {
   border-radius:4px;
   cursor:pointer;
 }
 
+.ui-dialog-buttonpane button,
 .mdui-button.vis-widget,
 .mdui-button {
   background:none;
@@ -1207,24 +1302,16 @@ ab hier nichts mehr ändern, nur am Ende anfügen
   transition: background 0.8s;
 }
 
-.mdui-input .ui-button,
+.ui-dialog-buttonpane button,
 .mdui-button * {
   background:none !important;
   border:none !important;
   color:var(--design-font-color);
 }
 
-.mdui-dark .mdui-input .ui-button,
+.mdui-dark .ui-dialog-buttonpane button,
 .mdui-dark .mdui-button * {
   color:#ffffff;
-}
-
-.mdui-runtime.mdui-notouch .mdui-button:hover {
-  box-shadow: 0 0 0 1000px rgba(0,0,0,0.05) inset !important;
-  transition: all 0.3s ease;
-}
-.mdui-runtime.mdui-notouch .mdui-dark .mdui-button:hover {
-  box-shadow: 0 0 0 1000px rgba(255,255,255,0.05) inset !important;
 }
 
 .mdui-button.mdui-accent *,
@@ -1312,13 +1399,6 @@ ab hier nichts mehr ändern, nur am Ende anfügen
   align-items: center;
 }
 
-.mdui-runtime.mdui-notouch .mdui-button-outlined:hover {
-  box-shadow: 0 0 0 1000px rgba(0,0,0,0.05) inset !important;
-  transition: all 0.3s ease;
-}
-.mdui-runtime.mdui-notouch .mdui-dark .mdui-button-outlined:hover {
-  box-shadow: 0 0 0 1000px rgba(255,255,255,0.05) inset !important;
-}
 
 .mdui-button-outlined.mdui-red *,
 .mdui-dark .mdui-button-outlined.mdui-red * { color:#f44336 !important; }
@@ -1459,13 +1539,6 @@ ab hier nichts mehr ändern, nur am Ende anfügen
   box-shadow: 0 1px 3px rgba(0,0,0,0.66), 0 1px 2px rgba(0,0,0,0.87);
 }
 
-.mdui-runtime.mdui-notouch .mdui-button-raised:hover {
-  box-shadow: 0 1px 3px rgba(0,0,0,0.27), 0 1px 2px rgba(0,0,0,0.54), 0 0 0 1000px rgba(0,0,0,0.05) inset;
-  transition: all 0.3s ease;
-}
-.mdui-runtime.mdui-notouch .mdui-dark .mdui-button-raised:hover {
-  box-shadow: 0 1px 3px rgba(0,0,0,0.66), 0 1px 2px rgba(0,0,0,0.87), 0 0 0 1000px rgba(255,255,255,0.05) inset !important;
-}
 
 /* ----- floating button -----*/
 
@@ -1494,7 +1567,7 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 }
 
 .mdui-runtime.mdui-notouch .mdui-floatingbutton:hover {
-  box-shadow: 0 10px 20px rgba(0,0,0,0.49), 0 6px 6px rgba(0,0,0,0.53), 0 0 0 1000px rgba(0,0,0,0.05) inset !important;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.49), 0 6px 6px rgba(0,0,0,0.53), 0 0 0 1000px var(--hover-color) inset !important;
   transition: all 0.3s ease;
 }
 
@@ -1529,16 +1602,22 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 /* ----- list ----- */
 
 .mdui-list {
-  border: 1px solid var(--divider-color) !important;
+  border: 1px solid transparent !important;
   background: transparent;
   color:var(--design-font-color);
   overflow-x:hidden;
   overflow-y:auto;
 }
 .mdui-dark .mdui-list {
-  border: 1px solid var(--divider-color-dark) !important;
   color:#ffffff;
 }
+.mdui-list.mdui-bordered {
+  border-color: var(--divider-color) !important;
+}
+.mdui-dark .mdui-list.mdui-bordered {
+  border-color: var(--divider-color-dark) !important;
+}
+
 .mdui-list>.vis-widget-body>.vis-view-container>.vis-view,
 .mdui-list>.vis-view-container>.vis-view {
   display: flex;
@@ -1559,25 +1638,43 @@ ab hier nichts mehr ändern, nur am Ende anfügen
   left:auto !important;
   flex-shrink: 0;
 }
+/* ist das flex-item, muss wieder in den normalen Verlauf rein */
+.mdui-list>.vis-widget-body>.vis-view-container>.vis-view>div:not(.mdui-noflex), 
+.mdui-list>.vis-view-container>.vis-view>div:not(.mdui-noflex) { 
+  position: relative !important;
+  position: -webkit-relative !important;
+  top:auto !important;
+  left:auto !important;
+  flex-shrink: 0;
+}
 
-.mdui-list-striped .mdui-listitem:nth-child(even) {
-  background:rgba(0,0,0,0.03);
-}
-.mdui-dark .mdui-list-striped  .mdui-listitem:nth-child(even) {
-  background:rgba(255,255,255,0.02);
-}
+/* ----- listitem ----- */
 
 .mdui-listitem {
-  border-bottom: 1px solid var(--divider-color) !important;
+  position:relative;
+  border-bottom: 1px solid transparent !important;
   background: transparent;
   color:var(--design-font-color);
-  padding:.25em;
+  padding:.33em 0.16em;
 }
 .mdui-dark .mdui-listitem {
-  border-bottom: 1px solid var(--divider-color-dark) !important;
-  background: transparent;
   color:#ffffff;
 }
+
+.mdui-list.mdui-striped .mdui-listitem:nth-child(even) {
+  background:var(--divider-color);
+}
+.mdui-dark .mdui-list.mdui-striped  .mdui-listitem:nth-child(even) {
+  background:var(--divider-color-dark);
+}
+
+.mdui-list.mdui-divided .mdui-listitem {
+  border-bottom-color: var(--divider-color) !important;
+}
+.mdui-dark .mdui-list.mdui-divided .mdui-listitem {
+  border-bottom-color: var(--divider-color-dark) !important;
+}
+
 
 .mdui-listitem * {
   overflow-wrap: break-word;
@@ -1598,6 +1695,59 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 .mdui-listitem a,
 .mdui-listitem .vis-widget-body {
   font-size:1em;
+}
+
+[class*='mdui-swipe-left'] {
+  box-shadow: inset -1px 0 0 0 var(--accent-color);    
+}
+[class*='mdui-swipe-left']:hover {
+  box-shadow: inset -2px 0 0 0 var(--accent-color);    
+}
+[class*='mdui-swipe-right'] {
+  box-shadow: inset 1px 0 0 0 var(--accent-color);    
+}
+[class*='mdui-swipe-right']:hover {
+  box-shadow: inset 2px 0 0 0 var(--accent-color);    
+}
+[class*='mdui-swipe-left'][class*='mdui-swipe-right'] {
+  box-shadow: inset -1px 0 0 0 var(--accent-color), 
+  inset 1px 0 0 0 var(--accent-color);    
+}
+[class*='mdui-swipe-left'][class*='mdui-swipe-right']:hover {
+  box-shadow: inset -2px 0 0 0 var(--accent-color),    
+  inset 2px 0 0 0 var(--accent-color);    
+}
+[class*='mdui-swipe-up'] {
+  box-shadow: inset 0 -1px 0 0 var(--accent-color);    
+}
+[class*='mdui-swipe-up']:hover {
+  box-shadow: inset 0 -2px 0 0 var(--accent-color);    
+}
+[class*='mdui-swipe-down'] {
+  box-shadow: inset 0 1px 0 0 var(--accent-color);    
+}
+[class*='mdui-swipe-down']:hover {
+  box-shadow: inset 0 2px 0 0 var(--accent-color);    
+}
+[class*='mdui-swipe-up'][class*='mdui-swipe-down'] {
+  box-shadow: inset 0 -1px 0 0 var(--accent-color), 
+  inset 0 1px 0 0 var(--accent-color);    
+}
+[class*='mdui-swipe-up'][class*='mdui-swipe-down']:hover {
+  box-shadow: inset 0 -2px 0 0 var(--accent-color),    
+  inset 0 2px 0 0 var(--accent-color);    
+}
+[class*='mdui-swipe-left'][class*='mdui-swipe-right'][class*='mdui-swipe-up'][class*='mdui-swipe-down'] {
+  box-shadow: inset 0 -1px 0 0 var(--accent-color), 
+  inset 0 1px 0 0 var(--accent-color),    
+  inset -1px 0 0 0 var(--accent-color),    
+  inset 1px 0 0 0 var(--accent-color);    
+}
+[class*='mdui-swipe-left'][class*='mdui-swipe-right'][class*='mdui-swipe-up'][class*='mdui-swipe-down']:hover {
+  box-shadow: inset 0 -2px 0 0 var(--accent-color),    
+  inset 0 2px 0 0 var(--accent-color),    
+  inset -2px 0 0 0 var(--accent-color),    
+  inset 2px 0 0 0 var(--accent-color);    
 }
 
 
@@ -1627,15 +1777,9 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 .mdui-navitem {
   padding-left:0.5em !important;
   padding-right:0.5em !important;
+  cursor: pointer;
 }
 
-.mdui-runtime.mdui-notouch .mdui-navitem:hover {
-  box-shadow: 0 0 0 1000px rgba(0,0,0,0.05) inset !important;
-  transition: all 0.3s ease;
-}
-.mdui-runtime.mdui-notouch .mdui-dark .mdui-navitem:hover {
-  box-shadow: 0 0 0 1000px rgba(255,255,255,0.05) inset !important;
-}
 
 .mdui-navitem .vis-widget-body,
 .mdui-navitem .vis-widget-body * {
@@ -1675,23 +1819,36 @@ ab hier nichts mehr ändern, nur am Ende anfügen
 /* ----- divider ----- */
 
 .mdui-divider {
-  background:linear-gradient(to right, rgba(0,0,0,.2), rgba(0,0,0,.2) ) !important;
-  background-size:100% 1px !important;
+  background:linear-gradient(to right, var(--divider-color), var(--divider-color) ) !important;
+  background-size:100% 2px !important;
   background-repeat: repeat-x !important;
   background-position: 0px 50% !important;
+  min-height:2px;
 }
 .mdui-dark .mdui-divider {
-  background:linear-gradient(to right, rgba(255,255,255,.3), rgba(255,255,255,.3) ) !important;
-  background-size:100% 1px !important;
+  background:linear-gradient(to right, var(--divider-color-dark), var(--divider-color-dark) ) !important;
+  background-size:100% 2px !important;
   background-repeat: repeat-x !important;
   background-position: 0px 50% !important;
 }
-
+.mdui-divider-v {
+  background:linear-gradient(to bottom, var(--divider-color), var(--divider-color) ) !important;
+  background-size:2px 100% !important;
+  background-repeat: repeat-y !important;
+  background-position: 50% 0px !important;
+  min-width:2px;
+}
+.mdui-dark .mdui-divider-v {
+  background:linear-gradient(to bottom, var(--divider-color-dark), var(--divider-color-dark) ) !important;
+  background-size:2px 100% !important;
+  background-repeat: repeat-y !important;
+  background-position: 50% 0px !important;
+}
 
 /* ----- toggle button -----*/
 
 /* toggle Dreieck rechts aussen anzeigen */
-.mdui-navitem.mdui-toggle:after {
+.mdui-navitem.mdui-toggle:before {
   position: absolute;
   font-family: 'Material Icons' !important;
   font-size:24px;
@@ -1704,18 +1861,20 @@ ab hier nichts mehr ändern, nur am Ende anfügen
   transition:transform 0.33s; 
 }
 
-.mdui-dark .mdui-navitem.mdui-toggle:after {
+.mdui-dark .mdui-navitem.mdui-toggle:before {
   color: #ffffff;
 }
 
-.mdui-navitem.mdui-toggle.ui-state-active:after {
+.mdui-navitem.mdui-toggle.ui-state-active:before {
   transform:rotate(180deg); 
 }
+
+/* kein navitem */
 :not(.mdui-navitem).mdui-toggle.ui-state-active {
-  background: rgba(0,0,0,.1) !important;
+  background: var(--divider-color) !important;
 }
 .mdui-dark :not(.mdui-navitem).mdui-toggle.ui-state-active {
-  background: rgba(255,255,255,.1) !important;
+  background: var(--divider-color-dark) !important;
 }
 
 
@@ -1743,7 +1902,7 @@ mdui-table[-r(responsewidth)][-w(colwidth)][-c(colcount)][-l]
 
 [class*="mdui-table"] tr th {
   color:var(--design-font-color);
-  opacity:0.54 !important;
+  opacity:0.66 !important;
   font-weight:normal;
   font-size:0.9em;
   padding-left:0.75em;
@@ -1753,24 +1912,61 @@ mdui-table[-r(responsewidth)][-w(colwidth)][-c(colcount)][-l]
 }
 .mdui-dark [class*="mdui-table"] tr th {
   color:#ffffff;
-  border-bottom-color: rgba(255,255,255,0.1);
+  border-bottom-color: rgba(255,255,255,0.2);
+}
+[class*="mdui-table"] tr th[onclick]{
+  cursor:pointer;
 }
 
-.mdui-dark .mdui-table-bordered tr th {
+[class*="mdui-table"] tr th[onclick]:hover{
+  box-shadow: 0 0 0 1000px var(--hover-color) inset !important;
+  transition: all 0.3s ease;
+  border-bottom-color : var(--accent-color) !important;
+  opacity:1 !important;
+}
+
+.mdui-runtime.mdui-notouch .mdui-dark [class*="mdui-table"] tr th[onclick]:hover{
+  box-shadow: 0 0 0 1000px var(--hover-color-dark) inset !important;
+}
+
+[class*="mdui-table"] tr th:after{
+  position: relative;
+  font-family: 'Material Icons' !important;
+  color:var(--design-font-color);
+  right:0;
+  top:3px;
+  content: "";
+}
+.mdui-dark [class*="mdui-table"] tr th:after{
+  color:#ffffff;
+}
+
+[class*="mdui-table"] tr th.mdui-sortable:after{
+  content: "unfold_more";
+}
+[class*="mdui-table"] tr th.mdui-sort-descending:after{
+  content: "arrow_downward";
+}
+[class*="mdui-table"] tr th.mdui-sort-ascending:after{
+  content: "arrow_upward";
+}
+
+
+.mdui-dark [class*="mdui-table"].mdui-divided tr th {
   border-bottom-width: 2px;
 }
 
-.mdui-table-striped tr:nth-child(even) {
-  background:rgba(0,0,0,0.03);
+[class*="mdui-table"].mdui-striped tr:nth-child(even) {
+  background:var(--divider-color);
 }
-.mdui-dark .mdui-table-striped tr:nth-child(even) {
-  background:rgba(255,255,255,0.02);
+.mdui-dark [class*="mdui-table"].mdui-striped tr:nth-child(even) {
+  background:var(--divider-color-dark);
 }
-.mdui-table-striped .vis-table-body tr:nth-child(even) {
-  background:rgba(0,0,0,0.03) !important;
+[class*="mdui-table"].mdui-striped .vis-table-body tr:nth-child(even) {
+  background:var(--divider-color) !important;
 }
-.mdui-dark .mdui-table-striped .vis-table-body tr:nth-child(even) {
-  background:rgba(255,255,255,0.02) !important;
+.mdui-dark [class*="mdui-table"].mdui-striped .vis-table-body tr:nth-child(even) {
+  background:var(--divider-color-dark) !important;
 }
 
 [class*="mdui-table"] tr {
@@ -1787,11 +1983,11 @@ mdui-table[-r(responsewidth)][-w(colwidth)][-c(colcount)][-l]
   color:#ffffff;
 }
 
-.mdui-table-bordered tr td {
-  border-bottom: 1px solid rgba(0,0,0,0.1);
+[class*="mdui-table"].mdui-divided tr td {
+  border-bottom: 1px solid var(--divider-color);
 }
-.mdui-dark .mdui-table-bordered tr td {
-  border-bottom-color: rgba(255,255,255,0.1);
+.mdui-dark [class*="mdui-table"].mdui-divided tr td {
+  border-bottom-color: var(--divider-color-dark);
 }
 
 /* responsive: cards or tiles  */
@@ -2029,7 +2225,7 @@ mdui-table[-r(responsewidth)][-w(colwidth)][-c(colcount)][-l]
 
 .mdui-state-outlined[class*="-ol"] {
   border-radius: 0em 0.4em 0.4em 0.4em;
-  border: 1px solid var(--design-color-033);
+  border: 1px solid var(--frame-color);
   padding-left:0.25em;
   padding-right:0.25em;
 }
@@ -2052,7 +2248,7 @@ mdui-table[-r(responsewidth)][-w(colwidth)][-c(colcount)][-l]
   height:100%;
   width:100%;
   border-radius: 0em 0.4em 0.4em 0.4em;
-  border: 1px solid var(--design-color-033);
+  border: 1px solid var(--frame-color);
   padding-left:0.25em;
   padding-right:0.25em;
   text-shadow: 1px solid black;
@@ -2100,7 +2296,7 @@ mdui-table[-r(responsewidth)][-w(colwidth)][-c(colcount)][-l]
 .mdui-input input:not([type="button"]) {
   border-bottom : 2px solid var(--design-font-color) !important;
   color : var(--design-font-color) !important;
-  background: rgba(0,0,0,0) !important;
+  background: none;
   height:calc(100% - 2px) !important;
   border-radius:0px !important;
   margin:0px !important;
@@ -2120,15 +2316,25 @@ mdui-table[-r(responsewidth)][-w(colwidth)][-c(colcount)][-l]
   color: var(--accent-color) !important;
 }
 
-.mdui-input input:not([type="button"]):hover,
 .mdui-input input:not([type="button"]):focus {
   border-bottom-color : var(--accent-color) !important;
-  box-shadow: 0 0 0 1000px rgba(0,0,0,0.05) inset;
-  transition: all 0.3s ease;
+  background:var(--hover-color);
+  transition: border-bottom-color 0.3s ease;
 }
-.mdui-dark .mdui-input input:not([type="button"]):hover,
 .mdui-dark .mdui-input input:not([type="button"]):focus {
-  box-shadow: 0 0 0 1000px rgba(255,255,255,0.05) inset;
+  background:var(--hover-color-dark);
+}
+
+.mdui-input .ui-button {
+  border-radius:4px;
+  cursor:pointer;
+  background:none;
+  border:none !important;
+  color:var(--design-font-color);
+}
+
+.mdui-dark .mdui-input .ui-button {
+  color:#ffffff;
 }
 
 /* 500 color */
@@ -2185,10 +2391,7 @@ mdui-table[-r(responsewidth)][-w(colwidth)][-c(colcount)][-l]
 .mdui-color3 input { color:var(--color3) !important; }
 
 
-/* -----
-   select
-   -----
-*/
+/* ----- select ----- */
 
 .mdui-select  {
   z-index:2;
@@ -2250,12 +2453,7 @@ mdui-table[-r(responsewidth)][-w(colwidth)][-c(colcount)][-l]
 .mdui-select select:hover,
 .mdui-select select:focus {
   border-bottom-color : var(--accent-color);
-  box-shadow: 0 0 0 1000px rgba(0,0,0,0.05) inset;
-  transition: all 0.3s ease;
-}
-.mdui-dark .mdui-select:hover,
-.mdui-dark .mdui-select select:focus {
-  box-shadow: 0 0 0 1000px rgba(255,255,255,0.05) inset;
+  transition: border-bottom-color 0.3s ease;
 }
 
 /* 500 color */
@@ -2286,20 +2484,15 @@ mdui-table[-r(responsewidth)][-w(colwidth)][-c(colcount)][-l]
 .mdui-custom select { color:var(--color2) !important; }
 .mdui-custom select { color:var(--color3) !important; }
 
-/* -----
-   Slider
-   -----
-Der folgende CSS Code wandelt das jqui Control "Slider"
-so um, dass es sich im Stil eines Slider Controls im Material Design
-zeigt und so bedienbar ist.
 
+/* ----- Slider ----- */
+/*
 <div class="vis-widget-body mdui-slider" style="padding: 4px;">
   <div class="sliderJQUI ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" id="w00003_slider" data-oid="javascript.0.Variable.TestINTEGER" data-oid2="" data-oid-working="" data-oid2-working="">
     <span class="ui-slider-handle ui-state-default ui-corner-all" tabindex="0" style="left: 47%;"></span>
   </div>
 </div>
 */
-
 
 .mdui-slider {
   padding:0px !important;
@@ -2310,6 +2503,7 @@ zeigt und so bedienbar ist.
   background-size:100% 4px !important;
 }
 
+.ui-datepicker .ui-slider,
 .mdui-slider .ui-slider {
   border:none  !important;
   padding:0px !important;
@@ -2327,6 +2521,7 @@ zeigt und so bedienbar ist.
   left:8px !important;
 }
 /* Einfärben des slide-Bereiches */
+.ui-datepicker .ui-slider-horizontal:before,
 .mdui-slider .ui-slider-horizontal:before {
   content: "";
   position: absolute;
@@ -2338,6 +2533,7 @@ zeigt und so bedienbar ist.
   border-radius: 2px;
   pointer-events: none;
 }
+.mdui-dark .ui-datepicker .ui-slider-horizontal:before,
 .mdui-dark .mdui-slider .ui-slider-horizontal:before {
   background:#ffffff !important;
 }
@@ -2376,6 +2572,7 @@ zeigt und so bedienbar ist.
 }
 
 /* rechten Slidebereich aufhellen/abdunkeln */
+.ui-datepicker .ui-slider-horizontal .ui-slider-handle,
 .mdui-slider .ui-slider-horizontal .ui-slider-handle {
   border:none  !important;
   outline:none !important;
@@ -2387,10 +2584,12 @@ zeigt und so bedienbar ist.
   border-radius: 2px;
   pointer-events: none;
 }
+.mdui-dark .ui-datepicker .ui-slider-horizontal .ui-slider-handle,
 .mdui-dark .mdui-slider .ui-slider-horizontal .ui-slider-handle {
   background:rgba(0,0,0,.2) !important;
 }
 /* Handle zeichnen */
+.ui-datepicker .ui-slider-horizontal .ui-slider-handle:before,
 .mdui-slider .ui-slider-horizontal .ui-slider-handle:before {
   content: "";
   position: absolute;
@@ -2406,45 +2605,40 @@ zeigt und so bedienbar ist.
     0 2px 2px 0 rgba(0, 0, 0, 0.27),
     0 1px 5px 0 rgba(0, 0, 0, 0.54);
 }
+.mdui-dark .ui-datepicker .ui-slider-horizontal .ui-slider-handle:before,
 .mdui-dark .mdui-slider .ui-slider-horizontal .ui-slider-handle:before {
   box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.27),
     0 2px 2px 0 rgba(0, 0, 0, 0.87),
     0 1px 5px 0 rgba(0, 0, 0, 1);
 }
 
-.mdui-runtime .mdui-slider:hover .ui-slider-horizontal .ui-slider-handle:not(:focus):before {
+.ui-datepicker .ui-slider-handle:focus:before,
+.ui-datepicker .ui-slider-horizontal:hover .ui-slider-handle:before,
+.mdui-slider .ui-slider-handle:focus:before,
+.mdui-slider:hover .ui-slider-horizontal .ui-slider-handle:before {
   outline: none;
   box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.27),
     0 2px 2px 0 rgba(0, 0, 0, 0.27),
     0 1px 5px 0 rgba(0, 0, 0, 0.54),
-    0 0 0 12px rgba(0,0,0,.33);
+    0 0 0 12px var(--hover-color),
+    0 0 0 12px var(--divider-color);
 }
-.mdui-runtime .mdui-dark .mdui-slider:hover .ui-slider-horizontal .ui-slider-handle:not(:focus):before {
+.mdui-dark .ui-datepicker .ui-slider-handle:focus:before,
+.mdui-dark .mdui-slider .ui-slider-handle:focus:before,
+.mdui-dark .ui-datepicker .ui-slider-horizontal:hover .ui-slider-handle:not(:focus):before,
+.mdui-dark .mdui-slider:hover .ui-slider-horizontal .ui-slider-handle:not(:focus):before {
   outline: none;
   box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.27),
     0 2px 2px 0 rgba(0, 0, 0, 0.87),
     0 1px 5px 0 rgba(0, 0, 0, 1),
-    0 0 0 12px rgba(255,255,255,.2);
-}
-.mdui-slider .ui-slider-handle:focus:before {
-  outline: none;
-  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.27),
-    0 2px 2px 0 rgba(0, 0, 0, 0.27),
-    0 1px 5px 0 rgba(0, 0, 0, 0.54),
-    0 0 0 16px rgba(0,0,0,.33);
-}
-.mdui-dark .mdui-slider .ui-slider-horizontal .ui-slider-handle:focus:before {
-  outline: none;
-  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.27),
-    0 2px 2px 0 rgba(0, 0, 0, 0.87),
-    0 1px 5px 0 rgba(0, 0, 0, 1),
-    0 0 0 16px rgba(255,255,255,.2);
+    0 0 0 12px var(--hover-color-dark),
+    0 0 0 12px var(--divider-color-dark);
 }
 
 /* left-Wert (mdui-slider-value) als %-Angabe anzeigen */
 /*.mdui-slider.mdui-show-hint .ui-slider-horizontal .ui-slider-handle:after,*/
-.mdui-runtime .mdui-slider.mdui-show-hint .ui-slider-horizontal .ui-slider-handle:focus:after,
-.mdui-runtime .mdui-slider:hover.mdui-show-hint .ui-slider-horizontal .ui-slider-handle:after {
+.mdui-slider.mdui-show-hint .ui-slider-horizontal .ui-slider-handle:focus:after,
+.mdui-slider:hover.mdui-show-hint .ui-slider-horizontal .ui-slider-handle:after {
   content: attr(mdui-slider-value);
   display:flex; 
   align-items: center;
@@ -2459,7 +2653,7 @@ zeigt und so bedienbar ist.
   width: 32px;
   height: 32px;
   background:#000000;
-  border-radius: 50%;
+  border-radius: .25em;
   opacity:1;
   z-index:32000;
   pointer-events: none;
@@ -2536,36 +2730,25 @@ zeigt und so bedienbar ist.
     0 1px 5px 0 rgba(0, 0, 0, 1);
 }
 
-.mdui-runtime .mdui-slider:hover .ui-slider-vertical .ui-slider-handle:not(:focus):before {
+.mdui-slider .ui-slider-handle:focus:before,
+.mdui-slider:hover .ui-slider-vertical .ui-slider-handle:before {
   outline: none;
   box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.27),
     0 2px 2px 0 rgba(0, 0, 0, 0.27),
     0 1px 5px 0 rgba(0, 0, 0, 0.54),
-    0 0 0 12px rgba(0,0,0,.33);
+    0 0 0 12px var(--hover-color),
+    0 0 0 12px var(--divider-color);
 }
-.mdui-runtime .mdui-dark .mdui-slider:hover .ui-slider-vertical .ui-slider-handle:not(:focus):before
+.mdui-dark .mdui-slider .ui-slider-handle:focus:before,
+.mdui-dark .mdui-slider:hover .ui-slider-vertical .ui-slider-handle:not(:focus):before
  {
   outline: none;
   box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.27),
     0 2px 2px 0 rgba(0, 0, 0, 0.87),
     0 1px 5px 0 rgba(0, 0, 0, 1),
-    0 0 0 12px rgba(255,255,255,.2);
+    0 0 0 12px var(--hover-color-dark),
+    0 0 0 12px var(--divider-color-dark);
 }
-.mdui-slider .ui-slider-handle:focus:before {
-  outline: none;
-  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.27),
-    0 2px 2px 0 rgba(0, 0, 0, 0.27),
-    0 1px 5px 0 rgba(0, 0, 0, 0.54),
-    0 0 0 16px rgba(0,0,0,.33);
-}
-.mdui-dark .mdui-slider .ui-slider-vertical .ui-slider-handle:focus:before {
-  outline: none;
-  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.27),
-    0 2px 2px 0 rgba(0, 0, 0, 0.87),
-    0 1px 5px 0 rgba(0, 0, 0, 1),
-    0 0 0 16px rgba(255,255,255,.2);
-}
-
 
 
 .mdui-slider[class*="mdui-segment-"] .ui-slider-vertical:after {
@@ -2622,7 +2805,7 @@ zeigt und so bedienbar ist.
   width: 32px;
   height: 32px;
   background:#121212;
-  border-radius: 50%;
+  border-radius: .25em;
   opacity:1;
   z-index:32000;
   pointer-events: none;
@@ -2728,9 +2911,8 @@ zeigt und so bedienbar ist.
 .mdui-color3-acc.mdui-slider .ui-slider-handle:before { background-color:var(--color3) !important; }
 
 
-/* -----
-   Radio Buttons
-   ----- */
+/* ----- Radio Buttons ----- */
+
 .mdui-radio  {
   z-index:2;
 }
@@ -2773,13 +2955,6 @@ display: block;
   border-bottom-color:var(--accent-color) !important;
   color:var(--accent-color) !important;
   opacity: 1;
-}
-.mdui-runtime.mdui-notouch .mdui-radio *[id*="_radio"]:hover {
-  box-shadow: 0 0 0 1000px rgba(0,0,0,0.05) inset;
-  transition: all 0.3s ease;
-}
-.mdui-runtime.mdui-notouch .mdui-dark .mdui-radio *[id*="_radio"] label:hover {
-  box-shadow: 0 0 0 1000px rgba(255,255,255,0.05) inset;
 }
 
 /* Radiobuttons vertikal darstellen */
@@ -2844,23 +3019,14 @@ display: block;
 .mdui-color3.mdui-radio *[id*="_radio"] label { color:var(--color3) !important; }
 
 
-/* -----
-   Chips
-   -----
-*/
-/*
-<div class="vis-widget mdui-chip vis-tpl-jqui-Button" id="w00349" style="left: 13px; top: 52px; position: absolute;">
-    <div class="vis-widget-body">
-    <button style="width:100%; height:100%" data-oid="milight-smart-light.0.1.rgbw-1.rgb" data-no-style="true" data-val="#ff0000" data-ctrl-oid="milight-smart-light.0.1.rgbw-1.rgb"><div style="background:#ff0000 !important;">rot</div></button>
+/* ----- Chip ----- */
 
-</div>
-*/
 .mdui-chip,
 .mdui-chip-outlined {
   min-width:2.5em;
   min-height:1.5em;
   border-radius: 1em !important;
-  border:1px solid rgba(0,0,0,0.05);
+  border:1px solid var(--hover-color);
   background:rgba(0,0,0,0.1);
   padding-top:0.2em;
   padding-bottom:0.2em;
@@ -2894,9 +3060,12 @@ display: block;
 .mdui-runtime.mdui-notouch .mdui-chip * *:hover,
 .mdui-runtime.mdui-notouch .mdui-chip-outlined:hover,
 .mdui-runtime.mdui-notouch .mdui-chip-outlined * *:hover {
-  box-shadow: 0 0 0px 1000px rgba(0,0,0,0.05) inset !important;
+  box-shadow: 0 0 0px 1000px var(--hover-color) inset !important;
   transition: all 0.3s ease;
 }
+
+
+/* ----- Chips ----- */
 
 /*
  <div ...>
@@ -2923,11 +3092,13 @@ display: block;
 .mdui-chips-outlined * {
   padding:0px !important;
   margin:0px !important;
+  height:inherit;
 }
+
 .mdui-chips label,
 .mdui-chips-outlined label {
   min-width:2em;
-  border:none !important;
+  border:1px solid transparent !important;
   border-radius: 1em;
   padding-top:.25em !important;
   padding-bottom:.25em !important;
@@ -2943,59 +3114,22 @@ display: block;
   color:#ffffff !important;
 }
 
-/* background label */
-.mdui-red.mdui-chips * label:before { background-color:#ff7961 !important; }
-.mdui-pink.mdui-chips * label:before { background-color:#ff6090 !important; }
-.mdui-purple.mdui-chips * label:before { background-color:#d05ce3 !important; }
-.mdui-deeppurple.mdui-chips * label:before { background-color:#9a67ea !important; }
-.mdui-indigo.mdui-chips * label:before { background-color:#757de8 !important; }
-.mdui-blue.mdui-chips * label:before { background-color:#6ec6ff !important; }
-.mdui-lightblue.mdui-chips * label:before { background-color:#67daff !important; }
-.mdui-cyan.mdui-chips * label:before { background-color:#62efff !important; }
-.mdui-teal.mdui-chips * label:before { background-color:#52c7b8 !important; }
-.mdui-green.mdui-chips * label:before { background-color:#80e27e !important; }
-.mdui-lightgreen.mdui-chips * label:before { background-color:#bef67a !important; }
-.mdui-lime.mdui-chips * label:before { background-color:#ffff6e !important; }
-.mdui-yellow.mdui-chips * label:before { background-color:#ffff72 !important; }
-.mdui-amber.mdui-chips * label:before { background-color:#fff350 !important; }
-.mdui-orange.mdui-chips * label:before { background-color:#ffc947 !important; }
-.mdui-deeporange.mdui-chips * label:before { background-color:#ff8a50 !important; }
-.mdui-brown.mdui-chips * label:before { background-color:#a98274 !important; }
-.mdui-grey.mdui-chips * label:before { background-color:#cfcfcf !important; }
-.mdui-darkgrey.mdui-chips * label:before { background-color:#383838 !important; }
-.mdui-bluegrey.mdui-chips * label:before { background-color:#8eacbb !important; }
-.mdui-white.mdui-chips * label:before { background-color:#f8f8f8 !important; }
-.mdui-black.mdui-chips * label:before { background-color:#303030 !important; }
-
-.mdui-color1.mdui-chips * label:before { background-color:var(--color1) !important; }
-.mdui-color2.mdui-chips * label:before { background-color:var(--color2) !important; }
-.mdui-color3.mdui-chips * label:before { background-color:var(--color3) !important; }
-
-
-.mdui-chips * label:before,
-.mdui-chips-outlined * label:before {
-  content:"";
-  position:absolute;
-  left:0;
-  top:0;
-  width:100%;
-  height:100%;
-  border: 1px solid transparent !important;
+.mdui-chips * label,
+.mdui-chips-outlined * label {
   border-radius: 1em;
-  background:var(--design-color-033) !important;
-  z-index:-1;
 }
-.mdui-dark .mdui-chips label:before {
-  background:rgba(255,255,255,0.33) !important;
+.mdui-chips * label {
+  background:var(--frame-color) !important;
 }
-.mdui-chips-outlined label:before {
-  border-color: var(--design-color-033) !important;
-  background:none !important;
+.mdui-dark .mdui-chips * label {
+  background:var(--frame-color-dark) !important;
 }
-.mdui-dark .mdui-chips-outlined label:before {
-  border-color: rgba(255,255,255,.33) !important;
+.mdui-chips-outlined * label {
+  border-color: var(--frame-color) !important;
 }
-
+.mdui-dark .mdui-chips-outlined * label {
+  border-color: var(--frame-color-dark) !important;
+}
 
 .mdui-chips label:not(:first-of-type),
 .mdui-chips td:not(:first-child) label,
@@ -3004,137 +3138,198 @@ display: block;
   margin-left:.25em !important;
 }
 
-.mdui-chips * label.ui-state-active,
-.mdui-chips-outlined * label.ui-state-active {
-  opacity:1.0;
-  z-index:0;
-}
-.mdui-chips * label.ui-state-active:before,
-.mdui-chips-outlined * label.ui-state-active:before {
-  content:"";
-  position:absolute;
-  left:0;
-  top:0;
-  width:100%;
-  height:100%;
-  border-radius: 1em;
-  background-color:var(--accent-color) !important;
-  z-index:-1;
-}
-
-.mdui-chips-outlined * label.ui-state-active:before {
-  border-color:var(--accent-color) !important;
-}
-
-.mdui-runtime.mdui-notouch .mdui-chips label:hover,
-.mdui-runtime.mdui-notouch .mdui-chips-outlined label:hover {
-  box-shadow: 0 0 0px 1000px rgba(0,0,0,0.05) inset;
-  transition: all 0.3s ease;
-}
-.mdui-runtime.mdui-notouch .mdui-dark .mdui-chips label:hover,
-.mdui-runtime.mdui-notouch .mdui-dark .mdui-chips-outlined label:hover {
-  box-shadow: 0 0 0px 1000px rgba(255,255,255,0.05) inset;
-}
-
 /* Chips vertikal darstellen */
 .mdui-chips.mdui-vertical td,
 .mdui-chips-outlined.mdui-vertical td {
    display: block;
 }
 
+/* chips background 200 */
+.mdui-red.mdui-chips * label { background-color:#ff7961 !important; }
+.mdui-pink.mdui-chips * label { background-color:#ff6090 !important; }
+.mdui-purple.mdui-chips * label { background-color:#d05ce3 !important; }
+.mdui-deeppurple.mdui-chips * label { background-color:#9a67ea !important; }
+.mdui-indigo.mdui-chips * label { background-color:#757de8 !important; }
+.mdui-blue.mdui-chips * label { background-color:#6ec6ff !important; }
+.mdui-lightblue.mdui-chips * label { background-color:#67daff !important; }
+.mdui-cyan.mdui-chips * label { background-color:#62efff !important; }
+.mdui-teal.mdui-chips * label { background-color:#52c7b8 !important; }
+.mdui-green.mdui-chips * label { background-color:#80e27e !important; }
+.mdui-lightgreen.mdui-chips * label { background-color:#bef67a !important; }
+.mdui-lime.mdui-chips * label { background-color:#ffff6e !important; }
+.mdui-yellow.mdui-chips * label { background-color:#ffff72 !important; }
+.mdui-amber.mdui-chips * label { background-color:#fff350 !important; }
+.mdui-orange.mdui-chips * label { background-color:#ffc947 !important; }
+.mdui-deeporange.mdui-chips * label { background-color:#ff8a50 !important; }
+.mdui-brown.mdui-chips * label { background-color:#a98274 !important; }
+.mdui-grey.mdui-chips * label { background-color:#cfcfcf !important; }
+.mdui-darkgrey.mdui-chips * label { background-color:#383838 !important; }
+.mdui-bluegrey.mdui-chips * label { background-color:#8eacbb !important; }
+.mdui-white.mdui-chips * label { background-color:#f8f8f8 !important; }
+.mdui-black.mdui-chips * label { background-color:#303030 !important; }
 
-/* outlined background label */
-.mdui-red.mdui-chips-outlined * label:not(.ui-state-active):before { border-color:#ff7961 !important; }
-.mdui-pink.mdui-chips-outlined * label:not(.ui-state-active):before { border-color:#e91e63 !important; }
-.mdui-purple.mdui-chips-outlined * label:not(.ui-state-active):before { border-color:#9c27b0 !important; }
-.mdui-deeppurple.mdui-chips-outlined * label:not(.ui-state-active):before { border-color:#673ab7 !important; }
-.mdui-indigo.mdui-chips-outlined * label:not(.ui-state-active):before { border-color:#3f51b5 !important; }
-.mdui-blue.mdui-chips-outlined * label:not(.ui-state-active):before { border-color:#2196f3 !important; }
-.mdui-lightblue.mdui-chips-outlined * label:not(.ui-state-active):before { border-color:#03a9f4 !important; }
-.mdui-cyan.mdui-chips-outlined * label:not(.ui-state-active):before { border-color:#00bcd4 !important; }
-.mdui-teal.mdui-chips-outlined * label:not(.ui-state-active):before { border-color:#009688 !important; } 
-.mdui-green.mdui-chips-outlined * label:not(.ui-state-active):before { border-color:#4caf50 !important; }
-.mdui-lightgreen.mdui-chips-outlined * label:not(.ui-state-active):before { border-color:#8bc34a !important; }
-.mdui-lime.mdui-chips-outlined * label:not(.ui-state-active):before { border-color:#cddc39 !important; }
-.mdui-yellow.mdui-chips-outlined * label:not(.ui-state-active):before { border-color:#ffeb3b !important; }
-.mdui-amber.mdui-chips-outlined * label:not(.ui-state-active):before { border-color:#ffc107 !important; }
-.mdui-orange.mdui-chips-outlined * label:not(.ui-state-active):before { border-color:#ff9800 !important; }
-.mdui-deeporange.mdui-chips-outlined * label:not(.ui-state-active):before { border-color:#ff5722 !important; }
-.mdui-brown.mdui-chips-outlined * label:not(.ui-state-active):before { border-color:#795548 !important; }
-.mdui-grey.mdui-chips-outlined * label:not(.ui-state-active):before { border-color:#9e9e9e !important; }
-.mdui-darkgrey.mdui-chips-outlined * label:not(.ui-state-active):before { border-color:#303030 !important; }
-.mdui-bluegrey.mdui-chips-outlined * label:not(.ui-state-active):before { border-color:#607d8b !important; }
-.mdui-white.mdui-chips-outlined * label:not(.ui-state-active):before { border-color:#f8f8f8 !important; }
-.mdui-black.mdui-chips-outlined * label:not(.ui-state-active):before { border-color:#212121 !important; }
+.mdui-color1.mdui-chips * label { background-color:var(--color1) !important; }
+.mdui-color2.mdui-chips * label { background-color:var(--color2) !important; }
+.mdui-color3.mdui-chips * label { background-color:var(--color3) !important; }
 
-.mdui-color1.mdui-chips-outlined * label:not(.ui-state-active):before { border-color:var(--color1) !important; }
-.mdui-color2.mdui-chips-outlined * label:not(.ui-state-active):before { border-color:var(--color2) !important; }
-.mdui-color3.mdui-chips-outlined * label:not(.ui-state-active):before { border-color:var(--color3) !important; }
+/* chips background active 500 */
+.mdui-red-acc.mdui-chips * label.ui-state-active {background-color:#f44336 !important;}
+.mdui-pink-acc.mdui-chips * label.ui-state-active {background-color:#e91e63 !important;}
+.mdui-purple-acc.mdui-chips * label.ui-state-active {background-color:#9c27b0 !important;}
+.mdui-deeppurple-acc.mdui-chips * label.ui-state-active { background-color:#673ab7 !important;}
+.mdui-indigo-acc.mdui-chips * label.ui-state-active { background-color:#3f51b5 !important;}
+.mdui-blue-acc.mdui-chips * label.ui-state-active { background-color:#2196f3 !important;}
+.mdui-lightblue-acc.mdui-chips * label.ui-state-active { background-color:#03a9f4 !important;}
+.mdui-cyan-acc.mdui-chips * label.ui-state-active { background-color:#00bcd4 !important;}
+.mdui-teal-acc.mdui-chips * label.ui-state-active { background-color:#009688 !important;}
+.mdui-green-acc.mdui-chips * label.ui-state-active { background-color:#4caf50 !important;}
+.mdui-lightgreen-acc.mdui-chips * label.ui-state-active { background-color:#8bc34a !important;}
+.mdui-lime-acc.mdui-chips * label.ui-state-active { background-color:#cddc39 !important;}
+.mdui-yellow-acc.mdui-chips * label.ui-state-active { background-color:#ffeb3b !important;}
+.mdui-amber-acc.mdui-chips * label.ui-state-active { background-color:#ffc107 !important;}
+.mdui-orange-acc.mdui-chips * label.ui-state-active { background-color:#ff9800 !important;}
+.mdui-deeporange-acc.mdui-chips * label.ui-state-active { background-color:#ff5722 !important;}
+.mdui-brown-acc.mdui-chips * label.ui-state-active { background-color:#795548 !important;}
+.mdui-grey-acc.mdui-chips * label.ui-state-active { background-color:#9e9e9e !important;}
+.mdui-darkgrey-acc.mdui-chips * label.ui-state-active { background-color:#303030 !important;}
+.mdui-bluegrey-acc.mdui-chips * label.ui-state-active { background-color:#607d8b !important;}
+.mdui-white-acc.mdui-chips * label.ui-state-active { background-color:#f8f8f8 !important;}
+.mdui-black-acc.mdui-chips * label.ui-state-active { background-color:#212121 !important;}
 
+.mdui-color1-acc.mdui-chips * label.ui-state-active { background-color:var(--color1) !important;}
+.mdui-color2-acc.mdui-chips * label.ui-state-active { background-color:var(--color2) !important;}
+.mdui-color3-acc.mdui-chips * label.ui-state-active { background-color:var(--color3) !important;}
 
-/* 500 color : active */
-.mdui-red-acc.mdui-chips-outlined * label.ui-state-active:before,
-.mdui-red-acc.mdui-chips * label.ui-state-active:before { background-color:#f44336 !important; border-color:#f44336 !important; }
-.mdui-pink-acc.mdui-chips-outlined * label.ui-state-active:before,
-.mdui-pink-acc.mdui-chips * label.ui-state-active:before { background-color:#e91e63 !important; border-color:#e91e63 !important; }
-.mdui-purple-acc.mdui-chips-outlined * label.ui-state-active:before,
-.mdui-purple-acc.mdui-chips * label.ui-state-active:before { background-color:#9c27b0 !important; border-color:#9c27b0 !important; }
-.mdui-deeppurple-acc.mdui-chips-outlined * label.ui-state-active:before,
-.mdui-deeppurple-acc.mdui-chips * label.ui-state-active:before { background-color:#673ab7 !important; border-color:#673ab7 !important; }
-.mdui-indigo-acc.mdui-chips-outlined * label.ui-state-active:before,
-.mdui-indigo-acc.mdui-chips * label.ui-state-active:before { background-color:#3f51b5 !important; border-color:#3f51b5 !important; }
-.mdui-blue-acc.mdui-chips-outlined * label.ui-state-active:before,
-.mdui-blue-acc.mdui-chips * label.ui-state-active:before { background-color:#2196f3 !important; border-color:#2196f3 !important; }
-.mdui-lightblue-acc.mdui-chips-outlined * label.ui-state-active:before,
-.mdui-lightblue-acc.mdui-chips * label.ui-state-active:before { background-color:#03a9f4 !important; border-color:#03a9f4 !important; }
-.mdui-cyan-acc.mdui-chips-outlined * label.ui-state-active:before,
-.mdui-cyan-acc.mdui-chips * label.ui-state-active:before { background-color:#00bcd4 !important; border-color:#00bcd4 !important; }
-.mdui-teal-acc.mdui-chips-outlined * label.ui-state-active:before,
-.mdui-teal-acc.mdui-chips * label.ui-state-active:before { background-color:#009688 !important; border-color:#009688 !important; }
-.mdui-green-acc.mdui-chips-outlined * label.ui-state-active:before,
-.mdui-green-acc.mdui-chips * label.ui-state-active:before { background-color:#4caf50 !important; border-color:#4caf50 !important; }
-.mdui-lightgreen-acc.mdui-chips-outlined * label.ui-state-active:before,
-.mdui-lightgreen-acc.mdui-chips * label.ui-state-active:before { background-color:#8bc34a !important; border-color:#8bc34a !important; }
-.mdui-lime-acc.mdui-chips-outlined * label.ui-state-active:before,
-.mdui-lime-acc.mdui-chips * label.ui-state-active:before { background-color:#cddc39 !important; border-color:#cddc39 !important; }
-.mdui-yellow-acc.mdui-chips-outlined * label.ui-state-active:before,
-.mdui-yellow-acc.mdui-chips * label.ui-state-active:before { background-color:#ffeb3b !important; border-color:#ffeb3b !important; }
-.mdui-amber-acc.mdui-chips-outlined * label.ui-state-active:before,
-.mdui-amber-acc.mdui-chips * label.ui-state-active:before { background-color:#ffc107 !important; border-color:#ffc107 !important; }
-.mdui-orange-acc.mdui-chips-outlined * label.ui-state-active:before,
-.mdui-orange-acc.mdui-chips * label.ui-state-active:before { background-color:#ff9800 !important; border-color:#ff9800 !important; }
-.mdui-red-acc.mdui-chips-outlined * label.ui-state-active:before,
-.mdui-deeporange-acc.mdui-chips * label.ui-state-active:before { background-color:#ff5722 !important; border-color:#ff5722 !important; }
-.mdui-brown-acc.mdui-chips-outlined * label.ui-state-active:before,
-.mdui-brown-acc.mdui-chips * label.ui-state-active:before { background-color:#795548 !important; border-color:#795548 !important; }
-.mdui-grey-acc.mdui-chips-outlined * label.ui-state-active:before,
-.mdui-grey-acc.mdui-chips * label.ui-state-active:before { background-color:#9e9e9e !important; border-color:#9e9e9e !important; }
-.mdui-darkgrey-acc.mdui-chips-outlined * label.ui-state-active:before,
-.mdui-darkgrey-acc.mdui-chips * label.ui-state-active:before { background-color:#303030 !important; border-color:#303030 !important; }
-.mdui-bluegrey-acc.mdui-chips-outlined * label.ui-state-active:before,
-.mdui-bluegrey-acc.mdui-chips * label.ui-state-active:before { background-color:#607d8b !important; border-color:#607d8b !important; }
-.mdui-white-acc.mdui-chips-outlined * label.ui-state-active:before,
-.mdui-white-acc.mdui-chips * label.ui-state-active:before { background-color:#f8f8f8 !important; border-color:#f8f8f8 !important; }
-.mdui-black-acc.mdui-chips-outlined * label.ui-state-active:before,
-.mdui-black-acc.mdui-chips * label.ui-state-active:before { background-color:#212121 !important; border-color:#212121 !important; }
+/* outlined background label 200 light */
+.mdui-red.mdui-chips-outlined * label { border-color:#ff7961 !important; }
+.mdui-pink.mdui-chips-outlined * label { border-color:#ff6090 !important; }
+.mdui-purple.mdui-chips-outlined * label { border-color:#d05ce3 !important; }
+.mdui-deeppurple.mdui-chips-outlined * label { border-color:#9a67ea !important; }
+.mdui-indigo.mdui-chips-outlined * label { border-color:#757de8 !important; }
+.mdui-blue.mdui-chips-outlined * label { border-color:#6ec6ff !important; }
+.mdui-lightblue.mdui-chips-outlined * label { border-color:#67daff !important; }
+.mdui-cyan.mdui-chips-outlined * label { border-color:#62efff !important; }
+.mdui-teal.mdui-chips-outlined * label { border-color:#52c7b8 !important; } 
+.mdui-green.mdui-chips-outlined * label { border-color:#80e27e !important; }
+.mdui-lightgreen.mdui-chips-outlined * label { border-color:#bef67a !important; }
+.mdui-lime.mdui-chips-outlined * label { border-color:#ffff6e !important; }
+.mdui-yellow.mdui-chips-outlined * label { border-color:#ffff72 !important; }
+.mdui-amber.mdui-chips-outlined * label { border-color:#fff350 !important; }
+.mdui-orange.mdui-chips-outlined * label { border-color:#ffc947 !important; }
+.mdui-deeporange.mdui-chips-outlined * label { border-color:#ff8a50 !important; }
+.mdui-brown.mdui-chips-outlined * label { border-color:#a98274 !important; }
+.mdui-grey.mdui-chips-outlined * label { border-color:#cfcfcf !important; }
+.mdui-darkgrey.mdui-chips-outlined * label { border-color:#383838 !important; }
+.mdui-bluegrey.mdui-chips-outlined * label { border-color:#8eacbb !important; }
+.mdui-white.mdui-chips-outlined * label { border-color:#f8f8f8 !important; }
+.mdui-black.mdui-chips-outlined * label { border-color:#212121 !important; }
 
-.mdui-color1-acc.mdui-chips-outlined * label.ui-state-active:before,
-.mdui-color1-acc.mdui-chips * label.ui-state-active:before { background-color:var(--color1) !important; border-color:var(--color1) !important; }
-.mdui-color2-acc.mdui-chips-outlined * label.ui-state-active:before,
-.mdui-color2-acc.mdui-chips * label.ui-state-active:before { background-color:var(--color2) !important; border-color:var(--color2) !important; }
-.mdui-color3-acc.mdui-chips-outlined * label.ui-state-active:before,
-.mdui-color3-acc.mdui-chips * label.ui-state-active:before { background-color:var(--color3) !important; border-color:var(--color3) !important; }
+.mdui-color1.mdui-chips-outlined * label { border-color:var(--color1) !important; }
+.mdui-color2.mdui-chips-outlined * label { border-color:var(--color2) !important; }
+.mdui-color3.mdui-chips-outlined * label { border-color:var(--color3) !important; }
 
 
+/* outlined active 200 light */
+.mdui-red-acc.mdui-chips-outlined * label.ui-state-active { background-color:#ff7961 !important; }
+.mdui-pink-acc.mdui-chips-outlined * label.ui-state-active { background-color:#ff6090 !important; }
+.mdui-purple-acc.mdui-chips-outlined * label.ui-state-active { background-color:#d05ce3 !important; }
+.mdui-deeppurple-acc.mdui-chips-outlined * label.ui-state-active { background-color:#9a67ea !important; }
+.mdui-indigo-acc.mdui-chips-outlined * label.ui-state-active { background-color:#757de8 !important; }
+.mdui-blue-acc.mdui-chips-outlined * label.ui-state-active { background-color:#6ec6ff !important; }
+.mdui-lightblue-acc.mdui-chips-outlined * label.ui-state-active { background-color:#67daff !important; }
+.mdui-cyan-acc.mdui-chips-outlined * label.ui-state-active { background-color:#62efff !important; }
+.mdui-teal-acc.mdui-chips-outlined * label.ui-state-active { background-color:#52c7b8 !important; } 
+.mdui-green-acc.mdui-chips-outlined * label.ui-state-active { background-color:#80e27e !important; }
+.mdui-lightgreen-acc.mdui-chips-outlined * label.ui-state-active { background-color:#bef67a !important; }
+.mdui-lime-acc.mdui-chips-outlined * label.ui-state-active { background-color:#ffff6e !important; }
+.mdui-yellow-acc.mdui-chips-outlined * label.ui-state-active { background-color:#ffff72 !important; }
+.mdui-amber-acc.mdui-chips-outlined * label.ui-state-active { background-color:#fff350 !important; }
+.mdui-orange-acc.mdui-chips-outlined * label.ui-state-active { background-color:#ffc947 !important; }
+.mdui-deeporange-acc.mdui-chips-outlined * label.ui-state-active { background-color:#ff8a50 !important; }
+.mdui-brown-acc.mdui-chips-outlined * label.ui-state-active { background-color:#a98274 !important; }
+.mdui-grey-acc.mdui-chips-outlined * label.ui-state-active { background-color:#cfcfcf !important; }
+.mdui-darkgrey-acc.mdui-chips-outlined * label.ui-state-active { background-color:#383838 !important; }
+.mdui-bluegrey-acc.mdui-chips-outlined * label.ui-state-active { background-color:#8eacbb !important; }
+.mdui-white-acc.mdui-chips-outlined * label.ui-state-active { background-color:#f8f8f8 !important; }
+.mdui-black-acc.mdui-chips-outlined * label.ui-state-active { background-color:#212121 !important; }
 
-/* -----
-   Switch
-   -----
-*/
-.mdui-switch {
-  z-index:2;
+.mdui-color1-acc.mdui-chips-outlined * label.ui-state-active { background-color:var(--color1) !important; }
+.mdui-color2-acc.mdui-chips-outlined * label.ui-state-active { background-color:var(--color2) !important; }
+.mdui-color3-acc.mdui-chips-outlined * label.ui-state-active { background-color:var(--color3) !important; }
+
+/* outlined background label 500 dark */
+.mdui-dark .mdui-red.mdui-chips-outlined * label { border-color:#f44336 !important; }
+.mdui-dark .mdui-pink.mdui-chips-outlined * label { border-color:#e91e63 !important; }
+.mdui-dark .mdui-purple.mdui-chips-outlined * label { border-color:#9c27b0 !important; }
+.mdui-dark .mdui-deeppurple.mdui-chips-outlined * label { border-color:#673ab7 !important; }
+.mdui-dark .mdui-indigo.mdui-chips-outlined * label { border-color:#3f51b5 !important; }
+.mdui-dark .mdui-blue.mdui-chips-outlined * label { border-color:#2196f3 !important; }
+.mdui-dark .mdui-lightblue.mdui-chips-outlined * label { border-color:#03a9f4 !important; }
+.mdui-dark .mdui-cyan.mdui-chips-outlined * label { border-color:#00bcd4 !important; }
+.mdui-dark .mdui-teal.mdui-chips-outlined * label { border-color:#009688 !important; } 
+.mdui-dark .mdui-green.mdui-chips-outlined * label { border-color:#4caf50 !important; }
+.mdui-dark .mdui-lightgreen.mdui-chips-outlined * label { border-color:#8bc34a !important; }
+.mdui-dark .mdui-lime.mdui-chips-outlined * label { border-color:#cddc39 !important; }
+.mdui-dark .mdui-yellow.mdui-chips-outlined * label { border-color:#ffeb3b !important; }
+.mdui-dark .mdui-amber.mdui-chips-outlined * label { border-color:#ffc107 !important; }
+.mdui-dark .mdui-orange.mdui-chips-outlined * label { border-color:#ff9800 !important; }
+.mdui-dark .mdui-deeporange.mdui-chips-outlined * label { border-color:#ff5722 !important; }
+.mdui-dark .mdui-brown.mdui-chips-outlined * label { border-color:#795548 !important; }
+.mdui-dark .mdui-grey.mdui-chips-outlined * label { border-color:#9e9e9e !important; }
+.mdui-dark .mdui-darkgrey.mdui-chips-outlined * label { border-color:#303030 !important; }
+.mdui-dark .mdui-bluegrey.mdui-chips-outlined * label { border-color:#607d8b !important; }
+.mdui-dark .mdui-white.mdui-chips-outlined * label { border-color:#f8f8f8 !important; }
+.mdui-dark .mdui-black.mdui-chips-outlined * label { border-color:#212121 !important; }
+
+.mdui-dark .mdui-color1.mdui-chips-outlined * label { border-color:var(--color1-dark) !important; }
+.mdui-dark .mdui-color2.mdui-chips-outlined * label { border-color:var(--color2-dark) !important; }
+.mdui-dark .mdui-color3.mdui-chips-outlined * label { border-color:var(--color3-dark) !important; }
+
+
+/* outlined active 500 dark */
+.mdui-dark .mdui-red-acc.mdui-chips-outlined * label.ui-state-active { background-color:#f44336 !important; }
+.mdui-dark .mdui-pink-acc.mdui-chips-outlined * label.ui-state-active { background-color:#e91e63 !important; }
+.mdui-dark .mdui-purple-acc.mdui-chips-outlined * label.ui-state-active { background-color:#9c27b0 !important; }
+.mdui-dark .mdui-deeppurple-acc.mdui-chips-outlined * label.ui-state-active { background-color:#673ab7 !important; }
+.mdui-dark .mdui-indigo-acc.mdui-chips-outlined * label.ui-state-active { background-color:#3f51b5 !important; }
+.mdui-dark .mdui-blue-acc.mdui-chips-outlined * label.ui-state-active { background-color:#2196f3 !important; }
+.mdui-dark .mdui-lightblue-acc.mdui-chips-outlined * label.ui-state-active { background-color:#03a9f4 !important; }
+.mdui-dark .mdui-cyan-acc.mdui-chips-outlined * label.ui-state-active { background-color:#00bcd4 !important; }
+.mdui-dark .mdui-teal-acc.mdui-chips-outlined * label.ui-state-active { background-color:#009688 !important; } 
+.mdui-dark .mdui-green-acc.mdui-chips-outlined * label.ui-state-active { background-color:#4caf50 !important; }
+.mdui-dark .mdui-lightgreen-acc.mdui-chips-outlined * label.ui-state-active { background-color:#8bc34a !important; }
+.mdui-dark .mdui-lime-acc.mdui-chips-outlined * label.ui-state-active { background-color:#cddc39 !important; }
+.mdui-dark .mdui-yellow-acc.mdui-chips-outlined * label.ui-state-active { background-color:#ffeb3b !important; }
+.mdui-dark .mdui-amber-acc.mdui-chips-outlined * label.ui-state-active { background-color:#ffc107 !important; }
+.mdui-dark .mdui-orange-acc.mdui-chips-outlined * label.ui-state-active { background-color:#ff9800 !important; }
+.mdui-dark .mdui-deeporange-acc.mdui-chips-outlined * label.ui-state-active { background-color:#ff5722 !important; }
+.mdui-dark .mdui-brown-acc.mdui-chips-outlined * label.ui-state-active { background-color:#795548 !important; }
+.mdui-dark .mdui-grey-acc.mdui-chips-outlined * label.ui-state-active { background-color:#9e9e9e !important; }
+.mdui-dark .mdui-darkgrey-acc.mdui-chips-outlined * label.ui-state-active { background-color:#303030 !important; }
+.mdui-dark .mdui-bluegrey-acc.mdui-chips-outlined * label.ui-state-active { background-color:#607d8b !important; }
+.mdui-dark .mdui-white-acc.mdui-chips-outlined * label.ui-state-active { background-color:#f8f8f8 !important; }
+.mdui-dark .mdui-black-acc.mdui-chips-outlined * label.ui-state-active { background-color:#212121 !important; }
+
+.mdui-dark .mdui-color1-acc.mdui-chips-outlined * label.ui-state-active { background-color:var(--color1-dark) !important; }
+.mdui-dark .mdui-color2-acc.mdui-chips-outlined * label.ui-state-active { background-color:var(--color2-dark) !important; }
+.mdui-dark .mdui-color3-acc.mdui-chips-outlined * label.ui-state-active { background-color:var(--color3-dark) !important; }
+
+
+
+/* darf erst nach den background defs kommen */
+.mdui-chips * label.ui-state-active,
+.mdui-chips-outlined * label.ui-state-active {
+  opacity:1.0;
+  z-index:0;
+  background-color:var(--accent-color) !important;
 }
 
+/* ----- Switch ----- */
+
+.mdui-switch {
+  z-index:2;
+  border-radius:0.25em;
+}
 
 .mdui-switch input[type="checkbox"] {
   display: none;
@@ -3180,14 +3375,6 @@ display: block;
   box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.27),
     0 2px 2px 0 rgba(0, 0, 0, 0.27),
     0 1px 5px 0 rgba(0, 0, 0, 0.54);
-}
-.mdui-runtime.mdui-notouch .mdui-switch:hover {
-  box-shadow: 0 0 0 1000px rgba(0,0,0,0.05) inset;
-  border-radius:2px;
-  transition: all 0.3s ease;
-}
-.mdui-runtime.mdui-notouch .mdui-dark .mdui-switch:hover {
-  box-shadow: 0 0 0 1000px rgba(255,255,255,0.05) inset;
 }
 
 .mdui-switch input[type="checkbox"]:checked~label:before {
@@ -3263,24 +3450,31 @@ display: block;
 /* -----
    Dialog
    ----- */
+#ui-datepicker-div {
+  z-index: 2147483645 !important;
+}   
 .mdui-runtime .ui-dialog {
   box-shadow: 0 0 0 1px rgba(0,0,0,0.3), 0 14px 28px rgba(0,0,0,0.65), 0 10px 10px rgba(0,0,0,0.62);
   border:none;
   background: var(--content-background) !important;
   border-radius:2px;
   position:absolute;
-  z-index: 2147483647 !important;
 }
 .mdui-runtime .mdui-dark.ui-dialog {
   box-shadow: 0 0 0 1px rgba(0,0,0,0.5), 0 14px 28px rgba(0,0,0,0.87), 0 10px 10px rgba(0,0,0,1), 0 0 0 1000px rgba(255,255,255,.24) inset;
 }
 
-.mdui-runtime .ui-dialog .vis-view {
+.mdui-runtime .ui-dialog .vis-view,
+.mdui-runtime .ui-dialog .ui-dialog-content,
+.mdui-runtime .ui-dialog .ui-dialog-buttonpane {
   border:none !important;
   background:none !important;
   color: #000000 !important;
+  font-size: 1em;
 }
-.mdui-runtime .mdui-dark.ui-dialog .vis-view {
+.mdui-runtime .mdui-dark.ui-dialog .vis-view,
+.mdui-runtime .mdui-dark.ui-dialog .ui-dialog-content,
+.mdui-runtime .mdui-dark.ui-dialog .ui-dialog-buttonpane {
   color: #ffffff !important;
 }
 
@@ -3357,42 +3551,119 @@ display: block;
 /* -----
    DatePicker
    ----- */
+   
 .ui-datepicker {
-  background: #303030 !important;
+  background: var(--content-background) !important;
   color: rgba(255,255,255,0.87) !important;
   box-shadow: 0 0 0 1px rgba(0,0,0,0.3), 0 14px 28px rgba(0,0,0,0.65), 0 10px 10px rgba(0,0,0,0.62);
   border:none;
   border-radius:2px;
+  z-index: 2147483646 !important;
+}
+.mdui-dark.ui-datepicker {
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.5), 0 14px 28px rgba(0,0,0,0.87), 0 10px 10px rgba(0,0,0,1), 0 0 0 1000px rgba(255,255,255,.24) inset;
 }
 
+/*
 .ui-datepicker-header,
 .ui-datepicker td,
-.ui-datepicker td a {
-  background: #303030 !important;
-  color: rgba(255,255,255,0.87) !important;
+.ui-datepicker td a 
+*/
+.ui-datepicker *,
+.ui-datepicker * * {
+  background: none !important;
   border:none !important;
 }
 
+.ui-datepicker.ui-widget {
+  font-size: 1em;
+}
+
+.ui-datepicker,
+.ui-datepicker *,
+.ui-datepicker * * {
+  color: #000000 !important;
+}
+
+.mdui-dark.ui-datepicker,
+.mdui-dark.ui-datepicker *,
+.mdui-dark.ui-datepicker * * {
+  color: #ffffff !important;
+}
+
+.ui-datepicker .ui_tpicker_time_label,
+.ui-datepicker .ui_tpicker_hour_label,
+.ui-datepicker .ui_tpicker_minute_label,
+.ui-datepicker .ui_tpicker_second_label  {
+  font-size: 0.9em;
+  opacity: 0.87;
+}
+
+
 .mdui-runtime.mdui-notouch .ui-datepicker td a:hover {
-  box-shadow: 0 0 0 1000px rgba(255,255,255,0.05) inset;
+  box-shadow: 0 0 0 1000px var(--hover-color-dark) inset;
   transition: all 0.3s ease;
 }
 
-.ui-datepicker td a.ui-state-active {
-    color: rgba(0,255,0,1) !important;
+.ui-datepicker th {
+  opacity: 0.54;
 }
+
+
 .ui-datepicker td a.ui-state-highlight {
     color: rgba(255,0,0,1) !important;
 }
 
-.ui-datepicker th {
-  color: rgba(255,255,255,0.54) !important;
+.ui-datepicker .ui-timepicker-div td  {
+  font-size: 0.8em;
+  opacity: 0.54;
 }
 
 .ui-datepicker button {
-  background: #303030 !important;
+  background: none !important;
   border:none !important;
-  color: rgba(255,255,0,1) !important;
+}
+
+/* left/right Pfeile
+<a class="ui-datepicker-next ui-corner-all" data-handler="next" data-event="click" title="Next"><span class="ui-icon ui-icon-circle-triangle-e">Next</span></a>
+*/
+.ui-datepicker .ui-datepicker-next:after,
+.ui-datepicker .ui-datepicker-prev:after {
+  position:absolute;
+  left:0px;
+  top:0px;
+  font-family:"Material Icons";
+  font-size:2em;
+  content:'arrow_right';
+  border:none !important;
+  background:none !important;
+  color: #000000 !important;
+}
+.ui-datepicker .ui-datepicker-prev:after {
+  content:'arrow_left';
+}
+
+.mdui-dark.ui-datepicker .ui-datepicker-prev:after,
+.mdui-dark.ui-datepicker .ui-datepicker-next:after  {
+  color: #ffffff !important;
+}
+
+.ui-datepicker .ui-datepicker-next span,
+.ui-datepicker .ui-datepicker-prev span {
+    display: none;
+}
+
+.ui-datepicker .ui-datepicker-next:hover,
+.ui-datepicker .ui-datepicker-prev:hover {
+  border: none;
+  background: none;
+  box-shadow: 0 0 0 1000px var(--hover-color) inset !important;
+  transition: all 0.3s ease;
+}
+
+.mdui-dark.ui-datepicker .ui-datepicker-next:hover,
+.mdui-dark.ui-datepicker .ui-datepicker-prev:hover {
+  box-shadow: 0 0 0 1000px var(--hover-color-dark) inset !important;
 }
 
 
@@ -4045,7 +4316,7 @@ display: block;
   background: var(--content-background, #f0f0f0) !important;
 }
 
-/* Raster 320 / 80 / 40 */
+/* Raster 320 / 40 */
 
 .vis-grid:before {
   content:"";
@@ -4055,44 +4326,35 @@ display: block;
   width:100%;
   height:100%;
   background-position: 0px 0px;
+  background-size:320px 320px;
   background-image:
     /* 320er grid */
-    repeating-linear-gradient(
-     transparent 0px,   transparent 319px,
-     var(--design-grid) 320px,     transparent 321px
+    linear-gradient(
+     transparent 0px, transparent 319px,
+     var(--design-grid) 320px, transparent 320px
     ),
-    repeating-linear-gradient(to right,
-     transparent 0px,   transparent 319px,
-     var(--design-grid) 320px,     transparent 321px
+    linear-gradient(to right,
+     transparent 0px, transparent 319px,
+     var(--design-grid) 320px, transparent 320px
     ),
     
     /* 80er grid */
     repeating-linear-gradient(
-     transparent 0px,   transparent 79px,
-     var(--design-grid) 80px,      transparent 80px
+     transparent 0px, transparent 79px,
+     var(--design-grid) 80px, transparent 80px
     ),
     repeating-linear-gradient(to right,
-     transparent 0px,   transparent 79px,
-     var(--design-grid) 80px,      transparent 80px
-    ),
-    
-    /* 40er grid */
-    repeating-linear-gradient(
-     transparent 0px,   transparent 39px,
-     var(--design-grid) 40px,      transparent 40px
-    ),
-    repeating-linear-gradient(to right,
-     transparent 0px,   transparent 39px,
-     var(--design-grid) 40px,      transparent 40px
+     transparent 0px, transparent 79px,
+     var(--design-grid) 80px, transparent 80px
     )
-    
+
     ;
 }
 
 
 /* Sichtbarkeit des Grids verringern */
 .vis-grid {
-  opacity: .1;
+  opacity: .2;
   z-index:0;
   height:auto;
 }
@@ -4106,28 +4368,28 @@ display: block;
 }
 
 .widget_inner_helper {
-  outline: 2px dashed var(--design-hint-background);
-  outline-offset: -3px;
-  border: 2px solid var(--content-background);
+  outline: 2px dashed var(--design-hint-background) !important;
+  outline-offset: -2px !important;
+  border: 1px solid var(--content-background);
   pointer-events: none;
   top:0px;
   left:0px;
   position:absolute;
-  width: calc(100% + 1px);
-  height: calc(100% + 1px);
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
 }
 
-/* beim :hover hervorheben und die ID einblenden */
+/* beim :hover via outline hervorheben und die ID einblenden */
 .vis_container_edit .vis-view .vis-widget:hover:before {
   position:absolute;
   top:0px;
   left:0px;
   height:100%;
-  width:100%;
-  background:inherit;
+  width:calc(100% + 0px);
+  background:none;
   content:"";
   outline: 1px solid var(--design-hint-background);
-  outline-offset: -1px;
+  outline-offset: -2px;
   opacity:1;
   border-radius:inherit;
 }
@@ -4204,11 +4466,11 @@ display: block;
 
 
 /* hide State anzeigen */
-.vis_container_edit .vis-view .mdui-hide>.vis-widget-body:before  {
+.vis_container_edit .mdui-hide>.vis-widget-body:before  {
   position:absolute;
-  right:16px;
+  right:18px;
   top:0px;
-  width:16px;
+  width:10px;
   height:12px;
   content: "h";
   background: var(--design-hint-background);
@@ -4219,7 +4481,6 @@ display: block;
   display:flex;
   align-items: center;
   justify-content: center;
-
 }
 
 
@@ -4390,51 +4651,108 @@ display: block;
 }
 */
 
+/* MDCSS Versionsnummer anzeigen */
+#pan_attr>div>span:after {
+    position:relative;
+    font-size:66%;
+    content:' (' var(--release) ' ' var(--release-date) ')';
+}
+#pan_attr>div>span:hover:after {
+    background:#FFC107;
+}
+#pan_attr>div>span:before {
+  position:fixed;
+  content: 'Material Design CSS, Uhula (' var(--release) ' ' var(--release-date) ')';
+  padding-left:16px;
+  padding-top:8px;
+  color:#ffffff;
+  top:16px;
+  left:16px;
+  width:720px;
+  height:calc(100% - 32px);
+  background-color: #1565C0;
+  background-size: calc(100% - 16px) calc(100% - 40px);
+  background-position: 8px 32px;
+  background-repeat: no-repeat;
+  background-image: url("https://github.com/Uhula/ioBroker-Material-Design-Style/blob/master/docs/mdui-uebersicht.png?raw=true");
+  border-radius:4px;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.3), 0 14px 28px rgba(0,0,0,0.65), 0 10px 10px rgba(0,0,0,0.62);
+  z-index:32000;
+  display:none;
+}
+#pan_attr>div>span:hover:before {
+  display:block;
+}
+
 /* vis -Eigenschaften, label-column verkleinern */
 .vis-widget-tools table colgroup col:nth-child(1) {
-    width:20% !important;
+    width:15% !important;
+}
+#attr_wrap .tab_attr table tr td {
+    font-size:var(--design-fontsize);
 }
 
 /* mdui Hinweis bei Eingabe class anzeigen */
 #td_class td:nth-child(1) {
   font-style: italic;
 }
-#td_class td:nth-child(2):active:after {
-  position:absolute;
-  top:16px;
-  left:-640px;
-  width:640px;
-  height:calc(100% - 32px);
-  content:"";
-  background: #ffffff;
-  background-size: 100% auto;
-  background-position: 4px 4px;
-  background-repeat: no-repeat;
-  background-image: url("https://github.com/Uhula/ioBroker-Material-Design-Style/blob/master/docs/mdui-uebersicht.png?raw=true");
-  border-radius:4px;
+
+/* CSS Klasse input vergrößern und dropdownbox verstecken */
+/*
+#inspect_class:focus {
+  position:fixed !important;
+  z-index: 2147483647;
+  left:10px;
+  width:calc(100% - 20px);
+  padding:4px;
   box-shadow: 0 0 0 1px rgba(0,0,0,0.3), 0 14px 28px rgba(0,0,0,0.65), 0 10px 10px rgba(0,0,0,0.62);
-  z-index:32000;
 }
+*/
 
 /* 
 ##### Changelog, next version
 
-## V2.4 28.03.2020
+## V2.5 30.04.2020
 ### CSS
-* alle clip-path Angaben für Safari-Browser mit "-webkit-"-Präfix versehen
-* mdui-state-outlined: wie mdui-state aber zusätzlich mit einem Rahmen (-ol = outline) versehen. Die Rahmenfarbe kann entweder fix unter CSS Klasse (mdui-state-outlined mdui-red-ol) oder besser in den Wertelisten der Widgets (<div class="mdui-green-ol">OK</i>) angegeben werden.
-* scrollbar-pimp für touch-Geräte entfernt, erfolgt nur noch für Desktop Browser
+* mdui-table erweitert, so dass dort in der Kopfzeile Sortiersymbolesymbole angezeigt werden können (wird in einigen Mdui-Templates verwendet). In <th> wird ein "onclick" interpretiert und führt beim mouseover zu einem highlighting
+* mdui-sortable: Kann in <th> gesetzt werden, zeigt an, dass hiernach sortiert werden Kann
+* mdui-sort-ascending: Kann in <th> gesetzt werden, zeigt aufsteigende Sortierung an
+* mdui-sort-descending: Kann in <th> gesetzt werden, zeigt absteigende Sortierung an
+* CSS Klassen aufgenommen um die jqui-ctrl-Input Datetime Widgets im MD Style darstellen zu können, inkl dark/light-Theme Unterstützung
+* mdui-swipe-left?..., mdui-swipe-right?..., mdui-swipe-up?..., mdui-swipe-down?...: Kann gesetzt werden um Widgets mit swipe-Möglichkeiten zu versehen. ZB um in durch das swipen eines ListItems nach links dieses zu löschen. Beim Swipe wird temporär ein DOM-Element für die Anzeige des Icons/Farbe erzeugt, nach erfolgreichem Swipe wird eine vis-Action ausgeführt. Näheres in der Dokumentation. Bsp: mdui-swipe-left?dist:48;background:red;icon:delete;text:Löschen;action:setValue(0_userdata.0.mdui.mystate,my_value)
+* mdui-show-touch: Anzeige zur Laufzeit, wenn es sich um ein Touch-Gerät handelt
+* mdui-show-notouch: Anzeige zur Laufzeit, wenn es sich um ein No-Touch-Gerät handelt
+* mdui-hide-touch: Keine Anzeige zur Laufzeit, wenn es sich um ein Touch-Gerät handelt
+* mdui-hide-notouch: Keine zur Laufzeit, wenn es sich um ein No-Touch-Gerät handelt
+* mdui-tooltip?...: Hierüber kann dem Widget ein Tooltip-Text zugewiesen werden, welcher beim MouseEnter nach 700 ms unterhalb des Widgets für 1.5 Sek angezeigt wird, keine Funktion auf Touch-Geräten. Der Text sollte keine Sonderzeichen enthalten, Leerzeichen sind als + zu setzen. Die Angabe eines Hintergrundes ist optional. Bsp: mdui-tooltip?text:Mein+Tootip+für+das+Widget  mdui-tooltip?text:Mein+Tootip+für+das+Widget;background:red
+* mdui-click?...: Kann gesetzt werden um bei einem click-Ereignis auf einem Widget eine vis-Action ausführen zu lassen. Z.B. auf listitems. Dieses ist der direkten Zuweisung von onclick() vorzuziehen, da es sonst bei zeitgleichem mdui-swipe zu Problemen kommt da das onclick() Ereignis auch beim swipe ausgeführt wird. Näheres in der Dokumentation. Bsp: mdui-click?action:changeView(pageStart)
+* mdui-list mdui-list-striped: muss nun als "mdui-list mdui-striped" angegeben werden
+* mdui-list: hat per Vorgabe keinen Border und keine Item-Trennlinien mehr, wenn gewünscht, "mdui-list mdui-bordered" bzw. "mdui-list mdui-divided" angeben
+* mdui-table-striped: muss nun als "mdui-table mdui-striped" angegeben werden
+* mdui-table-bordered: muss nun als "mdui-table mdui-divided" angegeben werden
+* mdui-vis-info: kann einem basic HTML-Widget zugewiesen werden und zeigt zur Laufzeit eine Tabelle mit Informationen zur vis an
 
 ### vis-Editor
-* 
+* Schriftgröße der Attribut-Eingabe um 10% verkleinert, kann über die CSS Variable --design-fontsize (siehe Konfiguration) gesetzt werden
+* die MDCSS Version wird neben "Eigenschaften" angezeigt - bewegt man den Mauszeiger darüber, wird eine kleine mdui-Klassenübersicht angezeigt
+
 
 ### script
-* mdui-page-name und mdui-page-title verarbeiten nun auch Umlaute korrekt
-*
+* ui-datepicker wird beim Page-Wechsel behanldet um eine Anpassung an der dark/Light-Theme vornehmen zu können
+* Eventhandler für TouchStart, ...Move und ...End für die Auswertung der mdui-swipe-xxx hinzugefügt
+* Eventhandler für MouseDown, ...Move und ...Up für die Auswertung der mdui-swipe-xxx hinzugefügt. Damit wird auch auf No-Touch-Geräten ein swipe (mit der Maus) möglich
+* Eventhandler für MouseEnter/-Leave für die Anzeige der Tooltips mdui.tooltip hinzugefügt
+* Eventhandler für click() mdui-click hinzugefügt
+
 
 ### MD_Demo
-* cardStates, cardStastesOutlined überarbeitet. Sie zeigen nun alle möglichen mdui-state Arten an
-*
+* Beispiele für die Swipe-Anwendung hinzugefügt
+* Beispiele für Tooltip hinzugefügt
+* Statt der Verwendung der temporären States in der Form "demo_(variable)" wird nun "0_userdata.0.mdui.(variable)" verwendet. Damit ist es leicht möglich aus den temporären States persistente zu machen. Dazu müssen unter "0_userdata.0.mdui" lediglich die States als Datenpunkte (string) manuell angelegt werden (geht leider nicht via Runtime-Script). Bsp: "demo_content_color" -> "0_userdata.0.mdui.content_color"
+
+### MD_Simple
+* Erweiterung um die Konfigurationsdialoge
+
 
 ##### ToDo 
 * flot: timespan 1em
@@ -4454,9 +4772,3 @@ end of mdui-content
 */
 
 
-
-
-
-
-
-  

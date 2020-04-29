@@ -1,3 +1,43 @@
+## V2.5 30.04.2020
+### CSS
+* mdui-table erweitert, so dass dort in der Kopfzeile Sortiersymbolesymbole angezeigt werden können (wird in einigen Mdui-Templates verwendet). In <th> wird ein "onclick" interpretiert und führt beim mouseover zu einem highlighting
+* mdui-sortable: Kann in <th> gesetzt werden, zeigt an, dass hiernach sortiert werden Kann
+* mdui-sort-ascending: Kann in <th> gesetzt werden, zeigt aufsteigende Sortierung an
+* mdui-sort-descending: Kann in <th> gesetzt werden, zeigt absteigende Sortierung an
+* CSS Klassen aufgenommen um die jqui-ctrl-Input Datetime Widgets im MD Style darstellen zu können, inkl dark/light-Theme Unterstützung
+* mdui-swipe-left?..., mdui-swipe-right?..., mdui-swipe-up?..., mdui-swipe-down?...: Kann gesetzt werden um Widgets mit swipe-Möglichkeiten zu versehen. ZB um in durch das swipen eines ListItems nach links dieses zu löschen. Beim Swipe wird temporär ein DOM-Element für die Anzeige des Icons/Farbe erzeugt, nach erfolgreichem Swipe wird eine vis-Action ausgeführt. Näheres in der Dokumentation. Bsp: mdui-swipe-left?dist:48;background:red;icon:delete;text:Löschen;action:setValue(0_userdata.0.mdui.mystate,my_value)
+* mdui-show-touch: Anzeige zur Laufzeit, wenn es sich um ein Touch-Gerät handelt
+* mdui-show-notouch: Anzeige zur Laufzeit, wenn es sich um ein No-Touch-Gerät handelt
+* mdui-hide-touch: Keine Anzeige zur Laufzeit, wenn es sich um ein Touch-Gerät handelt
+* mdui-hide-notouch: Keine zur Laufzeit, wenn es sich um ein No-Touch-Gerät handelt
+* mdui-tooltip?...: Hierüber kann dem Widget ein Tooltip-Text zugewiesen werden, welcher beim MouseEnter nach 700 ms unterhalb des Widgets für 1.5 Sek angezeigt wird, keine Funktion auf Touch-Geräten. Der Text sollte keine Sonderzeichen enthalten, Leerzeichen sind als + zu setzen. Die Angabe eines Hintergrundes ist optional. Bsp: mdui-tooltip?text:Mein+Tootip+für+das+Widget  mdui-tooltip?text:Mein+Tootip+für+das+Widget;background:red
+* mdui-click?...: Kann gesetzt werden um bei einem click-Ereignis auf einem Widget eine vis-Action ausführen zu lassen. Z.B. auf listitems. Dieses ist der direkten Zuweisung von onclick() vorzuziehen, da es sonst bei zeitgleichem mdui-swipe zu Problemen kommt da das onclick() Ereignis auch beim swipe ausgeführt wird. Näheres in der Dokumentation. Bsp: mdui-click?action:changeView(pageStart)
+* mdui-list mdui-list-striped: muss nun als "mdui-list mdui-striped" angegeben werden
+* mdui-list: hat per Vorgabe keinen Border und keine Item-Trennlinien mehr, wenn gewünscht, "mdui-list mdui-bordered" bzw. "mdui-list mdui-divided" angeben
+* mdui-table-striped: muss nun als "mdui-table mdui-striped" angegeben werden
+* mdui-table-bordered: muss nun als "mdui-table mdui-divided" angegeben werden
+* mdui-vis-info: kann einem basic HTML-Widget zugewiesen werden und zeigt zur Laufzeit eine Tabelle mit Informationen zur vis an
+
+### vis-Editor
+* Schriftgröße der Attribut-Eingabe um 10% verkleinert, kann über die CSS Variable --design-fontsize (siehe Konfiguration) gesetzt werden
+* die MDCSS Version wird neben "Eigenschaften" angezeigt - bewegt man den Mauszeiger darüber, wird eine kleine mdui-Klassenübersicht angezeigt
+
+### script
+* ui-datepicker wird beim Page-Wechsel behanldet um eine Anpassung an der dark/Light-Theme vornehmen zu können
+* Eventhandler für TouchStart, ...Move und ...End für die Auswertung der mdui-swipe-xxx hinzugefügt
+* Eventhandler für MouseDown, ...Move und ...Up für die Auswertung der mdui-swipe-xxx hinzugefügt. Damit wird auch auf No-Touch-Geräten ein swipe (mit der Maus) möglich
+* Eventhandler für MouseEnter/-Leave für die Anzeige der Tooltips mdui.tooltip hinzugefügt
+* Eventhandler für click() mdui-click hinzugefügt
+
+### MD_Demo
+* Beispiele für die Swipe-Anwendung hinzugefügt
+* Beispiele für Tooltip hinzugefügt
+* Statt der Verwendung der temporären States in der Form "demo_(variable)" wird nun "0_userdata.0.mdui.(variable)" verwendet. Damit ist es leicht möglich aus den temporären States persistente zu machen. Dazu müssen unter "0_userdata.0.mdui" lediglich die States als Datenpunkte (string) manuell angelegt werden (geht leider nicht via Runtime-Script). Bsp: "demo_content_color" -> "0_userdata.0.mdui.content_color"
+
+### MD_Simple
+* Erweiterung um die Konfigurationsdialoge
+
+
 ## V2.4 28.03.2020
 ### CSS
 * alle clip-path Angaben für Safari-Browser mit "-webkit-"-Präfix versehen
