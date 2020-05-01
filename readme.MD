@@ -93,7 +93,7 @@ Im [Wiki](https://github.com/Uhula/ioBroker-Material-Design-Style/wiki) (siehe S
 
 
 ### 7. Changelog
-v2.1.2 23.02.2020
+v2.5 30.04.2020
 Siehe [ChangeLog](./changelog.MD).
 
 
