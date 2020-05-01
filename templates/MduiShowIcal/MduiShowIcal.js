@@ -28,7 +28,9 @@ Optional in der Funktion MduiShowIcal|doInit() eine Anpassung der KONFIGURATION 
 Optional Anpassung der tmpList.
   
 **** Dokumentation
-Beispiel vis-view beschrieben in: 
+https://github.com/Uhula/ioBroker-Material-Design-Style/wiki/3.5-MduiShowIcal
+
+###### Um ein Feedback zu erhalten wäre es schön, wenn jeder, der diese Vorlagen nutzt, den  1.Beitrag des Themas positiv bewertet (Pfeil nach oben oder unten ;-) ). Ich kann dann auch abschätzen, ob sich die weitere Pflege lohnt. Thx!
 
 ***** States
 Unter dem STATE_PATH werden die folgenden States erzeugt:
@@ -55,6 +57,13 @@ Beispiele:
 
 **** Lizenz
 (c) 2020 by UH, MIT License, no warranty, use on your own risc
+
+*** Changelog
+2020.05.01 UH 
+* Anpassung an neues MduiBase (intern)
+* Anpassung an MDCSS 2.5
+* Serientermine vor dem aktuellem Datum werden nicht mehr angezeigt
+
 */
 
 // ------------------------------------------------------------------------------------- 
@@ -65,13 +74,6 @@ class MduiBase {
 
     constructor() {
       this.init();
-      // beim 1.Start nur die States erzeugen
-      if ( !this.existState("version") || (this.getState('version').val!=this.VERSION) ) {
-          for (let s=0; s<this.states.length; s++) { this.createState( this.states[s].id ); }
-          this.logWarn('first script start, create states for version '+this.VERSION+', please wait 5 seconds and start script again');
-          setTimeout( setState, 3000, this.STATE_PATH + 'version', this.VERSION );
-      }
-      else this.installed = true; 
     }
     
     //
@@ -81,9 +83,16 @@ class MduiBase {
         this.VERSION    = '1.0/2020-01-01';
         this.NAME       = 'mduiBase';
         this.STATE_PATH = '0_userdata.0.mdui.base.';
+        this.STATE_UNKNOWN    =  0;
+        this.STATE_INSTALLING = 10;
+        this.STATE_INSTALLED  = 11;
+        this.STATE_STARTING   = 20;
+        this.STATE_STARTED    = 21;
+        this.STATE_STOPPING   = 30;
+        this.STATE_STOPPED    = 31;
     
         // var
-        this.installed = false;
+        this.state = this.STATE_UNKNOWN;
         this.states = [];
         this.subscribers = [];
         this.schedulers = [];
@@ -94,35 +103,87 @@ class MduiBase {
         this.states.push( { id:'version',     common:{name:'installed script-version', write:false, def:this.VERSION} } );
     }
     
+    //
     // start the script/class
+    //
     start() {
-        if (!this.installed) {
-            this.logWarn('cant start, states for version '+this.VERSION+' missed, please start script again');
+        // beim 1.Start nur die States erzeugen
+        if ( !this.existState("version") || (this.getState('version').val!=this.VERSION) ) {
+            for (let s=0; s<this.states.length; s++) { this.createState( this.states[s].id ); }
+            this.logWarn('first script start, creating states for version '+this.VERSION+', automatic restarting script again in 10 sec ...');
+            setStateDelayed(this.STATE_PATH + 'version', this.VERSION, 3000);
+            setTimeout( this.start.bind(this), 10000 );
+            this.state = this.STATE_INSTALLED; 
             return;
-        } 
-        if (this.doStart())
-            this.log('script started');
-    }
-    
-    // stop the script/class
-    stop() {
-        if (this.doStop()) {
-            this.log('script stopped');
-            for (let i=0; i<this.subscribers.length; i++) if (this.subscribers[i] !== undefined) unsubscribe( this.subscribers[i] );
-            this.subscribers = [];
-            for (let i=0; i<this.schedulers.length; i++) if (this.schedulers[i] !== undefined) clearSchedule( this.schedulers[i] );
-            this.schedulers = [];
         }
+        switch (this.state) {
+            case this.STATE_UNKNOWN : ;
+            case this.STATE_INSTALLING : ;
+            case this.STATE_INSTALLED : ;
+            case this.STATE_STOPPED : {
+                this.state = this.STATE_STARTING; 
+                if (this.doStart()) {
+                    this.log('script started');
+                    this.state = this.STATE_STARTED;
+                }
+                break;    
+            }
+            case this.STATE_STARTING : ;
+            case this.STATE_STARTED : {
+                this.logWarn('script already starting/started');
+                break;    
+            }
+            case this.STATE_STOPPING : {
+                this.logWarn('script is stopping, pls start later again');
+                break;    
+            }
+      
+        } 
     }
     
-    // --------------------- virtual functions, overwrite it 
+    //
+    // stop the script/class
+    //
+    stop() {
+        switch (this.state) {
+            case this.STATE_STARTED : {
+                this.state = this.STATE_STOPPING; 
+                if (this.doStop()) {
+                    for (let i=0; i<this.subscribers.length; i++) if (this.subscribers[i] !== undefined) unsubscribe( this.subscribers[i] );
+                    this.subscribers = [];
+                    for (let i=0; i<this.schedulers.length; i++) if (this.schedulers[i] !== undefined) clearSchedule( this.schedulers[i] );
+                    this.schedulers = [];
+                    this.state = this.STATE_STOPPED; 
+                    this.log('script stopped');
+                }
+                break;    
+            }
+            default : {
+                this.log('cant stopp script, because not startet');
+            }
+        } 
+    }
     
+    //
+    // virtual functions, overwrite it 
+    //
     doInit() { return true; }
     doStart() { return true; }
     doStop() { return true; }
     
-    // --------------------- helper functions 
+    // einen on-Handler registrieren
+    subscribe( handler ) {
+        this.subscribers.push( handler );
+    }
     
+    // einen timer registrieren
+    schedule( handler ) {
+        this.schedulers.push( handler );
+    }
+    
+    //
+    // tool functions 
+    //
     logDebug(msg) { if (this.DEBUG) console.log('['+this.NAME+'] '+msg); }
     log(msg) { console.log('['+this.NAME+'] '+msg); }
     logWarn(msg) { console.warn('['+this.NAME+'] '+msg); }
@@ -279,6 +340,10 @@ class MduiBase {
       // -----------------------  
     
       // var
+      this.logs = [];
+      for (let i=0; i<=this.MAX_LOG_FOLDER && i<10; i++) 
+          this.logs.push({filter:'' });
+      
     
       // init der states
       this.states.push( { id:'version',     common:{name:'installed script-version', write:false, def:this.VERSION} } );
@@ -307,9 +372,9 @@ class MduiBase {
         super.doStart();
         
         // subscriber erzeugen
-        this.subscribers.push( on( this.STATE_PATH+'updatePressed', obj => { this.onUpdate(obj) } ));
-        this.subscribers.push( on( new RegExp( this.STATE_PATH+'*.filter' ), obj => { this.onFilter(obj) } ));
-        this.subscribers.push( on( this.ICAL_TABLE, obj => { this.onIcalTable(obj) } ));
+        this.subscribe( on( this.STATE_PATH+'updatePressed', obj => { this.onUpdate(obj) } ));
+        this.subscribe( on( new RegExp( this.STATE_PATH+'*.filter' ), obj => { this.onFilter(obj) } ));
+        this.subscribe( on( this.ICAL_TABLE, obj => { this.onIcalTable(obj) } ));
     
         this.onBuildHTML();
         return true;
@@ -412,6 +477,8 @@ class MduiBase {
         entry.currHour = currDate.getHours();
         entry.currMinute = currDate.getMinutes();
         entry.currDate = formatDate(currDate,  this.DATE_FORMAT);
+        entry.currDateOnly = entry.currYear*10000+entry.currMonth*100+entry.currDay;
+    
     
         let endDate = new Date( entry.endDateISO );
         //allDay Korrektur: liefert immer einen Tag zu viel
@@ -471,6 +538,9 @@ class MduiBase {
         let calendar = {};
         let cal      = {};
         let calOptions = {};
+        let todayDate = new Date();
+        let today = todayDate.getFullYear()*10000+todayDate.getMonth()*100+todayDate.getDate();
+    
     
         for (var i = 0; i < calTable.val.length; i++) { 
           cal = calTable.val[i];
@@ -508,7 +578,8 @@ class MduiBase {
     
             entry = this.buildEntry( entry);
     
-            json.push( entry );
+            if (entry.currDateOnly >= today)
+                json.push( entry );
     
             // Listenansicht
             // in calTable steht nur ein Eintrag für jeden Beginn, für die List-Darstellung
@@ -526,7 +597,8 @@ class MduiBase {
                     newEntry.currDateISO = new Date(currTime).toISOString();
                     newEntry = this.buildEntry( newEntry );
                     newEntry.hint += ' (Tag '+dayCount+'/'+dayMax+')';
-                    json.push( newEntry );
+                    if (newEntry.currDateOnly >= today)
+                        json.push( newEntry );
                     currTime = currTime + this.DAY_MILLISECONDS;
                     dayCount++;
                 }
@@ -535,32 +607,31 @@ class MduiBase {
         }
     
         // sortieren
-        json.sort( this.compareNodes.bind(this) );
+        json.sort( (l,r) => {
+                  let lv=l['currTime'],rv=r['currTime'];
+                  return ((lv < rv) ? -1 : (lv > rv) ? 1 : 0);
+              } );
             
       // build table/list HTML
       for (let i=0; i<=this.MAX_LOG_FOLDER && i<10; i++) {
-          let filter = '';
-          let ts = 0;
-          let idState = 'log'+i;
-          if (this.existState(idState+'.filter')) filter = this.getState(idState+'.filter').val;
-          if (this.existState(idState+'.lastClear')) ts = this.getState(idState+'.lastClear').val;
+          let log = this.logs[i];
+          log.filter = '';
+          log.ts = 0;
+          log.idState = 'log'+i;
+          if (this.existState(log.idState+'.filter')) log.filter = this.getState(log.idState+'.filter').val;
+          if (this.existState(log.idState+'.lastClear')) log.ts = this.getState(log.idState+'.lastClear').val;
     
-          this.convertJSON2HTML(json, idState, filter);
+          this.convertJSON2HTML(json, log);
       }
     } catch(err) { this.logError( 'onBuildHTML: '+err.message ); }  }
     
-    //
-    compareNodes(l,r) {
-      let lv=l['currTime'],rv=r['currTime'];
-      return ((lv < rv) ? -1 : (lv > rv) ? 1 : 0);
-    }
     
     // color date event calName beginDate endDate allDay
-    convertJSON2HTML(json, idState, filter) {
+    convertJSON2HTML(json, log) {
     const tmpTable = {
     header : 
     `<tr>
-    <th style="text-align:left;"></th>
+    <th style="text-align:right;"></th>
     <th style="text-align:left;"></th>
     <th style="text-align:left;"></th>
     <th style="text-align:left;"></th>
@@ -592,13 +663,13 @@ class MduiBase {
     <td><span style="font-size:1.0em; opacity:.8;">{timeSpan} {hint}</span></td>
     <td>{location}</td>
     <td><span style="font-size:0.8em; opacity:.8;color:{calColor};">{calName}</span></td>
-    <td><td>
+    <td></td>
     </tr>`
     }
     
     const tmpList = {
     row : 
-    `<div class="mdui-listitem" style="width:100%; display:flex; opacity:{opacity};">
+    `<div class="mdui-listitem" style="font-size:1em; width:100%; display:flex; opacity:{opacity};">
       <div style="min-width:3.5em;">
         <div style="display:{showDay}; color:{dayColor};">
           <span style="font-size:1.5em; opacity:1; font-weight:bold;">{currDay}</span>
@@ -626,18 +697,20 @@ class MduiBase {
     </div>`}
         // build htmlTable and htmlList
         let htmlTable  = "<table><thead>"+tmpTable.header+"</thead><tbody>";
+        for (let [key, value] of Object.entries(log)) htmlTable = htmlTable.replace(new RegExp('{'+key+'}','g'),value);
+       
         let htmlList  = "";
         let entry, tr;
         let count = 0;
         // filter as regex?
-        if ( filter!==undefined && typeof filter == 'string' && filter.startsWith('/') && filter.endsWith('/') && (filter.length>=2) )  {
-            filter = new RegExp(filter.substr(1,filter.length-2), 'i');
+        if ( log.filter!==undefined && typeof log.filter == 'string' && log.filter.startsWith('/') && log.filter.endsWith('/') && (log.filter.length>=2) )  {
+            log.filter = new RegExp(log.filter.substr(1,log.filter.length-2), 'i');
         }
     
         let lastEntry = {};
         for (var i = 0; i < json.length && count<this.MAX_TABLE_ROWS; i++) { 
             entry = json[i];
-            if (this.fitsFilter(':' + entry.currDate + ':' + entry.event +':'+entry.calName + ':' + entry.location + ':',filter)) {
+            if (this.fitsFilter(':' + entry.currDate + ':' + entry.event +':'+entry.calName + ':' + entry.location + ':',log.filter)) {
                 entry.showDay = (lastEntry=={}) || (entry.currDay!=lastEntry.currDay) || (entry.currMonth!=lastEntry.currMonth) || (entry.currYear!=lastEntry.currYear)?'flex':'none';
                 lastEntry = entry;
                 tr = tmpTable.row;    
@@ -650,10 +723,10 @@ class MduiBase {
             }
         }
         htmlTable+="</body></table>";    
-        this.setState(idState+'.table', htmlTable);  
-        this.setState(idState+'.list', htmlList);  
-        this.setState(idState+'.count', count);  
-        this.setState(idState+'.lastUpdate', +new Date());  
+        this.setState(log.idState+'.table', htmlTable);  
+        this.setState(log.idState+'.list', htmlList);  
+        this.setState(log.idState+'.count', count);  
+        this.setState(log.idState+'.lastUpdate', +new Date());  
     }
     
     }

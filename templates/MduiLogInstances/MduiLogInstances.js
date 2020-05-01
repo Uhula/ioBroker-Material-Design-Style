@@ -23,7 +23,7 @@ Optional Anpassung der tmpTable und tmpList.
 
   
 **** Dokumentation
-Beispiel vis-view beschrieben in: 
+https://github.com/Uhula/ioBroker-Material-Design-Style/wiki/3.6-MduiLogInstances
 
 ***** States
 Unter dem STATE_PATH werden die folgenden States erzeugt:
@@ -54,6 +54,14 @@ Beispiele:
 
 **** Lizenz
 (c) 2020 by UH, MIT License, no warranty, use on your own risc
+
+*** Changelog
+2020.05.01 UH 
+* Anpassung an neues MduiBase (intern)
+* Anpassung an MDCSS 2.5
+* Einbau swipeLeft für Start/Stop Adapter, keine Buttonanzeige mehr auf Touch-Geräten
+
+
 */
 
 // ------------------------------------------------------------------------------------- 
@@ -78,16 +86,17 @@ class MduiBase {
         this.VERSION    = '1.0/2020-01-01';
         this.NAME       = 'mduiBase';
         this.STATE_PATH = '0_userdata.0.mdui.base.';
-        this.STATE_UNKNOWN    = 0;
-        this.STATE_INSTALLING = 0;
-        this.STATE_INSTALLED  = 0;
-        this.STATE_STARTING   = 0;
-        this.STATE_STARTED    = 0;
-        this.STATE_STOPPING   = 0;
-        this.STATE_STOPPED    = 0;
+        this.STATE_UNKNOWN    =  0;
+        this.STATE_INSTALLING = 10;
+        this.STATE_INSTALLED  = 11;
+        this.STATE_STARTING   = 20;
+        this.STATE_STARTED    = 21;
+        this.STATE_STOPPING   = 30;
+        this.STATE_STOPPED    = 31;
+    
     
         // var
-        this.state = this.STATE_INSTALLING;
+        this.state = this.STATE_UNKNOWN;
         this.states = [];
         this.subscribers = [];
         this.schedulers = [];
@@ -107,8 +116,7 @@ class MduiBase {
             for (let s=0; s<this.states.length; s++) { this.createState( this.states[s].id ); }
             this.logWarn('first script start, creating states for version '+this.VERSION+', starting script again in 10 sec ...');
             setStateDelayed(this.STATE_PATH + 'version', this.VERSION, 3000);
-            if (this.state == this.STATE_INSTALLING)
-                setTimeout( this.start.bind(this), 10000 );
+            setTimeout( this.start.bind(this), 10000 );
             this.state = this.STATE_INSTALLED; 
             return;
         }
@@ -120,7 +128,7 @@ class MduiBase {
                 this.state = this.STATE_STARTING; 
                 if (this.doStart()) {
                     this.log('script started');
-                    this.state == this.STATE_STARTED;
+                    this.state = this.STATE_STARTED;
                 }
                 break;    
             }
@@ -166,6 +174,16 @@ class MduiBase {
     doInit() { return true; }
     doStart() { return true; }
     doStop() { return true; }
+    
+    // einen on-Handler registrieren
+    subscribe( handler ) {
+        this.subscribers.push( handler );
+    }
+    
+    // einen timer registrieren
+    schedule( handler ) {
+        this.schedulers.push( handler );
+    }
     
     //
     // helper functions 
@@ -326,20 +344,16 @@ class MduiBase {
         super.doStart();
         
         // subscriber erzeugen
-        this.subscribers.push( on( this.STATE_PATH+'updatePressed', obj => { this.onUpdate(obj) } ));
-        this.subscribers.push( on( this.STATE_PATH+'toggleInstanceID', obj => { this.onToggleInstanceID(obj) } ));
-        this.subscribers.push( on( new RegExp( this.STATE_PATH+'*.showAs' ), obj => { this.onShowAs(obj) } ));
-        this.subscribers.push( on( new RegExp( this.STATE_PATH+'*.filter' ), obj => { this.onFilter(obj) } ));
-    //    this.subscribers.push( on( new RegExp( this.STATE_PATH+'*.sortBy' ), obj => { this.onChangeSortBy(obj) } ));
-        this.subscribers.push( on( {id: new RegExp( this.STATE_PATH+'*.sortBy' ), change: "any"} , obj => { this.onChangeSortBy(obj) } ));
+        this.subscribe( on( this.STATE_PATH+'updatePressed', obj => { this.onUpdate(obj) } ));
+        this.subscribe( on( this.STATE_PATH+'toggleInstanceID', obj => { this.onToggleInstanceID(obj) } ));
+        this.subscribe( on( new RegExp( this.STATE_PATH+'*.showAs' ), obj => { this.onShowAs(obj) } ));
+        this.subscribe( on( new RegExp( this.STATE_PATH+'*.filter' ), obj => { this.onFilter(obj) } ));
+        this.subscribe( on( {id: new RegExp( this.STATE_PATH+'*.sortBy' ), change: "any"} , obj => { this.onChangeSortBy(obj) } ));
     
-        
-    
-        this.subscribers.push( on( new RegExp( this.STATE_PATH+'*.sortAscending' ), obj => { this.onChangeSortAscending(obj) } ));
-        this.subscribers.push( on( new RegExp( this.SELECT_ALIVE ), obj => { this.onBuildHTML(obj) } ));
-        this.subscribers.push( on( new RegExp( this.SELECT_UPDATEJSON ), obj => { this.onBuildHTML(obj) } ));
-        //this.subscribers.push( on( new RegExp( '*.info.connection' ), obj => { this.onBuildHTML(obj) } ));
-        this.subscribers.push( on( new RegExp( 'system.adapter.*.connected' ), obj => { this.onBuildHTML(obj) } ));
+        this.subscribe( on( new RegExp( this.STATE_PATH+'*.sortAscending' ), obj => { this.onChangeSortAscending(obj) } ));
+        this.subscribe( on( new RegExp( this.SELECT_ALIVE ), obj => { this.onBuildHTML(obj) } ));
+        this.subscribe( on( new RegExp( this.SELECT_UPDATEJSON ), obj => { this.onBuildHTML(obj) } ));
+        this.subscribe( on( new RegExp( 'system.adapter.*.connected' ), obj => { this.onBuildHTML(obj) } ));
     
         this.setStateDelayed ('toggleInstanceID', '', 2000);
         this.onBuildHTML();
@@ -379,8 +393,9 @@ class MduiBase {
           setObject(instanceID, instance);
           this.log(instanceID.replace('system.adapter.', '')+' wird '+(instance.common.enabled?'gestartet.':'gestoppt.'));
       }
-      this.setStateDelayed ('toggleInstanceID', '', 2000);
+      this.setStateDelayed ('toggleInstanceID', 'Instanzen', 2000);
     } catch(err) { this.logError( 'onToggleInstanceID: '+err.message ); }  }
+    
     // filter, sort events
     onFilter(obj) {
       this.onBuildHTML();
@@ -462,7 +477,12 @@ class MduiBase {
                    'installedversion':instance.obj.common['installedVersion'] || 'unbekannt' ,
                    };
         entry.btntext = entry.enabled?'Stop':'Start';
+        entry.btnicon = entry.enabled?'stop':'play_arrow';
+        
         entry.image = entry.exticon!=''?'<img width="48px" height="auto" src="'+entry.exticon+'">':'';   
+       
+        // c:/home/iobroker2/iobroker-data/tmp/';
+    
         // system.adapter.javascript.0
         let adapterID = instance.id.replace('system.adapter.', '').split(".");
         adapterID = adapterID[0];
@@ -504,6 +524,7 @@ class MduiBase {
       entrySum.connected = 0;
       entrySum.alive = 0;
       entrySum.btntext = 'Update';
+      entrySum.btnicon = 'refresh';
       entrySum.image = '';
       for (let i = 0; i < json.length; i++) { 
           let entry = json[i];
@@ -601,7 +622,8 @@ class MduiBase {
     <th style="text-align:left;">Start</th>
     </tr>`,
     row : 
-    `<tr style="font-size:1em;">
+    `<tr style="font-size:1em;" class="mdui-swipe-left?dist:64;background:blue;icon:{btnicon};action:setValue(`+this.STATE_PATH+`toggleInstanceID,{id}) mdui-tooltip?text:Swipeleft={btntext}">
+    
     <td style="vertical-align:top;"><i class='material-icons mdui-center {iconColor}' style='font-size:1.5em;'>{icon}</i></td>
     <td style="vertical-align:top;">{title}</td>
     <td style="vertical-align:top;">{name}</td>
@@ -619,8 +641,8 @@ class MduiBase {
     <td style="display:{showcompact}; vertical-align:top;">{mode}</td>
     <td style="display:{showcompact}; vertical-align:top;">{image}</td>
     <td style="vertical-align:top;">
-      <div class="mdui-button-outlined">
-        <button onclick="vis.setValue('`+this.STATE_PATH+`toggleInstanceID','{id}');">{btntext}</button> 
+      <div class="mdui-show-notouch mdui-button mdui-center mdui-tooltip?text:{btntext}">
+        <button onclick="vis.setValue('`+this.STATE_PATH+`toggleInstanceID','{id}');"><i class="mdui-icon">{btnicon}</i></button> 
       </div>
     </td>
     </tr>`
@@ -628,7 +650,7 @@ class MduiBase {
     
     const tmpList = {
     row : 
-    `<div class="mdui-listitem" style="width:100%; display:flex;">
+    `<div class="mdui-listitem mdui-swipe-left?dist:64;background:blue;icon:{btnicon};action:setValue(`+this.STATE_PATH+`toggleInstanceID,{id})  mdui-tooltip?text:Swipeleft={btntext}" style="width:100%; display:flex;">
       <div style="flex:0 0 2.5em;">
         <i class="material-icons mdui-center {iconColor}" style="font-size:1.5em;">{icon}</i>
       </div>  
@@ -652,8 +674,8 @@ class MduiBase {
       <div style="flex:0 0 3em; display:flex; flex-wrap:wrap; justify-content:center; align-items:center; ">
         <div class="mdui-subtitle">{mode}</div>
         <div style="display:{showcompact};">{image}</div>
-        <div class="mdui-button-outlined">
-          <button onclick="vis.setValue('`+this.STATE_PATH+`toggleInstanceID','{id}');">{btntext}</button> 
+        <div class="mdui-show-notouch mdui-button  mdui-tooltip?text:{btntext}">
+          <button onclick="vis.setValue('`+this.STATE_PATH+`toggleInstanceID','{id}');"><i class="mdui-icon">{btnicon}</i></button> 
         </div>
       </div> 
     </div>`}

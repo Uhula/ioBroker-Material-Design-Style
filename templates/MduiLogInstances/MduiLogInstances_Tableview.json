@@ -51,7 +51,7 @@
         "signals-horz-2": 0,
         "signals-vert-2": 0,
         "signals-hide-edit-2": false,
-        "class": "mdui-table mdui-table-bordered",
+        "class": "mdui-table mdui-divided",
         "g_last_change": false,
         "lc-type": "last-change",
         "lc-is-interval": true,
