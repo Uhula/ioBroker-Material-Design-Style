@@ -4,7 +4,7 @@
 **** Installation
 Einfach als serverseitiges Script installieren und starten-5 Sek warten-stoppen-starten. Beim 1.Start werden 
 die notwendigen States unter STATE_PATH = '0_userdata.0.mdui.logPing.' erzeugt. Erst beim 2.Start
-instanziiert das Script die Event-Handler und lÃ¤uft dann.
+instanziiert das Script die Event-Handler und läuft dann.
 
 **** Konfiguration
 Optional im MduiLogPing.doInit() die const anpassen.
@@ -17,8 +17,8 @@ Beispiel vis-view beschrieben in:
 ***** States
 Unter dem STATE_PATH werden die folgenden States erzeugt:
 version        : Script-Version, wird verwendet um Script-Updates zu erkennen
-table          : enthÃ¤lt die table-HTML fÃ¼r ein basic-string (unescaped) Widget
-list           : enthÃ¤lt die list-HTML fÃ¼r ein basic-string (unescaped) Widget
+table          : enthält die table-HTML für ein basic-string (unescaped) Widget
+list           : enthält die list-HTML für ein basic-string (unescaped) Widget
 count          : Anzahl der Log-Zeilen
 countUnreached : Anzahl der Log-Zeilen, welche den Zustand FALSE haben
 lastUpdate     : Timestamp des letzten Updates
@@ -93,7 +93,7 @@ class MduiBase {
     logWarn(msg) { console.warn('['+this.NAME+'] '+msg); }
     logError(msg) { console.error('['+this.NAME+'] '+msg); }
     
-    // Ã¼ber den $-Operator nachsehen, ob der state bereits vorhanden ist
+    // über den $-Operator nachsehen, ob der state bereits vorhanden ist
     // getState().notExists geht auch, erzeugt aber Warnmeldungen!
     existState(id) {
         return ( $(this.STATE_PATH+id).length==0?false:true);
@@ -214,7 +214,7 @@ class MduiBase {
     <th style='text-align:left;'>Verb.?</th>
     <th style='text-align:left;'>Name</th>
     <th style='text-align:left;'>IP</th>
-    <th style='text-align:left;'>geÃ¤ndert am</th>
+    <th style='text-align:left;'>geändert am</th>
     </tr>`,
     row : 
     `<tr>
@@ -230,7 +230,7 @@ class MduiBase {
     `<div class="mdui-listitem mdui-center-v">
       <i class="material-icons {icon_color}" style="width:40px;font-size:1.5em;">&nbsp;{icon}&nbsp;</i>
       <div class="mdui-label" style="width:calc(100% - 40px);">{name}
-        <div class="mdui-subtitle">{ip}, GeÃ¤ndert am:{lc}</div>
+        <div class="mdui-subtitle">{ip}, Geändert am: {lc}</div>
       </div>
     </div>`}
     
