@@ -465,7 +465,7 @@ class MduiBase {
             '2 x LR44 (6V)'      : ['HM-SEC-SC', 'HM-SEC-SC2L', 'HM-SEC-SC-2', 'HM-SEC-RHS'],
             '2 x LR6,AA,Mignon'  : ['HM-CC-VD', 'HM-CC-RT-DN', 'HM-SEC-WDS', 'HM-SEC-WDS-2', 'HM-CC-TC', 'HM-DIS-TD-T', 'HB-UW-SEN-THPL-I', 'HM-WDS40-TH-I', 
                                     'HM-WDS40-TH-I-2', 'HM-WDS10-TH-O', 'HMIP-SMI', 'HMIP-ETRV', 'HM-WDS30-OT2-SM-2', 'HMIP-SMO', 'HMIP-SMO-A', 'HMIP-SPI', 
-                                    'HMIP-eTRV-2', 'HMIP-SPDR', 'HMIP-SWD', 'HMIP-STHO-A', 'HMIP-eTRV-B', 'HMIP-PCBS-BAT','HMIP-STHO'],
+                                    'HMIP-ETRV-2', 'HMIP-SPDR', 'HMIP-SWD', 'HMIP-STHO-A', 'HMIP-ETRV-B', 'HMIP-PCBS-BAT','HMIP-STHO'],
             '3 x LR6,AA,Mignon'  : ['HMIP-SWO-PL', 'HM-SEC-MDIR', 'HM-SEC-MDIR-2', 'HM-SEC-SD', 'HM-SEC-KEY', 'HM-SEC-KEY-S', 'HM-SEC-KEY-O', 'HM-SEN-WA-OD', 
                                     'HM-SEN-MDIR', 'HM-SEN-MDIR-O', 'HM-SEN-MDIR-O-2', 'HM-WDS100-C6-O', 'HM-WDS100-C6-O-2', 'HM-WDS100-C6-O-2', 'HMIP-ASIR', 
                                     'HMIP-SWO-B', 'HM-SEN-MDIR-O-3', 'HM-SEC-MDIR-3'],
